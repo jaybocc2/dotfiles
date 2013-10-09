@@ -33,13 +33,6 @@ setopt EXTENDED_HISTORY
 setopt HIST_IGNORE_ALL_DUPS
 setopt HISTVERIFY
 
-# complete on a space character
-bindkey ' ' magic-space
-
-# allow editing of the text on the current command line with v (cmd mode)
-autoload -U edit-command-line
-zle -N edit-command-line
-bindkey -M vicmd v edit-command-line
 
 # we like the calculator built into the shell
 autoload -U zcalc
@@ -64,16 +57,6 @@ prompt clint
 
 autoload -U zrecompile
 
-# -----------------------------------------------
-# Zsh keybindings
-# -----------------------------------------------
-
-# auto pushd setopt autocd autopushd pushdignoredups
-bindkey -v
-
-zstyle :compinstall filename '/home/rharding/.zshrc'
-autoload -Uz compinit && compinit
-
 # case-insensitive tab completion for filenames (useful on Mac OS X)
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 
@@ -83,9 +66,6 @@ zstyle ':completion:*:messages' format '%d'
 zstyle ':completion:*:warnings' format 'No matches for: %d'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
-
-#------------------------------------------------------------------------------
-
 
 # -----------------------------------------------
 # Setup
@@ -100,11 +80,6 @@ setopt \
     complete_aliases \
     extended_glob \
     zle
-
-
-# map jj as the esc key for vim mode
-bindkey "jj" vi-cmd-mode
-#------------------------------------------------------------------------------
 
 # -----------------------------------------------
 # Keybindings
@@ -134,7 +109,19 @@ bindkey "\e[F" end-of-line
 # completion in the middle of a line
 bindkey '^i' expand-or-complete-prefix
 bindkey '^R' history-incremental-search-backward
-#------------------------------------------------------------------------------
+# complete on a space character
+bindkey ' ' magic-space
+
+# allow editing of the text on the current command line with v (cmd mode)
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd v edit-command-line
+
+# map jj as the esc key for vim mode
+bindkey "jj" vi-cmd-mode
+
+# auto pushd setopt autocd autopushd pushdignoredups
+bindkey -v
 
 # -----------------------------------------------
 # SSH AGENT SETUP
@@ -156,27 +143,27 @@ else
   source ~/.ssh/agent.${HOSTNAME}.${USER}
 fi
 
-#if [[ $(ps --no-heading -C ssh-agent |awk '{ print $4 }') == 'ssh-agent' ]]; then
-#  . .ssh/agent.$HOSTNAME.$USER
-#else
-#  eval `$SSHAGENT $SSHAGENTARGS > .ssh/agent.$HOSTNAME.$USER`
-#  . .ssh/agent.$HOSTNAME.$USER
-#fi
-#
-#NUMKEYS=$(ls ~/.ssh/keys/ |grep -v '.pub' |wc -l)
-#NUMIDENTITIES=$(ssh-add -l |egrep -v "The agent has no identities.|libeToken.so.8" |wc -l)
-#if [[ ${NUMIDENTITIES} -lt ${NUMKEYS} ]]; then
-#  echo "adding agent identities"
-#  for i in $(ls ~/.ssh/keys/ |grep -v '.pub'); do
-#    ssh-add ~/.ssh/keys/${i}
-#  done
-#fi
-#
-#if [[ -z $(ssh-add -l |grep 'libeToken.so.8') ]]; then
-#  ssh-add -s libeToken.so.8 -t 28800
-#fi
+if [[ 0 -gt 1 ]]; then
+  if [[ $(ps --no-heading -C ssh-agent |awk '{ print $4 }') == 'ssh-agent' ]]; then
+    . .ssh/agent.$HOSTNAME.$USER
+  else
+    eval `$SSHAGENT $SSHAGENTARGS > .ssh/agent.$HOSTNAME.$USER`
+    . .ssh/agent.$HOSTNAME.$USER
+  fi
 
-#------------------------------------------------------------------------------
+  NUMKEYS=$(ls ~/.ssh/keys/ |grep -v '.pub' |wc -l)
+  NUMIDENTITIES=$(ssh-add -l |egrep -v "The agent has no identities.|libeToken.so.8" |wc -l)
+  if [[ ${NUMIDENTITIES} -lt ${NUMKEYS} ]]; then
+    echo "adding agent identities"
+    for i in $(ls ~/.ssh/keys/ |grep -v '.pub'); do
+      ssh-add ~/.ssh/keys/${i}
+    done
+  fi
+
+  if [[ -z $(ssh-add -l |grep 'libeToken.so.8') ]]; then
+    ssh-add -s libeToken.so.8 -t 28800
+  fi
+fi
 
 # -----------------------------------------------
 # Shell Aliases
