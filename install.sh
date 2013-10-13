@@ -2,6 +2,8 @@
 # install for jaybocc2@'s dotfiles
 
 for file in $(git ls-files |egrep -v '(/|LICENSE|README|install.sh)');do
-  mv ~/.${file} ~/.${file}.old
+  if [[ -e ~/.${file} ]]; then
+    mv ~/.${file} ~/.${file}.old
+  fi
   ln -s ${file} ~/.${file}
 done
