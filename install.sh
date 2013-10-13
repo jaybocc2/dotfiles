@@ -6,7 +6,7 @@ install() {
     if [[ -e ~/.${file} ]]; then
       mv ~/.${file} ~/.${file}.old
     fi
-    ln -s ./${file} ~/.${file}
+    ln -s $(pwd)/${file} ~/.${file}
   done
 }
 
