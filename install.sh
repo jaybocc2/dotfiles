@@ -12,7 +12,7 @@ install() {
 
 purge-all() {
   for file in $(git ls-files |egrep -v '(/|LICENSE|README|install.sh)');do
-    if [[ -e ~/.${file} ]]; then
+    if [[ -e ~/.${file} ]] || [[ -h ~/.${file} ]]; then
       rm -rf ~/.${file}
     fi
   done
