@@ -8,6 +8,33 @@ RSYNC_RSH=/usr/bin/ssh
 FIGNORE='.o:.out:~'
 DISPLAY=:0.0
 
+#enable easy coloring
+typeset -Ag FX FG BG
+
+FX=(
+    reset     "%{[00m%}"
+    bold      "%{[01m%}" no-bold      "%{[22m%}"
+    italic    "%{[03m%}" no-italic    "%{[23m%}"
+    underline "%{[04m%}" no-underline "%{[24m%}"
+    blink     "%{[05m%}" no-blink     "%{[25m%}"
+    reverse   "%{[07m%}" no-reverse   "%{[27m%}"
+)
+
+local SUPPORT
+
+# Optionally handle impoverished terminals.
+if (( $# == 0 )); then
+    SUPPORT=256
+else
+    SUPPORT=$1
+fi
+
+# Fill the color maps.
+for color in {000..$SUPPORT}; do
+    FG[$color]="%{[38;5;${color}m%}"
+    BG[$color]="%{[48;5;${color}m%}"
+done
+
 # colored filename/directory completion
 # Attribute codes:
 # 00 none 01 bold 04 underscore 05 blink 07 reverse 08 concealed
@@ -51,9 +78,29 @@ export GREP_COLOR='7;31'
 setopt promptsubst
 autoload -U promptinit && promptinit
 
-# use the walters prompt as a default from the built ins
-# to view others use: prompt <tab>
-prompt clint
+
+prompt_git_info () {
+  git_repo_path=$(git rev-parse --git-dir 2>/dev/null)
+
+  if [[ $git_repo_path != '' && $git_repo_path != '~' && $git_repo_path != "~/.git" ]]; then
+    git_branch=" $(git symbolic-ref -q HEAD |sed 's/refs\/heads\///')"
+    git_commit_id=" $(git rev-parse --short HEAD 2>/dev/null)"
+
+    git_status=""
+    if [[ $git_repo_path != '.' && $(git ls-files -m) != "" ]]; then
+      git_status=" $FG[001]$FX[bold]✗$FX[no-bold]"
+    else
+      git_status=" $FG[002]✓"
+    fi
+    echo "$FG[008]${git_branch}$FG[007]${git_commit}${git_status} $FG[015]→"
+  fi
+}
+
+PROMPT='
+$BG[234]$FG[007][ $FG[027]%n$FG[011]@$FG[002]%m$FG[007] ] $BG[238] $FG[011]%~ $BG[234]$FG[015] [$FG[008]$FX[bold]%h$FX[no-bold]$FG[015]]
+$BG[234]$FG[001]%(?..[%?%1v] )$BG[234]$FG[015]→$(prompt_git_info) $FG[027]%B%#%b%f$reset_color '
+
+RPROMPT="$FG[027]%D{%A %Y-%m-%d} $FG[006]%T%b%f"
 
 autoload -U zrecompile
 

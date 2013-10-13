@@ -1,0 +1,5 @@
+[user]
+	name = Jay Bendon
+	email = jaybocc2@gmail.com
+[core]
+	excludesfile = /home/jaybocc2/.gitignore_global
