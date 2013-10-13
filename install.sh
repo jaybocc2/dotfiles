@@ -24,7 +24,7 @@ case "$1" in
     install
     ;;
   purge-all)
-    remove-all
+    purge-all
     ;;
   *)
     echo "Usage: $0 {install|purge-all}"
