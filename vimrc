@@ -46,6 +46,8 @@ syntax on
 colorscheme desert
 set background=dark
 
+" set no error bells
+set noerrorbells visualbell t_vb=
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " Custom Mappings                                "
 """"""""""""""""""""""""""""""""""""""""""""""""""
@@ -94,6 +96,8 @@ au FileType python set omnifunc=pythoncomplete#Complete
 autocmd! BufNewFile,BufRead *.pde setlocal ft=arduino
 autocmd! BufNewFile,BufRead *.ino setlocal ft=arduino
 
+" disable visual bells
+autocmd GUIEnter * set visualbell t_vb=
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " Auto Load File Templates                       "
 """"""""""""""""""""""""""""""""""""""""""""""""""
