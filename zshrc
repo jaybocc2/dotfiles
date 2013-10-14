@@ -1,6 +1,9 @@
 # -----------------------------------------------
 # Set up the Environment
 # -----------------------------------------------
+if [[ -e ~/.pre-zsh.zsh ]]; then
+  source .pre-zsh.zsh
+fi
 PATH=${PATH}:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
 
 source ~/.zsh/colors.zsh
