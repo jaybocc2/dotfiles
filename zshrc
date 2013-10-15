@@ -53,7 +53,8 @@ export GREP_COLOR='7;31'
 # -----------------------------------------------
 # Prompt Setup
 # -----------------------------------------------
-setopt promptsubst autoload -U promptinit && promptinit
+setopt promptsubst
+autoload -U promptinit && promptinit
 
 PROMPT='
 $BG[234]$FG[007][ $FG[027]%n$FG[011]@$FG[002]%m$FG[007] ] $BG[238] $FG[011]%~ $BG[234]$FG[015] [$FG[008]$FX[bold]%h$FX[no-bold]$FG[015]]
