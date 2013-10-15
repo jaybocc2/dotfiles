@@ -1,7 +1,7 @@
 tmux_setup () {
-  for line in $(cat $1);do
+  while read line;do
     tmux $line
-  done
+  done < $1
 }
 
 if [[ hostname == 'ua41f726ec3bf51b0fc71' ]]; then
