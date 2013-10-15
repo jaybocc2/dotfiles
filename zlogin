@@ -1,17 +1,11 @@
-work_ubuntu_setup () {
-  tmux source ~/.tmux/ubuntu.amz.conf
+tmux_setup () {
+  for line in $(cat $1);do
+    tmux $line
+  done
 }
-main_setup () {
-  tmux source ~/.tmux/main.conf
-}
-misc_setup () {
-}
-
-#start tmux server
-tmux start
 
 if [[ hostname == 'ua41f726ec3bf51b0fc71' ]]; then
-  work_ubuntu_setup
+  tmux_setup ~/.tmux/ubuntu.amz.conf
 else
-  main_setup
+  tmux_setup ~/.tmux/main.conf
 fi
