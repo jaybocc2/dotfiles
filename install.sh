@@ -1,8 +1,9 @@
 #!/bin/zsh
 # install for jaybocc2@'s dotfiles
+files=$(git ls-tree master |awk '{print $4}' |egrep -v '(/|LICENSE|README|install.sh)')
 
 install() {
-  for file in $(git ls-files |egrep -v '(/|LICENSE|README|install.sh)');do
+  for file in $(echo $files);do
     if [[ -e ~/.${file} ]]; then
       mv ~/.${file} ~/.${file}.old
     fi
@@ -11,7 +12,7 @@ install() {
 }
 
 purge-all() {
-  for file in $(git ls-files |egrep -v '(/|LICENSE|README|install.sh)');do
+  for file in $(echo $files);do
     if [[ -e ~/.${file} ]] || [[ -h ~/.${file} ]]; then
       rm -rf ~/.${file}
     fi
