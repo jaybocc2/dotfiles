@@ -174,8 +174,8 @@ alias zc='zcalc'
 alias bjs='ssh-add -s libeToken.so.8 -t 28800'
 alias ka='pkill ssh-agent'
 alias fa='source ~/.zshrc'
-alias tmuxmain='tmux attach -t main'
-alias tmuxwork='tmux attach -t work'
+alias tmuxmain='tmux -2 attach -t main'
+alias tmuxwork='tmux -2 attach -t work'
 
 ## Pipe Aliases (Global)
 #alias -g L='|less'
