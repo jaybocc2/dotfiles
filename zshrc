@@ -17,9 +17,9 @@ FIGNORE='.o:.out:~'
 DISPLAY=:0.0
 
 
-ARDUINO_DIR   = /usr/share/arduino
-ARDMK_DIR     = /usr/local
-AVR_TOOLS_DIR = /usr
+ARDUINO_DIR=/usr/share/arduino
+ARDMK_DIR=/usr/local
+AVR_TOOLS_DIR=/usr
 
 
 # colored filename/directory completion
