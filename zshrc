@@ -9,11 +9,18 @@ PATH=${PATH}:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
 source ~/.zsh/colors.zsh
 source ~/.zsh/functions.zsh
 
+
 EDITOR=vim
 PAGER=less
 RSYNC_RSH=/usr/bin/ssh
 FIGNORE='.o:.out:~'
 DISPLAY=:0.0
+
+
+ARDUINO_DIR   = /usr/share/arduino
+ARDMK_DIR     = /usr/local
+AVR_TOOLS_DIR = /usr
+
 
 # colored filename/directory completion
 # Attribute codes:
