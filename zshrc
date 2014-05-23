@@ -4,7 +4,13 @@
 if [[ -e ~/.pre-zsh.zsh ]]; then
   source .pre-zsh.zsh
 fi
-PATH=${PATH}:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
+
+PATH=${PATH}
+
+if [[ -e ~/.rbenv ]]; then
+    PATH=${PATH}:${HOME}/.rbenv/bin
+    $(rbenv init -)
+fi
 
 source ~/.zsh/colors.zsh
 source ~/.zsh/functions.zsh

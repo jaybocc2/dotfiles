@@ -43,7 +43,7 @@ set completeopt=menuone,longest,preview
 filetype plugin on
 filetype indent on
 syntax on
-colorscheme desert
+colorscheme solarized
 set background=dark
 
 " set no error bells
@@ -118,6 +118,22 @@ function! FT_Python()
 
   map <buffer> <Leader>p8 :call Pep8()<CR>
 endfunction
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" JSON FileType Settings                         "
+""""""""""""""""""""""""""""""""""""""""""""""""""
+au! BufRead,BufNewFile *.json set filetype=json
+" autocmd BufNewFile,BufRead *.json set ft=javascript
+"let g:vim_json_syntax_conceal = 0
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" Powershell FileType Settings                   "
+""""""""""""""""""""""""""""""""""""""""""""""""""
+
+au BufNewFile,BufRead   *.ps1xml   set ft=ps1xml
+au BufNewFile,BufRead   *.ps1   set ft=ps1
+au BufNewFile,BufRead   *.psd1  set ft=ps1
+au BufNewFile,BufRead   *.psm1  set ft=ps1
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " MISC Stuff                                     "
