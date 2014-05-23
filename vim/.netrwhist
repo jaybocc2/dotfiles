@@ -1,5 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =3
-let g:netrw_dirhist_1='/home/jaybocc2/code/mds_nagios/etc/nagios3/conf.d/templates/services'
-let g:netrw_dirhist_2='/home/jaybocc2/games'
-let g:netrw_dirhist_3='/home/jaybocc2/.PlayOnLinux/wineprefix/LeagueOfLegends/drive_c/Riot Games/tourney-client/Config'

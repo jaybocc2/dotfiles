@@ -1,4 +1,14 @@
 [user]
-	name = Jay Bendon
+    name = Jay Bendon
+    email = jaybocc2@gmail.com
 [core]
-	excludesfile = ~/.gitignore_global
+    excludesfile = ~/.gitignore_global
+    pager = vim -R -
+[branch]
+    autosetuprebase = always
+[branch "master"]
+    rebase = true
+[fetch]
+    recurseSubmodules = true
+[push]
+    default = tracking
