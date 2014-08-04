@@ -4,7 +4,9 @@
 if [[ -e ~/.pre-zsh.zsh ]]; then
   source .pre-zsh.zsh
 fi
-PATH=${PATH}:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
+#PATH=${PATH}:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
+export PATH=/usr/local/bin:/usr/local/git/bin:/usr/local/go/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:${HOME}/.rbenv/bin
+eval "$(rbenv init -)"
 
 source ~/.zsh/colors.zsh
 source ~/.zsh/functions.zsh
@@ -154,7 +156,7 @@ if (( ${SSHPID} == 0 )); then
   for i in $(ls ~/.ssh/keys/ |grep -v '.pub'); do
     ssh-add ~/.ssh/keys/${i}
   done
-  ssh-add -s libeToken.so.8 -t 28800
+  #ssh-add -s libeToken.so.8 -t 28800
 else
   source ~/.ssh/agent.${HOSTNAME}.${USER}
 fi
@@ -170,9 +172,9 @@ alias b=byobu
 alias s=screen
 alias r='screen -R'
 alias vi='vim'
-alias ls='ls --color=auto -F'
-alias ll='ls -lAFh --color=auto'
-alias ld='ls -ltr --color=auto'
+alias ls='ls -G -F'
+alias ll='ls -lAFh -G'
+alias ld='ls -ltr -G'
 alias sls='screen -ls'
 alias zrc='vim ~/.zshrc'
 alias dv='dirs -v'
@@ -183,6 +185,16 @@ alias ka='pkill ssh-agent'
 alias fa='source ~/.zshrc'
 alias tmuxmain='tmux -2 attach -t main'
 alias tmuxwork='tmux -2 attach -t work'
+alias knife-dev='export CHEF_ENV=dev; knife'
+alias knife-prod='export CHEF_ENV=prod; knife'
+alias knife-prod-ap='export CHEF_ENV=prod-ap; knife'
+alias knife-prod-apvpc='export CHEF_ENV=prod-ap-vpc; knife'
+alias knife-prod-eu='export CHEF_ENV=prod-eu; knife'
+alias knife-sjc1='export CHEF_ENV=sjc1; knife'
+alias knife-syd1='export CHEF_ENV=syd1; knife'
+alias aws-us='amazonaws --region us-east-1'
+alias aws-eu='amazonaws --region eu-west-1'
+alias aws-ap='amazonaws --region ap-northeast-1'
 
 ## Pipe Aliases (Global)
 #alias -g L='|less'
@@ -197,5 +209,5 @@ alias tmuxwork='tmux -2 attach -t work'
 # src=~/src
 
 if [[ -e ~/.localized.zsh ]]; then
-  source .localized.zsh
+  source ~/.localized.zsh
 fi

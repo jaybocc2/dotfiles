@@ -43,8 +43,14 @@ set completeopt=menuone,longest,preview
 filetype plugin on
 filetype indent on
 syntax on
-colorscheme desert
 set background=dark
+colorscheme desert
+" colorscheme slate
+
+" enable 80 and 120 character colums
+" set colorcolumn=+1
+" highlight ColorColumn ctermbg=235 guibg=#2c2d27
+" let &colorcolumn="80,".join(range(120,999),",")
 
 " set no error bells
 set noerrorbells visualbell t_vb=
@@ -89,6 +95,7 @@ au BufWritePost *.py !chmod +x %
 au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "bash" | silent !chmod +x <afile> | endif | endif
 
 au BufRead,BufNewFile *.go set shiftwidth=4 softtabstop=4 noexpandtab
+au FileType ruby set shiftwidth=2 softtabstop=2 tabstop=2
 
 au FileType python call FT_Python()
 au FileType python set omnifunc=pythoncomplete#Complete
@@ -118,6 +125,22 @@ function! FT_Python()
 
   map <buffer> <Leader>p8 :call Pep8()<CR>
 endfunction
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" JSON FileType Settings                         "
+""""""""""""""""""""""""""""""""""""""""""""""""""
+au! BufRead,BufNewFile *.json set filetype=json 
+" autocmd BufNewFile,BufRead *.json set ft=javascript
+"let g:vim_json_syntax_conceal = 0
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" Powershell FileType Settings                   "
+""""""""""""""""""""""""""""""""""""""""""""""""""
+
+au BufNewFile,BufRead   *.ps1xml   set ft=ps1xml
+au BufNewFile,BufRead   *.ps1   set ft=ps1
+au BufNewFile,BufRead   *.psd1  set ft=ps1
+au BufNewFile,BufRead   *.psm1  set ft=ps1
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " MISC Stuff                                     "
