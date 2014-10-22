@@ -14,11 +14,11 @@ source $HOME/.vim/functions.vim
 " Basic Settings                                 "
 """"""""""""""""""""""""""""""""""""""""""""""""""
 set autoread
-set shiftwidth=4
-set softtabstop=4
+set shiftwidth=2
+set softtabstop=2
 set expandtab
 set smarttab
-set tabstop=4
+set tabstop=2
 set shortmess=I
 set hlsearch
 set showmatch
@@ -43,9 +43,8 @@ set completeopt=menuone,longest,preview
 filetype plugin on
 filetype indent on
 syntax on
+colorscheme solarized
 set background=dark
-colorscheme desert
-" colorscheme slate
 
 " enable 80 and 120 character colums
 " set colorcolumn=+1
@@ -129,7 +128,7 @@ endfunction
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " JSON FileType Settings                         "
 """"""""""""""""""""""""""""""""""""""""""""""""""
-au! BufRead,BufNewFile *.json set filetype=json 
+au! BufRead,BufNewFile *.json set filetype=json
 " autocmd BufNewFile,BufRead *.json set ft=javascript
 "let g:vim_json_syntax_conceal = 0
 
