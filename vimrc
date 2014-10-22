@@ -92,7 +92,7 @@ au BufWritePost *.py !chmod +x %
 " Bash style guide recommends you don't name your
 " scripts .sh, so this will make your file executable
 " as long as you have your shabang line as the first line.
-au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "bash" | silent !chmod +x <afile> | endif | endif
+" au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "bash" | silent !chmod +x <afile> | endif | endif
 
 au BufRead,BufNewFile *.go set shiftwidth=4 softtabstop=4 noexpandtab
 au FileType ruby set shiftwidth=2 softtabstop=2 tabstop=2

@@ -4,9 +4,8 @@
 if [[ -e ~/.pre-zsh.zsh ]]; then
   source .pre-zsh.zsh
 fi
-#PATH=${PATH}:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
-export PATH=/usr/local/bin:/usr/local/git/bin:/usr/local/go/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:${HOME}/.rbenv/bin
-eval "$(rbenv init -)"
+PATH=${PATH}:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
+
 
 source ~/.zsh/colors.zsh
 source ~/.zsh/functions.zsh
@@ -185,16 +184,6 @@ alias ka='pkill ssh-agent'
 alias fa='source ~/.zshrc'
 alias tmuxmain='tmux -2 attach -t main'
 alias tmuxwork='tmux -2 attach -t work'
-alias knife-dev='export CHEF_ENV=dev; knife'
-alias knife-prod='export CHEF_ENV=prod; knife'
-alias knife-prod-ap='export CHEF_ENV=prod-ap; knife'
-alias knife-prod-apvpc='export CHEF_ENV=prod-ap-vpc; knife'
-alias knife-prod-eu='export CHEF_ENV=prod-eu; knife'
-alias knife-sjc1='export CHEF_ENV=sjc1; knife'
-alias knife-syd1='export CHEF_ENV=syd1; knife'
-alias aws-us='amazonaws --region us-east-1'
-alias aws-eu='amazonaws --region eu-west-1'
-alias aws-ap='amazonaws --region ap-northeast-1'
 
 ## Pipe Aliases (Global)
 #alias -g L='|less'
