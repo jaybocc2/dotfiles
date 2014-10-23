@@ -3,9 +3,10 @@
 files=$(git ls-tree master |awk '{print $4}' |egrep -v '(/|LICENSE|README|install.sh|vim-colors-solarized)')
 
 install() {
+  mkdir -p ~/.old_shell_files
   for file in $(echo $files);do
     if [[ -e ~/.${file} ]]; then
-      mv ~/.${file} ~/.${file}.old
+      mv ~/.${file} ~/.old_shell_files/.${file}.old
     fi
     ln -s $(pwd)/${file} ~/.${file}
   done

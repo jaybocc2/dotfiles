@@ -43,8 +43,8 @@ set completeopt=menuone,longest,preview
 filetype plugin on
 filetype indent on
 syntax on
-colorscheme solarized
 set background=dark
+colorscheme solarized
 
 " enable 80 and 120 character colums
 " set colorcolumn=+1
