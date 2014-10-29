@@ -1,6 +1,6 @@
 #!/bin/zsh
 # install for jaybocc2@'s dotfiles
-files=$(git ls-tree master |awk '{print $4}' |egrep -v '(/|LICENSE|README|install.sh|vim-colors-solarized)')
+files=$(git ls-tree master |awk '{print $4}' |egrep -v '(/|LICENSE|README|install.sh)')
 
 install() {
   for file in $(echo $files);do
