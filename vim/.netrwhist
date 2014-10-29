@@ -1,9 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =7
-let g:netrw_dirhist_1='/home/jaybocc2/code/snail'
-let g:netrw_dirhist_2='/home/jaybocc2/code'
-let g:netrw_dirhist_3='/home/jaybocc2/code/snail'
-let g:netrw_dirhist_4='/home/jaybocc2/code/snail/config'
-let g:netrw_dirhist_5='/home/jaybocc2/code/snail'
-let g:netrw_dirhist_6='/home/jaybocc2/code/snail/config'
-let g:netrw_dirhist_7='/home/jaybocc2/code/snail/vendor/assets/stylesheets'
