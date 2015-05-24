@@ -7,11 +7,6 @@ fi
 
 export PATH=${PATH}
 
-if [[ -d ~/.rbenv ]]; then
-    export PATH=${HOME}/.rbenv/bin:${PATH}
-    eval "$(rbenv init -)"
-fi
-
 source ~/.zsh/colors.zsh
 source ~/.zsh/functions.zsh
 
@@ -160,7 +155,7 @@ if (( ${SSHPID} == 0 )); then
   for i in $(ls ~/.ssh/keys/ |grep -v '.pub'); do
     ssh-add ~/.ssh/keys/${i}
   done
-  ssh-add -s libeToken.so.8 -t 28800
+  # ssh-add -s libeToken.so.8 -t 28800
 else
   source ~/.ssh/agent.${HOSTNAME}.${USER}
 fi
@@ -184,7 +179,7 @@ alias zrc='vim ~/.zshrc'
 alias dv='dirs -v'
 alias hist='history -rd'
 alias zc='zcalc'
-alias bjs='ssh-add -s libeToken.so.8 -t 28800'
+# alias bjs='ssh-add -s libeToken.so.8 -t 28800'
 alias ka='pkill ssh-agent'
 alias fa='source ~/.zshrc'
 alias tmuxmain='tmux -2 attach -t main'
@@ -201,6 +196,17 @@ alias tmuxwork='tmux -2 attach -t work'
 # directory aliases
 # use like: ls ~src OR ~src OR du -h ~src
 # src=~/src
+
+if [[ -d ~/.rbenv ]]; then
+    export PATH=${HOME}/.rbenv/bin:${PATH}
+    eval "$(rbenv init -)"
+fi
+
+if [[ -d ~/.pyenv]]; then
+  export PATH=${HOME}/.pyenv/bin:${PATH}
+  eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
+fi
 
 if [[ -e ~/.localized.zsh ]]; then
   source .localized.zsh
