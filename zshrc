@@ -209,5 +209,5 @@ if [[ -d ~/.pyenv ]]; then
 fi
 
 if [[ -e ~/.localized.zsh ]]; then
-  source .localized.zsh
+  source ~/.localized.zsh
 fi
