@@ -11,3 +11,7 @@
 	recurseSubmodules = true
 [push]
 	default = tracking
+[hub]
+  host = github.services.ooyala.net
+  user = jbendon
+	protocol = http

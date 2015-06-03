@@ -43,6 +43,11 @@ set completeopt=menuone,longest,preview
 filetype plugin on
 filetype indent on
 syntax on
+"let g:solarized_termcolors = 256
+"let g:solarized_degrade = 1
+let g:solarized_termtrans = 1
+let g:solarized_visibility = "high"
+let g:solarized_contrast = "normal"
 set background=dark
 colorscheme solarized
 
