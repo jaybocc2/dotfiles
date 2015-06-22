@@ -7,8 +7,10 @@ tmux_setup () {
   fi
 }
 
-if [[ $(hostname) == 'ua41f726ec3bf51b0fc71' ]]; then
-  tmux_setup work ~/.tmux/ubuntu.amz.conf
+if [[ $(uname -a |awk '{print $1}') == 'Darwin' ]]; then
+  tmux_setup main ~/.tmux/osx.conf
+elif [[ $(uname -a |awk '{print $1}') == 'Linux' ]]; then
+  tmux_setup main ~/.tmux/main.conf
 else
   tmux_setup main ~/.tmux/main.conf
 fi

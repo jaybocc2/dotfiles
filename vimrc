@@ -43,8 +43,11 @@ set completeopt=menuone,longest,preview
 filetype plugin on
 filetype indent on
 syntax on
-colorscheme solarized
+let g:solarized_termtrans = 1
+let g:solarized_visibility = "high"
+let g:solarized_contrast = "normal"
 set background=dark
+colorscheme solarized
 
 " set no error bells
 set noerrorbells visualbell t_vb=

@@ -3,9 +3,11 @@
 files=$(git ls-tree master |awk '{print $4}' |egrep -v '(/|LICENSE|README|install.sh)')
 
 install() {
+  bdir=$(date +%Y-%m-%d_%H:%M)
+  mkdir ~/dotfiles-backup/${bdir}/
   for file in $(echo $files);do
     if [[ -e ~/.${file} ]]; then
-      mv ~/.${file} ~/.${file}.old
+      mv ~/.${file} ~/dotfiles-backup/${bdir}/.${file}
     fi
     ln -s $(pwd)/${file} ~/.${file}
   done
