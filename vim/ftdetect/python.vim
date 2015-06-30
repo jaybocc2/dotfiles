@@ -1,3 +1,1 @@
-setlocal shiftwidth=4
-setlocal softtabstop=4
-setlocal tabstop=4
+autocmd FileType python setlocal shiftwidth=4 softtabstop=4 tabstop=4
