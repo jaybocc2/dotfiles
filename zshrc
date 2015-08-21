@@ -198,12 +198,10 @@ alias tmuxwork='tmux -2 attach -t work'
 # src=~/src
 
 if [[ -d ~/.rbenv ]]; then
-    export PATH=${HOME}/.rbenv/bin:${PATH}
-    eval "$(rbenv init -)"
+  eval "$(rbenv init -)"
 fi
 
 if [[ -d ~/.pyenv ]]; then
-  export PATH=${HOME}/.pyenv/bin:${PATH}
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
 fi
