@@ -1,8 +1,10 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " I don't really know what i'm doing...          "
 """"""""""""""""""""""""""""""""""""""""""""""""""
+execute pathogen#infect()
 set nocompatible                " be iMproved
 filetype off                    " required!
+set t_Co=256
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " Sourcing Vim Scripts and Functions             "
@@ -43,9 +45,10 @@ set completeopt=menuone,longest,preview
 filetype plugin on
 filetype indent on
 syntax on
+let g:solarized_termcolors=256
 let g:solarized_termtrans = 1
-let g:solarized_visibility = "high"
-let g:solarized_contrast = "normal"
+" let g:solarized_visibility = "high"
+" let g:solarized_contrast = "normal"
 set background=dark
 colorscheme solarized
 
@@ -60,8 +63,9 @@ nnoremap <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
 " Execute file being edited with <Shift> + e:
 map <buffer> <S-e> :w<CR>:!/usr/bin/env python % <CR>
 " Shorter commands to toggle Taglist display
-nnoremap TT :TlistToggle<CR>
-map <F4> :TlistToggle<CR>
+" nnoremap TT :TlistToggle<CR>
+" map <F4> :TlistToggle<CR>
+nmap <F4> :TagbarToggle<CR>
 map <F5> :silent !touch ~/code/{mc_cp,edb}/django.wsgi <CR>
 map <F6> :w <CR>
 set pastetoggle=<F8>
@@ -139,23 +143,57 @@ au BufNewFile,BufRead   *.psd1  set ft=ps1
 au BufNewFile,BufRead   *.psm1  set ft=ps1
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
+" GoLang FileType Settings                       "
+""""""""""""""""""""""""""""""""""""""""""""""""""
+au FileType go nmap <Leader>dt <Plug>(go-def-tab)
+au FileType go nmap <leader>r <Plug>(go-run)
+au FileType go nmap <leader>b <Plug>(go-build)
+au FileType go nmap <leader>t <Plug>(go-test)
+au FileType go nmap <leader>c <Plug>(go-coverage)
+au FileType go nmap <Leader>gd <Plug>(go-doc)
+au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
+au FileType go nmap <Leader>gb <Plug>(go-doc-browser)
+au FileType go nmap <Leader>s <Plug>(go-implements)
+au FileType go nmap <Leader>i <Plug>(go-info)
+au FileType go nmap <Leader>e <Plug>(go-rename)
+
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
+
+let g:go_fmt_command = "goimports"
+
+" let g:go_fmt_fail_silently = 1
+
+" let g:go_fmt_autosave = 0
+
+" let g:go_play_open_browser = 0
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
 " MISC Stuff                                     "
 """"""""""""""""""""""""""""""""""""""""""""""""""
 
-" Taglist variables
-" Display function name in status bar:
-let g:ctags_statusline=1
-" Automatically start script
-let generate_tags=1
-" Displays taglist results in a vertical window:
-let Tlist_Use_Horiz_Window=0
-" Various Taglist diplay config:
-let Tlist_Use_Right_Window = 1
-let Tlist_Compact_Format = 1
+" none X terminal
+" let g:indentLine_color_tty_light = 7 " (default: 4)
+" let g:indentLine_color_dark = 1 " (default: 2)
+let g:indentLine_color_term = 234 "234
+" let g:indentLine_color_dark = 0
+let g:indentLine_char = '│'
+let g:indentLine_enabled = 1
 
-let Tlist_GainFocus_On_ToggleOpen = 1
-let Tlist_File_Fold_Auto_Close = 1
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" Ultisnips                                      "
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" make YCM compatible with UltiSnips (using supertab)
+let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+let g:SuperTabDefaultCompletionType = '<C-n>'
 
-" tab completion for python
-let g:SuperTabDefaultCompletionType = "context"
-let g:SuperTabClosePreviewOnPopupClose = 1
+" better key bindings for UltiSnipsExpandTrigger
+let g:UltiSnipsExpandTrigger = "<tab>"
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+" If you want :UltiSnipsEdit to split your window.
+" let g:UltiSnipsEditSplit="vertical"

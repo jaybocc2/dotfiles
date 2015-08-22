@@ -3,6 +3,12 @@
 files=$(git ls-tree master |awk '{print $4}' |egrep -v '(/|LICENSE|README|install.sh)')
 
 install() {
+  echo "  ++  NOTICE  ++"
+  echo "Please install ctags, and go.  Also be sure to run :GoInstallBinaries in vim on first run, or some functionality will be missing."
+  echo "[Enter]"
+  read
+  git submodule update --init --recursive
+  git submodule sync --recursive
   bdir=$(date +%Y-%m-%d_%H:%M)
   mkdir ~/dotfiles-backup/${bdir}/
   for file in $(echo $files);do
@@ -11,6 +17,9 @@ install() {
     fi
     ln -s $(pwd)/${file} ~/.${file}
   done
+  pushd ~/dotfiles/vim/bundle/YouCompleteMe/
+  ./install.sh --gocode-completer
+  popd
 }
 
 purge-all() {
