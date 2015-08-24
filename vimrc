@@ -79,7 +79,7 @@ map <silent> <LocalLeader>aa :!make && make upload<CR>
 " Custom Commands                                "
 """"""""""""""""""""""""""""""""""""""""""""""""""
 
-command! Pylint cexpr system('/usr/bin/pylint --output-format=parseable --include-ids=y ' . expand('%'))
+command! Pylint cexpr system('/usr/bin/env pylint --output-format=parseable --include-ids=y ' . expand('%'))
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " Auto Commands                                  "
@@ -87,13 +87,13 @@ command! Pylint cexpr system('/usr/bin/pylint --output-format=parseable --includ
 
 " If your file's extention is .sh .pl. or .py
 " automatically set the executable bit.
-au BufWritePost *.sh !chmod +x %
-au BufWritePost *.pl !chmod +x %
-au BufWritePost *.py !chmod +x %
+" au BufWritePost *.sh !chmod +x %
+" au BufWritePost *.pl !chmod +x %
+" au BufWritePost *.py !chmod +x %
 " Bash style guide recommends you don't name your
 " scripts .sh, so this will make your file executable
 " as long as you have your shabang line as the first line.
-au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "bash" | silent !chmod +x <afile> | endif | endif
+" au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "bash" | silent !chmod +x <afile> | endif | endif
 
 au BufRead,BufNewFile *.go set shiftwidth=4 softtabstop=4 noexpandtab
 
