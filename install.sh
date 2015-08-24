@@ -17,7 +17,7 @@ install() {
     fi
     ln -s $(pwd)/${file} ~/.${file}
   done
-  pushd ~/dotfiles/vim/bundle/YouCompleteMe/
+  pushd vim/bundle/YouCompleteMe/
   ./install.sh --gocode-completer
   popd
 }
