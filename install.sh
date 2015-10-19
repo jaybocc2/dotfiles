@@ -10,7 +10,7 @@ install() {
   git submodule update --init --recursive
   git submodule sync --recursive
   bdir=$(date +%Y-%m-%d_%H:%M)
-  mkdir ~/dotfiles-backup/${bdir}/
+  mkdir -p ~/dotfiles-backup/${bdir}/
   for file in $(echo $files);do
     if [[ -e ~/.${file} ]]; then
       mv ~/.${file} ~/dotfiles-backup/${bdir}/.${file}
