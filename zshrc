@@ -197,15 +197,23 @@ alias tmuxwork='tmux -2 attach -t work'
 # use like: ls ~src OR ~src OR du -h ~src
 # src=~/src
 
-if [[ -d ~/.rbenv ]]; then
+if [ -d ~/.rbenv ]; then
+  which rbenv
+  if [ $? -gt 0 ];then
+    export PATH=${PATH}:${HOME}/.rbenv/bin
+  fi
   eval "$(rbenv init -)"
 fi
 
-if [[ -d ~/.pyenv ]]; then
+if [ -d ~/.pyenv ]; then
+  which pyenv
+  if [ $? -gt 0 ];then
+    export PATH=${PATH}:${HOME}/.pyenv/bin
+  fi
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
 fi
 
-if [[ -e ~/.localized.zsh ]]; then
+if [ -e ~/.localized.zsh ]; then
   source ~/.localized.zsh
 fi
