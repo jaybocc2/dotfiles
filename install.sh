@@ -5,7 +5,7 @@ files=$(git ls-tree master |awk '{print $4}' |egrep -v '(/|LICENSE|README|instal
 install() {
   echo "  ++  NOTICE  ++"
   echo "Please install ctags, and go.  Also be sure to run :GoInstallBinaries in vim on first run, or some functionality will be missing."
-  echo "[Enter]"
+  echo "Press [Enter] to continue..."
   read
   git submodule update --init --recursive
   git submodule sync --recursive
@@ -18,11 +18,17 @@ install() {
     ln -s $(pwd)/${file} ~/.${file}
   done
   pushd vim/bundle/YouCompleteMe/
-  ./install.sh --gocode-completer
+  git submodule update --init --recursive
+  git submodule sync --recursive
+  /usr/bin/python install.py --gocode-completer
   popd
 }
 
 purge-all() {
+  echo "  ++  NOTICE  ++"
+  echo "This will potentially remove all dotfiles checked into this repository from your home dir."
+  echo "Press [Enter] to continue..."
+  read
   for file in $(echo $files);do
     if [[ -e ~/.${file} ]] || [[ -h ~/.${file} ]]; then
       rm -rf ~/.${file}
