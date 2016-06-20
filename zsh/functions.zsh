@@ -10,8 +10,8 @@ prompt_git_info () {
     if [[ $git_repo_path != '.' && $(git ls-files -m) != "" ]]; then
       git_status=" $FG[001]$FX[bold]✗$FX[no-bold]"
     else
-      git_status=" $FG[002]✓"
+      git_status=" $FG[035]✓"
     fi
-    echo "$FG[008]${git_branch}$FG[007]${git_commit}${git_status} $FG[015]→"
+    echo "$FG[006]${git_branch}$FG[003]${git_commit_id}${git_status} $FG[016]→"
   fi
 }

@@ -34,7 +34,7 @@ set statusline=%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%04l,%04v]
 set laststatus=2
 set ruler
 set et
-set textwidth=80
+set textwidth=120
 set backspace=indent,eol,start " better backspace support
 set clipboard+=unnamed
 set autoread
@@ -49,7 +49,8 @@ let g:solarized_termcolors=256
 let g:solarized_termtrans = 1
 " let g:solarized_visibility = "high"
 " let g:solarized_contrast = "normal"
-set background=dark
+" set background=dark
+set background=light
 colorscheme solarized
 
 " set no error bells
