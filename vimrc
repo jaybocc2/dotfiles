@@ -193,8 +193,10 @@ if has("unix")
   if s:uname == "Darwin"
   " let g:ycm_path_to_python_interpreter = '/usr/bin/python2'
   " let g:ycm_path_to_python_interpreter = '/usr/bin/env python'
-  let g:ycm_path_to_python_interpreter = '/usr/bin/python'
+    let g:ycm_path_to_python_interpreter = '/usr/bin/python'
   " let g:ycm_path_to_python_interpreter = '/Users/jay/.pyenv/shims/python'
+  elseif s:uname == "Linux"
+    let g:ycm_path_to_python_interpreter = '/usr/bin/env python'
   endif
 endif
 " make YCM compatible with UltiSnips (using supertab)

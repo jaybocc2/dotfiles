@@ -20,7 +20,8 @@ install() {
   pushd vim/bundle/YouCompleteMe/
   git submodule update --init --recursive
   git submodule sync --recursive
-  /usr/bin/python install.py --gocode-completer
+  # /usr/bin/python install.py --gocode-completer --tern-completer
+  PYENV_VERSION=2.7.10 python install.py --gocode-completer --tern-completer
   popd
 }
 
