@@ -15,3 +15,7 @@ prompt_git_info () {
     echo "$FG[006]${git_branch}$FG[003]${git_commit_id}${git_status} $FG[016]→"
   fi
 }
+
+tmux_load_avg () {
+  cat /proc/loadavg || uptime |awk '{print $10, $11, $12}'
+}
