@@ -15,6 +15,7 @@ install() {
     if [[ -e ~/.${file} ]]; then
       mv ~/.${file} ~/dotfiles-backup/${bdir}/.${file}
     fi
+    rm -rf ~/.${file}
     ln -s $(pwd)/${file} ~/.${file}
   done
   pushd vim/bundle/YouCompleteMe/
