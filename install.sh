@@ -18,12 +18,6 @@ install() {
     rm -rf ~/.${file}
     ln -s $(pwd)/${file} ~/.${file}
   done
-  pushd vim/bundle/YouCompleteMe/
-  git submodule update --init --recursive
-  git submodule sync --recursive
-  # /usr/bin/python install.py --gocode-completer --tern-completer
-  PYENV_VERSION=2.7.10 python install.py --gocode-completer --tern-completer
-  popd
 }
 
 purge-all() {
