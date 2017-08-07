@@ -193,8 +193,7 @@ alias tmuxmain='tmux -2 attach -t main'
 alias tmuxwork='tmux -2 attach -t work'
 alias gows="cd ${GOPATH}/src/github.com/jaybocc2"
 alias vim="nvim"
-hubpath=$(which hub || which git-hub)
-eval "$(${hubpath} alias -s)"
+eval "$(hub alias -s)"
 
 ## Pipe Aliases (Global)
 #alias -g L='|less'
