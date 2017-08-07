@@ -1,6 +1,6 @@
 #!/bin/bash
 # install for jaybocc2@'s dotfiles
-DOT_FILES=$(git ls-tree neovim|awk '{print $4}' |egrep -v '(/|LICENSE|README|install.sh)')
+DOT_FILES=$(git ls-tree @{u}|awk '{print $4}' |egrep -v '(/|LICENSE|README|install.sh)')
 OS=$(uname |tr '[:upper:]' '[:lower:]')
 DEB_DEPS="wget neovim tmux zsh vim git xclip zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libncurses5-dev libssl-dev build-essential"
 OSX_DEPS="wget neovim tmux zsh vim git hub reattach-to-user-namespace"
