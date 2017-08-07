@@ -1,7 +1,7 @@
 #!/bin/bash
 # install for jaybocc2@'s dotfiles
 DOT_FILES=$(git ls-tree neovim|awk '{print $4}' |egrep -v '(/|LICENSE|README|install.sh)')
-OS=$(uname)
+OS=$(uname |tr '[:upper:]' '[:lower:]')
 DEB_DEPS="wget neovim tmux zsh vim git xclip zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libncurses5-dev libssl-dev build-essential"
 OSX_DEPS="wget neovim tmux zsh vim git hub reattach-to-user-namespace"
 GO_VERSION=1.8.3
@@ -80,19 +80,19 @@ install_nodenv() {
 }
 
 install_golang() {
-  wget -O /tmp/go${GO_VERSION}.${OS,,}-${ARCH}.tar.gz https://storage.googleapis.com/golang/go${GO_VERSION}.${OS,,}-${ARCH}.tar.gz
-  tar -C ${HOME} -xzf /tmp/go${GO_VERSION}.${OS,,}-${ARCH}.tar.gz
+  wget -O /tmp/go${GO_VERSION}.${OS}-${ARCH}.tar.gz https://storage.googleapis.com/golang/go${GO_VERSION}.${OS}-${ARCH}.tar.gz
+  tar -C ${HOME} -xzf /tmp/go${GO_VERSION}.${OS}-${ARCH}.tar.gz
 }
 
 install_deps() {
   echo ""
   echo "installing deps. . . ."
 
-  if [[ "${OS}" == "Darwin" ]];then
+  if [[ "${OS}" == "darwin" ]];then
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     brew install macvim --with-cscope --with-lua --HEAD --override-system-vim
     brew install ${OSX_DEPS}
-  elif [[ "${OS}" == "Linux" ]];then
+  elif [[ "${OS}" == "linux" ]];then
     source /etc/*-release
     if [[ "${ID}" == "debian" ]];then
       sudo apt-get install ${DEB_DEPS}
