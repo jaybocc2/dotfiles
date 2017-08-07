@@ -5,12 +5,12 @@ if [[ -e ~/.pre-zsh.zsh ]]; then
   source .pre-zsh.zsh
 fi
 
-export GOROOT=${HOME}/go
-export GOPATH=${HOME}/go-workspace
+export PATH=${PATH}
 export PYENV_ROOT="${HOME}/.pyenv"
 export RBENV_ROOT="${HOME}/.rbenv"
 export NODENV_ROOT="${HOME}/.nodenv"
-export PATH=${PATH}
+export GOROOT=${HOME}/go
+export GOPATH=${HOME}/go-workspace
 export PATH=${PATH}:${GOPATH}/bin:${GOROOT}/bin
 
 source ~/.zsh/colors.zsh
@@ -59,10 +59,6 @@ setopt HISTVERIFY
 autoload -U zcalc
 
 export TERM EDITOR PAGER RSYNC_RSH CVSROOT FIGNORE DISPLAY NNTPSERVER COLORTERM PATH HISTFILE HISTSIZE SAVEHIST
-
-# output colored grep
-export GREP_OPTIONS='--color=auto'
-export GREP_COLOR='7;31'
 
 # -----------------------------------------------
 # Prompt Setup
@@ -189,6 +185,7 @@ alias zrc='vim ~/.zshrc'
 alias dv='dirs -v'
 alias hist='history -rd'
 alias zc='zcalc'
+alias grep='grep --color'
 # alias bjs='ssh-add -s libeToken.so.8 -t 28800'
 alias ka='pkill ssh-agent'
 alias fa='source ~/.zshrc'

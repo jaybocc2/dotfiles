@@ -1,6 +1,6 @@
 #!/bin/bash
 # install for jaybocc2@'s dotfiles
-DOT_FILES=$(git ls-tree master |awk '{print $4}' |egrep -v '(/|LICENSE|README|install.sh)')
+DOT_FILES=$(git ls-tree neovim|awk '{print $4}' |egrep -v '(/|LICENSE|README|install.sh)')
 OS=$(uname)
 DEB_DEPS="wget neovim tmux zsh vim git git-hub zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libncurses5-dev libssl-dev build-essential"
 OSX_DEPS="wget neovim tmux zsh vim git hub reattach-to-user-namespace"
@@ -8,6 +8,7 @@ GO_VERSION=1.8.3
 ARCH=amd64
 PY3_VERSION=3.6.2
 PY2_VERSION=2.7.13
+NODE_VERSION=6.11.2
 
 # backup dotfiles
 backup_dotfiles() {
@@ -68,6 +69,14 @@ install_nodenv() {
     || update_repo ~/.nodenv
   git clone https://github.com/nodenv/node-build.git ~/.nodenv/plugins/node-build \
     || update_repo ~/.nodenv/plugins/node-build
+
+  NODENV_ROOT="${HOME}/.nodenv"
+  PATH=${NODENV_ROOT}/bin:${PATH}
+  eval "$(nodenv init -)"
+
+  nodenv install ${NODE_VERSION}
+  nodenv global ${NODE_VERSION}
+  npm install -g tern
 }
 
 install_golang() {
@@ -136,9 +145,17 @@ install_vim_plugins() {
   PYENV_ROOT="${HOME}/.pyenv"
   PATH=${PYENV_ROOT}/bin:${PATH}
   eval "$(pyenv init -)"
+
+  NODENV_ROOT="${HOME}/.nodenv"
+  PATH=${NODENV_ROOT}/bin:${PATH}
+  eval "$(nodenv init -)"
+
+  export GOROOT=${HOME}/go
+  export GOPATH=${HOME}/go-workspace
+  export PATH=${PATH}:${GOPATH}/bin:${GOROOT}/bin
   
   nvim +PlugInstall
-  nvim +GoInstallBinaries
+  nvim +GoInstallBinaries +qall
 }
 
 install() {

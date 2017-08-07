@@ -5,7 +5,7 @@ call plug#begin('~/.vim/plugged')
 " code completion
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-  Plug "carlitux/deoplete-ternjs"
+  " Plug 'carlitux/deoplete-ternjs', { 'do': 'NODENV_VERSION=6.11.2 npm install -g tern' }
   Plug 'zchee/deoplete-go', { 'do': 'make'}
   Plug 'fishbullet/deoplete-ruby'
   Plug 'zchee/deoplete-jedi'
@@ -25,7 +25,7 @@ Plug 'junegunn/vim-easy-align' " code alignment
 
 "" Lang Specific
 " GoLang
-Plug 'fatih/vim-go
+Plug 'fatih/vim-go'
 Plug 'godoctor/godoctor.vim'
 " Markdown
 Plug 'gabrielelana/vim-markdown'

@@ -5,8 +5,8 @@ set nocompatible                " be iMproved, required!
 filetype off                    " required!
 
 " load plugins
-if filereadable(expand('~/.custom.plugs'))
-  source $HOME/.custom.plugs
+if filereadable(expand('~/.vim/custom-plugins.vim'))
+  source $HOME/.vim/custom-plugins.vim
 endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
@@ -162,6 +162,8 @@ endfunction
 au! BufRead,BufNewFile *.json set filetype=json
 " autocmd BufNewFile,BufRead *.json set ft=javascript
 "let g:vim_json_syntax_conceal = 0
+" Use tern_for_vim.
+let g:tern#command = [system(expand('~/.nodenv/bin/nodenv which tern'))]
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " Powershell FileType Settings                   "
