@@ -24,11 +24,14 @@ Plug 'w0rp/ale' " lint
 Plug 'junegunn/vim-easy-align' " code alignment
 
 "" Lang Specific
+
 " GoLang
 Plug 'fatih/vim-go'
 Plug 'godoctor/godoctor.vim'
+
 " Markdown
 Plug 'gabrielelana/vim-markdown'
+
 " Java
 Plug 'artur-shaik/vim-javacomplete2'
 
