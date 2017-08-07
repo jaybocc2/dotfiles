@@ -5,7 +5,13 @@ if [[ -e ~/.pre-zsh.zsh ]]; then
   source .pre-zsh.zsh
 fi
 
+export GOROOT=${HOME}/go
+export GOPATH=${HOME}/go-workspace
+export PYENV_ROOT="${HOME}/.pyenv"
+export RBENV_ROOT="${HOME}/.rbenv"
+export NODENV_ROOT="${HOME}/.nodenv"
 export PATH=${PATH}
+export PATH=${PATH}:${GOPATH}/bin:${GOROOT}/bin
 
 source ~/.zsh/colors.zsh
 source ~/.zsh/functions.zsh
@@ -188,6 +194,10 @@ alias ka='pkill ssh-agent'
 alias fa='source ~/.zshrc'
 alias tmuxmain='tmux -2 attach -t main'
 alias tmuxwork='tmux -2 attach -t work'
+alias gows="cd ${GOPATH}/src/github.com/jaybocc2"
+alias vim="nvim"
+hubpath=$(which hub || which git-hub)
+eval "$(${hubpath} alias -s)"
 
 ## Pipe Aliases (Global)
 #alias -g L='|less'
@@ -204,7 +214,7 @@ alias tmuxwork='tmux -2 attach -t work'
 if [ -d ~/.rbenv ]; then
   which rbenv
   if [ $? -gt 0 ];then
-    export PATH=${PATH}:${HOME}/.rbenv/bin
+    export PATH=${RBENV_ROOT}/bin:${PATH}
   fi
   eval "$(rbenv init -)"
 fi
@@ -212,10 +222,18 @@ fi
 if [ -d ~/.pyenv ]; then
   which pyenv
   if [ $? -gt 0 ];then
-    export PATH=${PATH}:${HOME}/.pyenv/bin
+    export PATH=${PYENV_ROOT}/bin:${PATH}
   fi
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
+fi
+
+if [ -d ~/.nodenv]; then
+  which nodenv
+  if [ $? -gt 0 ];then
+    export PATH=${NODENV_ROOT}/bin:${PATH}
+  fi
+  eval "$(nodenv init -)"
 fi
 
 if [ -e ~/.localized.zsh ]; then

@@ -7,9 +7,9 @@ tmux_setup () {
   fi
 }
 
-if [[ $(uname -a |awk '{print $1}') == 'Darwin' ]]; then
+if [[ $(uname) == 'Darwin' ]]; then
   tmux_setup main ~/.tmux/osx.init
-elif [[ $(uname -a |awk '{print $1}') == 'Linux' ]]; then
+elif [[ $(uname) == 'Linux' ]]; then
   tmux_setup main ~/.tmux/main.init
 else
   tmux_setup main ~/.tmux/main.init
