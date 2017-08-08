@@ -1,12 +1,6 @@
 # -----------------------------------------------
 # Set up the Environment
 # -----------------------------------------------
-if [[ -e ~/.pre-zsh.zsh ]]; then
-  source .pre-zsh.zsh
-fi
-
-export PATH=${PATH}
-
 source ~/.zsh/colors.zsh
 source ~/.zsh/functions.zsh
 
@@ -53,10 +47,6 @@ setopt HISTVERIFY
 autoload -U zcalc
 
 export TERM EDITOR PAGER RSYNC_RSH CVSROOT FIGNORE DISPLAY NNTPSERVER COLORTERM PATH HISTFILE HISTSIZE SAVEHIST
-
-# output colored grep
-export GREP_OPTIONS='--color=auto'
-export GREP_COLOR='7;31'
 
 # -----------------------------------------------
 # Prompt Setup
@@ -183,11 +173,15 @@ alias zrc='vim ~/.zshrc'
 alias dv='dirs -v'
 alias hist='history -rd'
 alias zc='zcalc'
+alias grep='grep --color'
 # alias bjs='ssh-add -s libeToken.so.8 -t 28800'
 alias ka='pkill ssh-agent'
 alias fa='source ~/.zshrc'
 alias tmuxmain='tmux -2 attach -t main'
 alias tmuxwork='tmux -2 attach -t work'
+alias gows="cd ${GOPATH}/src/github.com/jaybocc2"
+alias vim="nvim"
+eval "$(hub alias -s)"
 
 ## Pipe Aliases (Global)
 #alias -g L='|less'
@@ -200,23 +194,6 @@ alias tmuxwork='tmux -2 attach -t work'
 # directory aliases
 # use like: ls ~src OR ~src OR du -h ~src
 # src=~/src
-
-if [ -d ~/.rbenv ]; then
-  which rbenv
-  if [ $? -gt 0 ];then
-    export PATH=${PATH}:${HOME}/.rbenv/bin
-  fi
-  eval "$(rbenv init -)"
-fi
-
-if [ -d ~/.pyenv ]; then
-  which pyenv
-  if [ $? -gt 0 ];then
-    export PATH=${PATH}:${HOME}/.pyenv/bin
-  fi
-  eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
-fi
 
 if [ -e ~/.localized.zsh ]; then
   source ~/.localized.zsh
