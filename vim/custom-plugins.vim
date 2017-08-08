@@ -22,6 +22,8 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'FooSoft/vim-argwrap' " arg (de)wrapping
 Plug 'w0rp/ale' " lint
 Plug 'junegunn/vim-easy-align' " code alignment
+Plug 'majutsushi/tagbar' " tag bar
+Plug 'scrooloose/nerdtree' " tree explorer
 
 "" Lang Specific
 

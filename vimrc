@@ -78,6 +78,7 @@ nnoremap <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
 " nnoremap TT :TlistToggle<CR>
 " map <F4> :TlistToggle<CR>
 nmap <F4> :TagbarToggle<CR>
+map <F5> :NERDTreeToggle<CR>
 map <F6> :w <CR>
 set pastetoggle=<F8>
 
