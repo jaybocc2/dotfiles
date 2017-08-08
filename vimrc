@@ -52,7 +52,9 @@ set completeopt=menuone,longest,preview
 " plugins and syntax
 filetype plugin indent on
 syntax on
-set termguicolors
+if has('nvim')
+  set termguicolors
+endif
 let g:deoplete#enable_at_startup = 1
 let g:solarized_termcolors=256
 let g:solarized_termtrans = 1
