@@ -26,7 +26,7 @@ if [ -d ~/.pyenv ]; then
   eval "$(pyenv virtualenv-init -)"
 fi
 
-if [ -d ~/.nodenv]; then
+if [ -d ~/.nodenv ]; then
   which nodenv
   if [ $? -gt 0 ];then
     export PATH=${NODENV_ROOT}/bin:${PATH}
