@@ -16,7 +16,18 @@ if !has('nvim')
 endif
 
 " Colors
-Plug 'altercation/vim-colors-solarized'
+Plug 'freeo/vim-kalisi'
+Plug 'josuegaleas/jay'
+Plug 'morhetz/gruvbox'
+Plug 'rakr/vim-one'
+if has('nvim')
+  Plug 'frankier/neovim-colors-solarized-truecolor-only'
+else
+  Plug 'altercation/vim-colors-solarized'
+endif
+
+" statusbar
+Plug 'vim-airline/vim-airline'
 
 """ syntax & linting
 Plug 'FooSoft/vim-argwrap' " arg (de)wrapping

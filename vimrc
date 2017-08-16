@@ -56,13 +56,14 @@ if has('nvim')
   set termguicolors
 endif
 let g:deoplete#enable_at_startup = 1
-let g:solarized_termcolors=256
-let g:solarized_termtrans = 1
+" let g:solarized_termcolors=256
+" let g:solarized_termtrans = 1
 " let g:solarized_visibility = "high"
 " let g:solarized_contrast = "normal"
 " set background=dark
 set background=light
-colorscheme solarized
+" colorscheme solarized
+colorscheme kalisi
 
 " set no error bells
 set noerrorbells visualbell t_vb=
@@ -110,6 +111,8 @@ command! Pylint cexpr system('/usr/bin/env pylint --output-format=parseable --in
 au BufRead,BufNewFile *.go set shiftwidth=4 softtabstop=4 noexpandtab
 autocmd FileType html setlocal shiftwidth=2 tabstop=2 expandtab
 autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 expandtab
+autocmd FileType groovy setlocal shiftwidth=4 tabstop=4 expandtab
+autocmd FileType java setlocal shiftwidth=4 tabstop=4 expandtab
 
 au FileType python call FT_Python()
 au FileType python set omnifunc=pythoncomplete#Complete
