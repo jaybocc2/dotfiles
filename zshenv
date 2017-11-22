@@ -7,11 +7,11 @@ export RBENV_ROOT="${HOME}/.rbenv"
 export NODENV_ROOT="${HOME}/.nodenv"
 export GOROOT=${HOME}/go
 export GOPATH=${HOME}/go-workspace
-export PATH=${PATH}:${GOPATH}/bin:${GOROOT}/bin
+export PATH=${GOPATH}/bin:${GOROOT}/bin:${PATH}
 
 if [ -d ~/.rbenv ]; then
   which rbenv
-  if [ $? -gt 0 ];then
+  if [ $? -gt 0 ] && [ "$(echo ${PATH} |grep -o 'rbenv')" = 'rbenv' ];then
     export PATH=${RBENV_ROOT}/bin:${PATH}
   fi
   eval "$(rbenv init -)"
@@ -19,7 +19,7 @@ fi
 
 if [ -d ~/.pyenv ]; then
   which pyenv
-  if [ $? -gt 0 ];then
+  if [ $? -gt 0 ] && [ "$(echo ${PATH} |grep -o 'pyenv')" = 'pyenv' ];then
     export PATH=${PYENV_ROOT}/bin:${PATH}
   fi
   eval "$(pyenv init -)"
@@ -28,7 +28,7 @@ fi
 
 if [ -d ~/.nodenv ]; then
   which nodenv
-  if [ $? -gt 0 ];then
+  if [ $? -gt 0 ] && [ "$(echo ${PATH} |grep -o 'nodenv')" = 'nodenv' ];then
     export PATH=${NODENV_ROOT}/bin:${PATH}
   fi
   eval "$(nodenv init -)"

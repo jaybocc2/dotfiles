@@ -3,7 +3,7 @@
 DOT_FILES=$(git ls-tree @{u}|awk '{print $4}' |egrep -v '(/|LICENSE|README|install.sh)')
 OS=$(uname |tr '[:upper:]' '[:lower:]')
 DEB_DEPS="exuberant-ctags wget neovim tmux zsh vim git xclip zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libncurses5-dev libssl-dev build-essential"
-OSX_DEPS="ctags wget neovim tmux zsh vim git hub reattach-to-user-namespace"
+OSX_DEPS="ctags wget neovim tmux zsh vim git hub"
 GO_VERSION=1.8.3
 ARCH=amd64
 PY3_VERSION=3.6.2

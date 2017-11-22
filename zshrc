@@ -141,9 +141,9 @@ HOSTNAME=$(hostname)
 SSHAGENT=/usr/bin/ssh-agent
 SSHAGENTARGS=""
 
-SSHPID=$(ps ax|grep -c "[s]sh-agent")
+SSHEC=$(ps ax|grep -c "[s]sh-agent")
 
-if (( ${SSHPID} == 0 )); then
+if [ ${SSHEC} -eq 0 ]; then
   eval $(${SSHAGENT} ${SSHAGENTARGS} > ~/.ssh/agent.${HOSTNAME}.${USER})
   source ~/.ssh/agent.${HOSTNAME}.${USER}
   for i in $(ls ~/.ssh/keys/ |grep -v '.pub'); do
