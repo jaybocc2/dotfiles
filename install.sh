@@ -88,6 +88,7 @@ install_deps() {
   echo "installing deps. . . ."
 
   if [[ "${OS}" == "darwin" ]];then
+    xcode-select --install
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     brew install macvim --with-cscope --with-lua --HEAD --override-system-vim
     brew install ${OSX_DEPS}
