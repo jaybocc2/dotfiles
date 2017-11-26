@@ -7,7 +7,12 @@ export RBENV_ROOT="${HOME}/.rbenv"
 export NODENV_ROOT="${HOME}/.nodenv"
 export GOROOT=${HOME}/go
 export GOPATH=${HOME}/go-workspace
-export PATH=${GOPATH}/bin:${GOROOT}/bin:${PATH}
+
+if [ -e ${GOROOT} -a -e ${GOPATH} ];then
+  if [ "$(echo ${PATH} |grep -o \"${GOROOT}\")" = "${GOROOT}" ] && [ "$(echo ${PATH} |grep -o \"${GOROOT}\")" = "${GOROOT}" ]; then
+    export PATH=${GOPATH}/bin:${GOROOT}/bin:${PATH}
+  fi
+fi
 
 if [ -d ~/.rbenv ]; then
   which rbenv

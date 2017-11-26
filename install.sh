@@ -9,6 +9,7 @@ ARCH=amd64
 PY3_VERSION=3.6.2
 PY2_VERSION=2.7.13
 NODE_VERSION=6.11.2
+PYENV_PACKAGES="neovim flake8 pylint"
 
 # backup dotfiles
 backup_dotfiles() {
@@ -49,12 +50,10 @@ install_pyenv() {
   pyenv virtualenv ${PY3_VERSION} neovim3
   pyenv virtualenv ${PY2_VERSION} neovim
 
-  PYENV_VERSION='neovim3' pip install neovim
-  PYENV_VERSION='neovim3' pip install flake8
-  PYENV_VERSION='neovim3' pip install pylint
-  PYENV_VERSION='neovim' pip install neovim
-  PYENV_VERSION='neovim' pip install flake8
-  PYENV_VERSION='neovim' pip install pylint
+  for package in $(echo $PYENV_PACKAGES);do
+    PYENV_VERSION='neovim3' pip install ${package}
+    PYENV_VERSION='neovim' pip install ${package}
+  done
 }
 
 install_rbenv() {
