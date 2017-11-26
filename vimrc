@@ -57,13 +57,13 @@ if has('nvim')
 endif
 let g:deoplete#enable_at_startup = 1
 " let g:solarized_termcolors=256
-" let g:solarized_termtrans = 1
+let g:solarized_termtrans = 1
 " let g:solarized_visibility = "high"
 " let g:solarized_contrast = "normal"
-" set background=dark
-set background=light
-" colorscheme solarized
-colorscheme kalisi
+set background=dark
+" set background=light
+colorscheme solarized
+" colorscheme kalisi
 
 " set no error bells
 set noerrorbells visualbell t_vb=
@@ -229,6 +229,34 @@ if has('persistent_undo')
  let &undodir = myUndoDir
  set undofile
 endif
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+"" PromptLine Config                              "
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:promptline_preset = {
+  \'a'    : [ promptline#slices#user(), promptline#slices#host({ 'only_if_ssh': 1 }) ],
+  \'b'    : [ promptline#slices#cwd() ],
+  \'c'    : [ promptline#slices#vcs_branch(), '$(git rev-parse --short HEAD 2>/dev/null)' ],
+  \'x'    : [ promptline#slices#git_status() ],
+  \'y'    : [ promptline#slices#jobs() ],
+  \'z'    : [ '%D{%A %Y-%m-%d} %T' ],
+  \'warn' : [ promptline#slices#last_exit_code() ],
+  \'options': {
+    \'left_sections' : [ 'a', 'b', 'c', 'x', 'warn' ],
+    \'right_sections' : [ 'y', 'z' ]}}
+
+let g:tmuxline_preset = {
+  \ 'a': '#S',
+  \ 'b': '#H',
+  \ 'win': ['#I', '#W'],
+  \ 'cwin': ['#I', '#W'],
+  \ 'x': "#(uptime |awk '{ print $10, $11, $12 }'|tr -d ',')",
+  \ 'y': ['%A', '%Y-%m-%d'],
+  \ 'z': '%H:%M'}
+
+let g:airline#extensions#tmuxline#enabled = 0
+let g:tmuxline_theme = 'airline_insert'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""
 "" Ultisnips                                      "

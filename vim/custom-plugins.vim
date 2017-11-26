@@ -20,6 +20,8 @@ Plug 'freeo/vim-kalisi'
 Plug 'josuegaleas/jay'
 Plug 'morhetz/gruvbox'
 Plug 'rakr/vim-one'
+Plug 'joshdick/onedark.vim'
+Plug 'jonathanfilip/vim-lucius'
 if has('nvim')
   Plug 'frankier/neovim-colors-solarized-truecolor-only'
 else
@@ -28,6 +30,10 @@ endif
 
 " statusbar
 Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+" airline generator
+Plug 'edkolev/promptline.vim'
+Plug 'edkolev/tmuxline.vim'
 
 """ syntax & linting
 Plug 'FooSoft/vim-argwrap' " arg (de)wrapping

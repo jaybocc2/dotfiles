@@ -54,15 +54,8 @@ export TERM EDITOR PAGER RSYNC_RSH CVSROOT FIGNORE DISPLAY NNTPSERVER COLORTERM 
 setopt promptsubst
 autoload -U promptinit && promptinit
 
-# PROMPT='
-# $BG[234]$FG[007][ $FG[027]%n$FG[011]@$FG[002]%m$FG[007] ] $BG[238] $FG[011]%~ $BG[234]$FG[015] [$FG[008]$FX[bold]%h$FX[no-bold]$FG[015]]
-# $BG[234]$FG[001]%(?..[%?%1v] )$BG[234]$FG[015]→$(prompt_git_info) $FG[027]%B%#%b%f$reset_color '
-
-PROMPT='
-$BG[015]$FG[008][ $FG[027]%n$FG[011]@$FG[002]%m$FG[008] ] $BG[007] $FG[011]%~ $BG[015]$FG[008] [ $FG[006]$FX[bold]%h$FX[no-bold] $FG[008]]
-$BG[015]$FG[001]%(?..[%?%1v] )$BG[015]$FG[016]→$(prompt_git_info) $FG[027]%B%#%b%f$reset_color '
-
-RPROMPT="$FG[027]%D{%A %Y-%m-%d} $FG[006]%T%b%f"
+# source airline style zsh prompt
+source ~/.zsh/prompt.zsh
 
 autoload -U zrecompile
 
