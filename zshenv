@@ -15,26 +15,30 @@ if [ -e ${GOROOT} -a -e ${GOPATH} ];then
 fi
 
 if [ -d ~/.rbenv ]; then
-  which rbenv
-  if [ $? -gt 0 ] && [ "$(echo ${PATH} |grep -o 'rbenv')" = 'rbenv' ];then
+  if [ "$(echo ${PATH} |grep -o '.rbenv/bin')" != '.rbenv/bin' ];then
     export PATH=${RBENV_ROOT}/bin:${PATH}
   fi
-  eval "$(rbenv init -)"
+  if [ "$(echo ${PATH} |grep -o '.rbenv/shims')" != '.rbenv/shims' ];then
+    eval "$(rbenv init -)"
+  fi
 fi
 
 if [ -d ~/.pyenv ]; then
-  which pyenv
-  if [ $? -gt 0 ] && [ "$(echo ${PATH} |grep -o 'pyenv')" = 'pyenv' ];then
+  if [ "$(echo ${PATH} |grep -o '.pyenv/bin')" != '.pyenv/bin' ]; then
     export PATH=${PYENV_ROOT}/bin:${PATH}
   fi
-  eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
+  if [ "$(echo ${PATH} |grep -o '.pyenv/shims')" != '.pyenv/shims' ]; then
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+  fi
 fi
 
 if [ -d ~/.nodenv ]; then
-  which nodenv
-  if [ $? -gt 0 ] && [ "$(echo ${PATH} |grep -o 'nodenv')" = 'nodenv' ];then
+  if [ "$(echo ${PATH} |grep -o '.nodenv/bin')" != '.nodenv/bin' ]; then
     export PATH=${NODENV_ROOT}/bin:${PATH}
   fi
-  eval "$(nodenv init -)"
+
+  if [ "$(echo ${PATH} |grep -o '.nodenv/shims')" != '.nodenv/shims' ]; then
+    eval "$(nodenv init -)"
+  fi
 fi
