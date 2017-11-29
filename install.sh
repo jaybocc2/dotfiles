@@ -2,14 +2,15 @@
 # install for jaybocc2@'s dotfiles
 DOT_FILES=$(git ls-tree @{u}|awk '{print $4}' |egrep -v '(/|LICENSE|README|install.sh)')
 OS=$(uname |tr '[:upper:]' '[:lower:]')
-DEB_DEPS="exuberant-ctags wget neovim tmux zsh vim git xclip zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libncurses5-dev libssl-dev build-essential"
-OSX_DEPS="ctags wget neovim tmux zsh vim git hub htop"
+DEB_DEPS="exuberant-ctags wget neovim tmux zsh vim git xclip zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libncurses5-dev libssl-dev build-essential htop"
+OSX_DEPS="ctags wget neovim tmux zsh vim git hub"
 GO_VERSION=1.8.3
 ARCH=amd64
 PY3_VERSION=3.6.2
 PY2_VERSION=2.7.13
 NODE_VERSION=6.11.2
-PYENV_PACKAGES="neovim flake8 pylint"
+NEOVIM_PYENV_PACKAGES="neovim flake8 pylint"
+GLOBAL_PYENV_PACKAGES="glances"
 
 # backup dotfiles
 backup_dotfiles() {
@@ -50,7 +51,12 @@ install_pyenv() {
   pyenv virtualenv ${PY3_VERSION} neovim3
   pyenv virtualenv ${PY2_VERSION} neovim
 
-  for package in $(echo $PYENV_PACKAGES);do
+  for package in $(echo $GLOBAL_PYENV_PACKAGES);do
+    PYENV_VERSION='3global' pip install ${package}
+    PYENV_VERSION='2global' pip install ${package}
+  done
+
+  for package in $(echo $NEOVIM_PYENV_PACKAGES);do
     PYENV_VERSION='neovim3' pip install ${package}
     PYENV_VERSION='neovim' pip install ${package}
   done
@@ -91,12 +97,12 @@ install_deps() {
     xcode-select --install
     which brew
     if [ "$?" -gt 0 ]; then
-    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+      /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     else
       brew update
     fi
-    # brew install macvim --with-cscope --with-lua --HEAD --override-system-vim
     brew install ${OSX_DEPS}
+    brew upgrade ${OSX_DEPS}
   elif [[ "${OS}" == "linux" ]];then
     source /etc/*-release
     if [[ "${ID}" == "debian" ]];then
