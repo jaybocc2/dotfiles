@@ -1,6 +1,7 @@
 # -----------------------------------------------
 # Set up the Environment
 # -----------------------------------------------
+source ~/.zsh/env.zsh
 source ~/.zsh/colors.zsh
 source ~/.zsh/functions.zsh
 
