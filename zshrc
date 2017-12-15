@@ -6,7 +6,7 @@ source ~/.zsh/colors.zsh
 source ~/.zsh/functions.zsh
 
 
-EDITOR="vim"
+EDITOR="nvim"
 PAGER=less
 RSYNC_RSH=/usr/bin/ssh
 FIGNORE='.o:.out:~'
@@ -32,8 +32,8 @@ ZLS_COLORS="$LS_COLORS" COLORTERM=yes
 # history saves 50,000 in it if we want to open it
 # only the last 1000 are part of backward searching
 HISTFILE=~/.zshhistory
-HISTSIZE=50000
-SAVEHIST=50000
+HISTSIZE=100000
+SAVEHIST=100000
 
 # share history across terminal sessions
 setopt SHARE_HISTORY
