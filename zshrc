@@ -131,7 +131,7 @@ bindkey -v
 # -----------------------------------------------
 # SSH AGENT SETUP
 # -----------------------------------------------
-HOSTNAME=$(hostname)
+HOSTNAME=$(hostname -s)
 SSHAGENT=/usr/bin/ssh-agent
 SSHAGENTARGS=""
 
