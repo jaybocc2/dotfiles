@@ -163,6 +163,7 @@ install_vim_plugins() {
 
   export GOROOT=${HOME}/go
   export GOPATH=${HOME}/go-workspace
+  mkdir -p ${GOPATH}
   export PATH=${PATH}:${GOPATH}/bin:${GOROOT}/bin
   
   nvim +GoInstallBinaries +qall

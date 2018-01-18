@@ -4,7 +4,7 @@
 export PATH=${PATH}
 
 if [ -e ${GOROOT} -a -e ${GOPATH} ];then
-  if [ "$(echo ${PATH} |grep -o \"${GOROOT}\")" = "${GOROOT}" ] && [ "$(echo ${PATH} |grep -o \"${GOROOT}\")" = "${GOROOT}" ]; then
+  if [ "$(echo ${PATH} |grep -o "${GOROOT}"|head -n 1)" != "${GOROOT}" ]; then
     export PATH=${GOPATH}/bin:${GOROOT}/bin:${PATH}
   fi
 fi
