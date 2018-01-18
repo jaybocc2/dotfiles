@@ -85,6 +85,12 @@ install_nodenv() {
 }
 
 install_golang() {
+  if [ $(command -v go -a $(go version |egrep -o 'go\d+\.\d+\.\d+') != "go${GO_VERSION}" ) ]; then
+    rm -rf ${HOME}/go
+  elif [ $(command -v go -a $(go version |egrep -o 'go\d+\.\d+\.\d+') == "go${GO_VERSION}" )]; then
+    return
+  fi
+
   wget -O /tmp/go${GO_VERSION}.${OS}-${ARCH}.tar.gz https://storage.googleapis.com/golang/go${GO_VERSION}.${OS}-${ARCH}.tar.gz
   tar -C ${HOME} -xzf /tmp/go${GO_VERSION}.${OS}-${ARCH}.tar.gz
 }
