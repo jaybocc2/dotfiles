@@ -2,7 +2,8 @@
 # install for jaybocc2@'s dotfiles
 DOT_FILES=$(git ls-tree @{u}|awk '{print $4}' |egrep -v '(/|LICENSE|README|install.sh)')
 OS=$(uname |tr '[:upper:]' '[:lower:]')
-DEB_DEPS="exuberant-ctags wget neovim tmux zsh vim git xclip zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libncurses5-dev libssl-dev build-essential htop"
+DEB_DEPS="exuberant-ctags wget tmux zsh vim git xclip zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libncurses5-dev libssl-dev build-essential htop"
+DEB_BACKPORTS_DEPS="neovim"
 OSX_DEPS="ctags wget neovim tmux zsh vim git hub"
 GO_VERSION=1.9.2
 ARCH=amd64
@@ -113,6 +114,7 @@ install_deps() {
     source /etc/*-release
     if [[ "${ID}" == "debian" ]];then
       sudo apt-get install ${DEB_DEPS}
+      sudo apt-get -t jessie-backports install ${DEB_BACKPORTS_DEPS}
     fi
   fi
 
