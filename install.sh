@@ -114,7 +114,7 @@ install_deps() {
     source /etc/*-release
     if [[ "${ID}" == "debian" ]];then
       sudo apt-get install ${DEB_DEPS}
-      sudo apt-get -t jessie-backports install ${DEB_BACKPORTS_DEPS}
+      sudo apt-get -t stretch-backports install ${DEB_BACKPORTS_DEPS}
     fi
   fi
 
