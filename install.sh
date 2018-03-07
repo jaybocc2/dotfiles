@@ -52,13 +52,13 @@ install_pyenv() {
   pyenv virtualenv ${PY2_VERSION} neovim
 
   for package in $(echo $GLOBAL_PYENV_PACKAGES);do
-    PYENV_VERSION='3global' pip install ${package}
-    PYENV_VERSION='2global' pip install ${package}
+    PYENV_VERSION='3global' pip install ${package} -U
+    PYENV_VERSION='2global' pip install ${package} -U
   done
 
   for package in $(echo $NEOVIM_PYENV_PACKAGES);do
-    PYENV_VERSION='neovim3' pip install ${package}
-    PYENV_VERSION='neovim' pip install ${package}
+    PYENV_VERSION='neovim3' pip install ${package} -U
+    PYENV_VERSION='neovim' pip install ${package} -U
   done
 }
 
