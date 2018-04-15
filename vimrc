@@ -48,6 +48,7 @@ set autoread
 set clipboard=unnamedplus
 set lazyredraw
 set completeopt=menuone,longest,preview
+set hidden
 
 " plugins and syntax
 filetype plugin indent on
@@ -210,6 +211,16 @@ let g:go_addtags_transform = "camelcase"
 " let g:go_fmt_autosave = 0
 
 " let g:go_play_open_browser = 0
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" JavaScript FileType Settings                   "
+""""""""""""""""""""""""""""""""""""""""""""""""""
+au BufRead,BufNewFile *.js set filetype=javascript
+let g:user_emmet_settings = {
+\  'javascript.jsx' : {
+\      'extends' : 'jsx',
+\  },
+\}
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " MISC Stuff                                     "

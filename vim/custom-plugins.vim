@@ -41,6 +41,7 @@ Plug 'w0rp/ale' " lint
 Plug 'junegunn/vim-easy-align' " code alignment
 Plug 'majutsushi/tagbar' " tag bar
 Plug 'scrooloose/nerdtree' " tree explorer
+Plug 'nathanaelkane/vim-indent-guides' " indent guides
 
 "" Lang Specific
 
@@ -53,6 +54,12 @@ Plug 'gabrielelana/vim-markdown'
 
 " Java
 Plug 'artur-shaik/vim-javacomplete2'
+
+" JavaScript
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+Plug 'mattn/emmet-vim'
+
 
 " Initialize plugin system
 call plug#end()
