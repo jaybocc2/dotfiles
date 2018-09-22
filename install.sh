@@ -178,6 +178,8 @@ install_vim_plugins() {
   
   nvim +GoInstallBinaries +qall
   nvim +PlugInstall +qall
+  nvim +PlugUpgrade +qall
+  nvim +PlugUpdate +qall
 }
 
 install() {
