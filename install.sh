@@ -176,10 +176,11 @@ install_vim_plugins() {
   mkdir -p ${GOPATH}
   export PATH=${PATH}:${GOPATH}/bin:${GOROOT}/bin
   
-  nvim +GoInstallBinaries +qall
   nvim +PlugInstall +qall
   nvim +PlugUpgrade +qall
   nvim +PlugUpdate +qall
+  nvim +GoInstallBinaries +qall
+  nvim +GoUpdateBinaries +qall
 }
 
 install() {
