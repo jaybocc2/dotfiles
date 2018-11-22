@@ -42,6 +42,7 @@ Plug 'junegunn/vim-easy-align' " code alignment
 Plug 'majutsushi/tagbar' " tag bar
 Plug 'scrooloose/nerdtree' " tree explorer
 Plug 'nathanaelkane/vim-indent-guides' " indent guides
+Plug 'hashivim/vim-terraform' " vim TF formatting/style
 
 "" Lang Specific
 
