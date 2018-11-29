@@ -11,8 +11,9 @@ ARCH=amd64
 PY3_VERSION=3.6.2
 PY2_VERSION=2.7.13
 NODE_VERSION=6.11.2
-NEOVIM_PYENV_PACKAGES="neovim flake8 pylint"
-GLOBAL_PYENV_PACKAGES="glances"
+NEOVIM_PYENV_PACKAGES="pip pynvim flake8 pylint"
+NEOVIM_UNINSTALL_PYENV_PACKAGES="pynvim neovim"
+GLOBAL_PYENV_PACKAGES="pip glances"
 
 # backup dotfiles
 backup_dotfiles() {
@@ -53,13 +54,18 @@ install_pyenv() {
   pyenv virtualenv ${PY3_VERSION} neovim3
   pyenv virtualenv ${PY2_VERSION} neovim
 
+  for package in $(echo $NEOVIM_UNINSTALL_PYENV_PACKAGES);do
+    PYENV_VERSION='neovim3' pip3 uninstall ${package}
+    PYENV_VERSION='neovim' pip uninstall ${package}
+  done
+
   for package in $(echo $GLOBAL_PYENV_PACKAGES);do
-    PYENV_VERSION='3global' pip install ${package} -U
+    PYENV_VERSION='3global' pip3 install ${package} -U
     PYENV_VERSION='2global' pip install ${package} -U
   done
 
   for package in $(echo $NEOVIM_PYENV_PACKAGES);do
-    PYENV_VERSION='neovim3' pip install ${package} -U
+    PYENV_VERSION='neovim3' pip3 install ${package} -U
     PYENV_VERSION='neovim' pip install ${package} -U
   done
 }
@@ -228,7 +234,9 @@ case "$1" in
     install
     ;;
   purge)
-    purge_all
+    ;;
+  install_deps)
+    install_deps
     ;;
   *)
     echo "Usage: $0 {install|purge}"
