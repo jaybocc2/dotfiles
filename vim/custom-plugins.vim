@@ -61,6 +61,9 @@ Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 Plug 'mattn/emmet-vim'
 
+" Edit config
+Plug 'editorconfig/editorconfig-vim'
+
 
 " Initialize plugin system
 call plug#end()
