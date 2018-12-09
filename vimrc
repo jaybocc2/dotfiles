@@ -49,6 +49,7 @@ set clipboard=unnamedplus
 set lazyredraw
 set completeopt=menuone,longest,preview
 set hidden
+set guicursor=
 
 " plugins and syntax
 filetype plugin indent on
