@@ -5,7 +5,7 @@ OS=$(uname |tr '[:upper:]' '[:lower:]')
 DEB_DEPS="exuberant-ctags wget tmux zsh vim git xclip zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libncurses5-dev libssl-dev build-essential htop"
 DEB_BACKPORTS_DEPS=""
 DEB_TESTING_DEPS="neovim"
-OSX_DEPS="ctags wget neovim tmux zsh vim git hub"
+OSX_DEPS="ctags wget neovim tmux zsh vim git hub readline xz"
 GO_VERSION=1.11
 ARCH=amd64
 PY3_VERSION=3.6.2
@@ -14,6 +14,7 @@ NODE_VERSION=6.11.2
 NEOVIM_PYENV_PACKAGES="pip pynvim flake8 pylint"
 NEOVIM_UNINSTALL_PYENV_PACKAGES="pynvim neovim"
 GLOBAL_PYENV_PACKAGES="pip glances"
+CFLAGS='-O2'
 
 # backup dotfiles
 backup_dotfiles() {
@@ -109,6 +110,7 @@ install_deps() {
 
   if [[ "${OS}" == "darwin" ]];then
     xcode-select --install
+    sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /
     which brew
     if [ "$?" -gt 0 ]; then
       /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
