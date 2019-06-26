@@ -6,9 +6,17 @@ call plug#begin('~/.vim/plugged')
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   " Plug 'carlitux/deoplete-ternjs', { 'do': 'NODENV_VERSION=6.11.2 npm install -g tern' }
-  Plug 'zchee/deoplete-go', { 'do': 'make'}
+
+  " Python
+  Plug 'deoplete-plugins/deoplete-jedi'
+  " GoLang
+  Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
+  " Ruby
   Plug 'fishbullet/deoplete-ruby'
-  Plug 'zchee/deoplete-jedi'
+  " Make
+  Plug 'deoplete-plugins/deoplete-make'
+  " Docker
+  Plug 'deoplete-plugins/deoplete-docker'
 endif
 
 if !has('nvim')
@@ -43,6 +51,7 @@ Plug 'majutsushi/tagbar' " tag bar
 Plug 'scrooloose/nerdtree' " tree explorer
 Plug 'nathanaelkane/vim-indent-guides' " indent guides
 Plug 'hashivim/vim-terraform' " vim TF formatting/style
+Plug 'tmhedberg/SimpylFold' " python folding
 
 "" Lang Specific
 
