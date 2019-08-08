@@ -6,11 +6,11 @@ DEB_DEPS="exuberant-ctags wget tmux zsh vim git xclip zlib1g-dev libbz2-dev libr
 DEB_BACKPORTS_DEPS=""
 DEB_TESTING_DEPS="neovim"
 OSX_DEPS="ctags wget neovim tmux zsh vim git hub readline xz"
-GO_VERSION=1.11
+GO_VERSION=1.12.7
 ARCH=amd64
 PY3_VERSION=3.6.2
 PY2_VERSION=2.7.13
-NODE_VERSION=6.11.2
+NODE_VERSION=10.16.2
 NEOVIM_PYENV_PACKAGES="pip pynvim flake8 pylint"
 NEOVIM_UNINSTALL_PYENV_PACKAGES="pynvim neovim"
 GLOBAL_PYENV_PACKAGES="pip glances"
@@ -83,9 +83,11 @@ install_nodenv() {
     || update_repo ~/.nodenv
   git clone https://github.com/nodenv/node-build.git ~/.nodenv/plugins/node-build \
     || update_repo ~/.nodenv/plugins/node-build
+  git clone https://github.com/nodenv/node-build-update-defs.git ~/.nodenv/plugins/node-build-update-defs \
+    || update_repo ~/.nodenv/plugins/node-build-update-defs
 
   NODENV_ROOT="${HOME}/.nodenv"
-  PATH=${NODENV_ROOT}/bin:${PATH}
+  PATH="${NODENV_ROOT}/bin:${PATH}"
   eval "$(nodenv init -)"
 
   nodenv install ${NODE_VERSION}
