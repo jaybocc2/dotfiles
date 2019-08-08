@@ -172,7 +172,7 @@ alias grep='grep --color'
 alias ka='pkill ssh-agent'
 alias fa='source ~/.zshrc'
 alias tmuxmain='tmux -2 attach -t main'
-alias tmuxwork='tmux -2 attach -t work'
+alias tmuxside='tmux -2 attach -t sideprojects'
 alias gows="cd ${GOPATH}/src/github.com/jaybocc2"
 alias vim="nvim"
 eval "$(hub alias -s)"

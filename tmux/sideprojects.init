@@ -1,4 +1,4 @@
-new -d -s main
+new -d -s sideprojects
 neww -d -n dev -t :1 
 splitw -h -p 50 -t :1 
 neww -d -n dev -t :2 
@@ -9,7 +9,4 @@ neww -d -n dev -t :4
 splitw -h -p 50 -t :4 
 neww -d -n dev -t :5 
 splitw -h -p 50 -t :5 
-neww -d -n htop -t :10 "htop"
 selectw -t 1
-
-source-file ${HOME}/.tmux/main.conf

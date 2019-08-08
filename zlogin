@@ -4,13 +4,9 @@ tmux_setup () {
     while read line;do
       eval tmux "${line}"
     done < $2
+    tmux source-file ${HOME}/.tmux/$(uname).conf
   fi
 }
 
-if [[ $(uname) == 'Darwin' ]]; then
-  tmux_setup main ~/.tmux/osx.init
-elif [[ $(uname) == 'Linux' ]]; then
-  tmux_setup main ~/.tmux/main.init
-else
-  tmux_setup main ~/.tmux/main.init
-fi
+tmux_setup main ~/.tmux/$(uname).init
+tmux_setup sideprojects ~/.tmux/sideprojects.init
