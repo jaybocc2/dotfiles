@@ -12,11 +12,11 @@ if has('nvim')
   " GoLang
   Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
   " Ruby
-  Plug 'fishbullet/deoplete-ruby'
+  Plug 'jaybocc2/deoplete-ruby', { 'branch': 'fix-deoplete-import' }
   " Make
-  Plug 'deoplete-plugins/deoplete-make'
+  " Plug 'deoplete-plugins/deoplete-make'
   " Docker
-  Plug 'deoplete-plugins/deoplete-docker'
+  Plug 'jaybocc2/deoplete-docker', { 'branch': 'fix-deoplete-import' }
 endif
 
 if !has('nvim')
@@ -52,6 +52,7 @@ Plug 'scrooloose/nerdtree' " tree explorer
 Plug 'nathanaelkane/vim-indent-guides' " indent guides
 Plug 'hashivim/vim-terraform' " vim TF formatting/style
 Plug 'tmhedberg/SimpylFold' " python folding
+Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 
 "" Lang Specific
 
