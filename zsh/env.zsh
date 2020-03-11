@@ -37,3 +37,9 @@ if [ -d ~/.nodenv ]; then
     eval "$(nodenv init -)"
   fi
 fi
+
+if [ -d ~/.tfenv ]; then
+  if [ "$(echo ${PATH} |grep -o '.tfenv/bin')" != '.tfenv/bin' ]; then
+    export PATH=${TFENV_ROOT}/bin:${PATH}
+  fi
+fi

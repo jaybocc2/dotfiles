@@ -15,6 +15,7 @@ NEOVIM_PYENV_PACKAGES="pip pynvim flake8 pylint"
 NEOVIM_UNINSTALL_PYENV_PACKAGES="pynvim neovim"
 GLOBAL_PYENV_PACKAGES="pip glances"
 CFLAGS='-O2'
+TFENV_VERSIONS="0.11.10 latest"
 
 # backup dotfiles
 backup_dotfiles() {
@@ -95,6 +96,18 @@ install_nodenv() {
   npm install -g tern
 }
 
+install_tfenvv() {
+  git clone https://github.com/tfutils/tfenv.git ~/.tfenv \
+    || update_rrepo ~/.tfenv
+
+  TFENV_ROOT="${HOME}/.tfenv"
+  PATH="${TFENV_ROOT}/bin:${PATH}"
+
+  for v in $(echo ${TFENV_VERSIONS});do
+    tfenv install ${v}
+  done
+}
+
 install_golang() {
   if [ $(command -v go -a $(go version |egrep -o 'go\d+\.\d+\.\d+') != "go${GO_VERSION}" ) ]; then
     rm -rf ${HOME}/go
@@ -134,6 +147,7 @@ install_deps() {
   install_pyenv
   install_rbenv
   install_nodenv
+  install_tfenv
 }
 
 make_dirs() {
