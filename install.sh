@@ -96,7 +96,7 @@ install_nodenv() {
   npm install -g tern
 }
 
-install_tfenvv() {
+install_tfenv() {
   git clone https://github.com/tfutils/tfenv.git ~/.tfenv \
     || update_rrepo ~/.tfenv
 
