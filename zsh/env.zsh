@@ -43,3 +43,14 @@ if [ -d ~/.tfenv ]; then
     export PATH=${TFENV_ROOT}/bin:${PATH}
   fi
 fi
+
+#OktaAWSCLI
+if [ -d "${HOME}/.okta/bash_functions" ]; then
+    source "${HOME}/.okta/bash_functions"
+fi
+
+if [ -d ~/.okta/bin ]; then
+  if [ "$(echo ${PATH} |grep -o '.okta/bin')" != '.okta/bin' ]; then
+    export PATH="${HOME}/.okta/bin:${PATH}"
+  fi
+fi
