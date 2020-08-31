@@ -9,7 +9,7 @@ if [ -e ${GOROOT} -a -e ${GOPATH} ];then
   fi
 fi
 
-if [ -d ~/.rbenv ]; then
+if [ -d ${HOME}/.rbenv ]; then
   if [ "$(echo ${PATH} |grep -o '.rbenv/bin')" != '.rbenv/bin' ];then
     export PATH=${RBENV_ROOT}/bin:${PATH}
   fi
@@ -18,7 +18,7 @@ if [ -d ~/.rbenv ]; then
   fi
 fi
 
-if [ -d ~/.pyenv ]; then
+if [ -d ${HOME}/.pyenv ]; then
   if [ "$(echo ${PATH} |grep -o '.pyenv/bin')" != '.pyenv/bin' ]; then
     export PATH=${PYENV_ROOT}/bin:${PATH}
   fi
@@ -28,7 +28,7 @@ if [ -d ~/.pyenv ]; then
   fi
 fi
 
-if [ -d ~/.nodenv ]; then
+if [ -d ${HOME}/.nodenv ]; then
   if [ "$(echo ${PATH} |grep -o '.nodenv/bin')" != '.nodenv/bin' ]; then
     export PATH=${NODENV_ROOT}/bin:${PATH}
   fi
@@ -38,18 +38,18 @@ if [ -d ~/.nodenv ]; then
   fi
 fi
 
-if [ -d ~/.tfenv ]; then
+if [ -d ${HOME}/.tfenv ]; then
   if [ "$(echo ${PATH} |grep -o '.tfenv/bin')" != '.tfenv/bin' ]; then
     export PATH=${TFENV_ROOT}/bin:${PATH}
   fi
 fi
 
 #OktaAWSCLI
-if [ -d "${HOME}/.okta/bash_functions" ]; then
+if [ -d ${HOME}/.okta/bash_functions ]; then
     source "${HOME}/.okta/bash_functions"
 fi
 
-if [ -d ~/.okta/bin ]; then
+if [ -d ${HOME}/.okta/bin ]; then
   if [ "$(echo ${PATH} |grep -o '.okta/bin')" != '.okta/bin' ]; then
     export PATH="${HOME}/.okta/bin:${PATH}"
   fi
