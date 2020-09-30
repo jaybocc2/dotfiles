@@ -45,7 +45,7 @@ if [ -d ${HOME}/.tfenv ]; then
 fi
 
 #OktaAWSCLI
-if [ -d ${HOME}/.okta/bash_functions ]; then
+if [ -f ${HOME}/.okta/bash_functions ]; then
     source "${HOME}/.okta/bash_functions"
 fi
 
