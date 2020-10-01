@@ -2,14 +2,15 @@
 # install for jaybocc2@'s dotfiles
 DOT_FILES=$(git ls-tree @{u}|awk '{print $4}' |egrep -v '(/|LICENSE|README|install.sh)')
 OS=$(uname |tr '[:upper:]' '[:lower:]')
-DEB_DEPS="exuberant-ctags wget tmux zsh vim git xclip zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libncurses5-dev libssl-dev build-essential htop"
+DEB_DEPS="curl exuberant-ctags wget tmux zsh vim git xclip zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libncurses5-dev libssl-dev build-essential htop hub"
 DEB_BACKPORTS_DEPS=""
+DEB_BACKPORTS_REPO="buster"
 DEB_TESTING_DEPS="neovim"
 OSX_DEPS="ctags wget neovim tmux zsh vim git hub readline xz"
 GO_VERSION=1.12.7
 ARCH=amd64
-PY3_VERSION=3.6.2
-PY2_VERSION=2.7.13
+PY3_VERSION=3.8.5
+PY2_VERSION=2.7.18
 NODE_VERSION=10.16.2
 NEOVIM_PYENV_PACKAGES="pip pynvim flake8 pylint"
 NEOVIM_UNINSTALL_PYENV_PACKAGES="pynvim neovim"
@@ -138,8 +139,8 @@ install_deps() {
     source /etc/*-release
     if [[ "${ID}" == "debian" ]];then
       sudo apt-get install ${DEB_DEPS}
-      sudo apt-get -t stretch-backports install ${DEB_BACKPORTS_DEPS}
-      sudo apt-get -t testing install ${DEB_BACKPORTS_DEPS}
+      sudo apt-get -t ${DEB_BACKPORTS_REPO}-backports install ${DEB_BACKPORTS_DEPS}
+      sudo apt-get -t testing install ${DEB_TESTING_DEPS}
     fi
   fi
 
@@ -250,6 +251,9 @@ purge_all() {
 case "$1" in
   install)
     install
+    ;;
+  plugins)
+    install_vim_plugins
     ;;
   purge)
     ;;
