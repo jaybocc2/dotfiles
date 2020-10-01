@@ -2,7 +2,7 @@
 # install for jaybocc2@'s dotfiles
 DOT_FILES=$(git ls-tree @{u}|awk '{print $4}' |egrep -v '(/|LICENSE|README|install.sh)')
 OS=$(uname |tr '[:upper:]' '[:lower:]')
-DEB_DEPS="curl exuberant-ctags wget tmux zsh vim git xclip zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libncurses5-dev libssl-dev build-essential htop hub"
+DEB_DEPS="curl exuberant-ctags wget tmux zsh vim git xclip zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libncurses5-dev libssl-dev build-essential htop hub libffi-dev libffi7 libffi6"
 DEB_BACKPORTS_DEPS=""
 DEB_BACKPORTS_REPO="buster"
 DEB_TESTING_DEPS="neovim"
@@ -57,11 +57,6 @@ install_pyenv() {
   pyenv virtualenv ${PY3_VERSION} neovim3
   pyenv virtualenv ${PY2_VERSION} neovim
 
-  for package in $(echo $NEOVIM_UNINSTALL_PYENV_PACKAGES);do
-    PYENV_VERSION='neovim3' pip3 uninstall ${package}
-    PYENV_VERSION='neovim' pip uninstall ${package}
-  done
-
   for package in $(echo $GLOBAL_PYENV_PACKAGES);do
     PYENV_VERSION='3global' pip3 install ${package} -U
     PYENV_VERSION='2global' pip install ${package} -U
@@ -99,7 +94,7 @@ install_nodenv() {
 
 install_tfenv() {
   git clone https://github.com/tfutils/tfenv.git ~/.tfenv \
-    || update_rrepo ~/.tfenv
+    || update_repo ~/.tfenv
 
   TFENV_ROOT="${HOME}/.tfenv"
   PATH="${TFENV_ROOT}/bin:${PATH}"
