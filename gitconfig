@@ -11,3 +11,5 @@
 	recurseSubmodules = true
 [push]
 	default = tracking
+[url "git@github.com:"]
+        insteadOf = https://github.com/
