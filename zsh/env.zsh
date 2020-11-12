@@ -54,3 +54,10 @@ if [ -d ${HOME}/.okta/bin ]; then
     export PATH="${HOME}/.okta/bin:${PATH}"
   fi
 fi
+
+DART_PATH="/usr/lib/dart/bin"
+if [ -d "${DART_PATH}" ];then
+  if [ "$(echo ${PATH} |grep -o '/usr/lib/dart/bin')" != '/usr/lib/dart/bin' ]; then
+    source "${DART_PATH}"
+  fi
+fi
