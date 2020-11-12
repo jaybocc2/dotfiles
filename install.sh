@@ -2,7 +2,8 @@
 # install for jaybocc2@'s dotfiles
 DOT_FILES=$(git ls-tree @{u}|awk '{print $4}' |egrep -v '(/|LICENSE|README|install.sh)')
 OS=$(uname |tr '[:upper:]' '[:lower:]')
-DEB_DEPS="curl exuberant-ctags wget tmux zsh vim git xclip zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libncurses5-dev libssl-dev build-essential htop hub libffi-dev libffi7 libffi6"
+DEB_DEPS="curl exuberant-ctags wget tmux zsh vim git xclip zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
+libncurses5-dev libssl-dev build-essential htop hub libffi-dev libffi7 libffi6 xz-utils"
 DEB_BACKPORTS_DEPS=""
 DEB_BACKPORTS_REPO="buster"
 DEB_TESTING_DEPS="neovim"
@@ -12,6 +13,7 @@ ARCH=amd64
 PY3_VERSION=3.8.5
 PY2_VERSION=2.7.18
 NODE_VERSION=10.16.2
+FLUTTER_VERSION=1.22.3
 NEOVIM_PYENV_PACKAGES="pip pynvim flake8 pylint"
 NEOVIM_UNINSTALL_PYENV_PACKAGES="pynvim neovim"
 GLOBAL_PYENV_PACKAGES="pip glances"
@@ -33,86 +35,115 @@ backup_dotfiles() {
   done
 }
 
-update_repo() {
- pushd $1
- git checkout master
- git pull
- popd
+upstall_repo() {
+ test -d $2 && {
+   echo "Updating ${2} . . ."
+   pushd $2
+   git checkout master
+   git pull
+   popd
+ } || {
+   echo "Installing $1 to $2 . . ."
+   git clone $1 $2
+ }
 }
 
 install_pyenv() {
-  git clone https://github.com/pyenv/pyenv.git ~/.pyenv \
-    || update_repo ~/.pyenv
-  git clone https://github.com/pyenv/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv \
-    || update_repo ~/.pyenv/plugins/pyenv-virtualenv
+  upstall_repo https://github.com/pyenv/pyenv.git ~/.pyenv
+  upstall_repo https://github.com/pyenv/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv
 
   PYENV_ROOT="${HOME}/.pyenv"
   PATH=${PYENV_ROOT}/bin:${PATH}
   eval "$(pyenv init -)"
-  pyenv install ${PY3_VERSION}
-  pyenv install ${PY2_VERSION}
-  pyenv virtualenv ${PY3_VERSION} 3global
-  pyenv virtualenv ${PY2_VERSION} 2global
-  pyenv global 2global
-  pyenv virtualenv ${PY3_VERSION} neovim3
-  pyenv virtualenv ${PY2_VERSION} neovim
+
+  pyenv versions |grep ${PY3_VERSION} || pyenv install ${PY3_VERSION}
+  pyenv versions |grep ${PY2_VERSION} || pyenv install ${PY2_VERSION}
+  pyenv versions |grep 3global || pyenv virtualenv ${PY3_VERSION} 3global
+  pyenv versions |grep 2global || pyenv virtualenv ${PY2_VERSION} 2global
+  pyenv global 3global
+  pyenv versions |grep neovim3 || pyenv virtualenv ${PY3_VERSION} neovim3
+  pyenv versions |grep neovim || pyenv virtualenv ${PY2_VERSION} neovim
 
   for package in $(echo $GLOBAL_PYENV_PACKAGES);do
-    PYENV_VERSION='3global' pip3 install ${package} -U
-    PYENV_VERSION='2global' pip install ${package} -U
+    export PYENV_VERSION='3global'
+    pip list |grep ${package} || pip install ${package}
+    pip list --outdated |grep ${package} && pip install ${package} -U
+    export PYENV_VERSION='2global'
+    pip list |grep ${package} || pip install ${package}
+    pip list --outdated |grep ${package} && pip install ${package} -U
   done
 
   for package in $(echo $NEOVIM_PYENV_PACKAGES);do
-    PYENV_VERSION='neovim3' pip3 install ${package} -U
-    PYENV_VERSION='neovim' pip install ${package} -U
+    export PYENV_VERSION='neovim3'
+    pip list |grep ${package} || pip install ${package}
+    pip list --outdated |grep ${package} && pip install ${package} -U
+    export PYENV_VERSION='neovim'
+    pip list |grep ${package} || pip install ${package}
+    pip list --outdated |grep ${package} && pip install ${package} -U
   done
+
+  unset PYENV_VERSION
+
 }
 
 install_rbenv() {
-  git clone https://github.com/rbenv/rbenv.git ~/.rbenv \
-    || update_repo ~/.rbenv
-  git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build \
-    || update_repo ~/.rbenv/plugins/ruby-build
+  upstall_repo https://github.com/rbenv/rbenv.git ~/.rbenv
+  upstall_repo https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 }
 
 install_nodenv() {
-  git clone https://github.com/nodenv/nodenv.git ~/.nodenv \
-    || update_repo ~/.nodenv
-  git clone https://github.com/nodenv/node-build.git ~/.nodenv/plugins/node-build \
-    || update_repo ~/.nodenv/plugins/node-build
-  git clone https://github.com/nodenv/node-build-update-defs.git ~/.nodenv/plugins/node-build-update-defs \
-    || update_repo ~/.nodenv/plugins/node-build-update-defs
+  upstall_repo https://github.com/nodenv/nodenv.git ~/.nodenv
+  upstall_repo https://github.com/nodenv/node-build.git ~/.nodenv/plugins/node-build
+  upstall_repo https://github.com/nodenv/node-build-update-defs.git ~/.nodenv/plugins/node-build-update-defs
 
   NODENV_ROOT="${HOME}/.nodenv"
   PATH="${NODENV_ROOT}/bin:${PATH}"
   eval "$(nodenv init -)"
 
-  nodenv install ${NODE_VERSION}
+  nodenv versions |grep ${NODE_VERSION} || nodenv install ${NODE_VERSION}
   nodenv global ${NODE_VERSION}
   npm install -g tern
 }
 
 install_tfenv() {
-  git clone https://github.com/tfutils/tfenv.git ~/.tfenv \
-    || update_repo ~/.tfenv
+  upstall_repo https://github.com/tfutils/tfenv.git ~/.tfenv
 
   TFENV_ROOT="${HOME}/.tfenv"
   PATH="${TFENV_ROOT}/bin:${PATH}"
 
+  tfenv use latest
   for v in $(echo ${TFENV_VERSIONS});do
-    tfenv install ${v}
+    tfenv list |grep ${v} || tfenv install ${v}
   done
 }
 
 install_golang() {
-  if [ $(command -v go -a $(go version |egrep -o 'go\d+\.\d+\.\d+') != "go${GO_VERSION}" ) ]; then
-    rm -rf ${HOME}/go
-  elif [ $(command -v go -a $(go version |egrep -o 'go\d+\.\d+\.\d+') == "go${GO_VERSION}" )]; then
-    return
+  GOROOT="${home}/go"
+
+  if [ -d ${GOROOT} ]; then
+    if [ "$(${GOROOT}/bin/go version |cut -f3 -d' ')" != "go${GO_VERSION}" ]; then
+      rm -rf ${HOME}/go
+    else
+      return
+    fi
   fi
 
-  wget -O /tmp/go${GO_VERSION}.${OS}-${ARCH}.tar.gz https://storage.googleapis.com/golang/go${GO_VERSION}.${OS}-${ARCH}.tar.gz
-  tar -C ${HOME} -xzf /tmp/go${GO_VERSION}.${OS}-${ARCH}.tar.gz
+  curl https://storage.googleapis.com/golang/go${GO_VERSION}.${OS}-${ARCH}.tar.gz \
+    | tar -C ${HOME} -xz
+}
+
+install_flutter() {
+  export FLUTTER_PATH=${HOME}/flutter
+
+  if [ -d ${FLUTTER_PATH} ]; then
+    if [ "$(${FLUTTER_PATH}/bin/flutter --version |grep Flutter |cut -f2 -d' ')" != "${FLUTTER_VERSION}" ]; then
+      rm -rf ${HOME}/flutter
+    else
+      return
+    fi
+  fi
+
+  curl https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_${FLUTTER_VERSION}-stable.tar.xz |tar x -J -C ${HOME}
 }
 
 install_deps() {
@@ -144,6 +175,7 @@ install_deps() {
   install_rbenv
   install_nodenv
   install_tfenv
+  install_flutter
 }
 
 make_dirs() {

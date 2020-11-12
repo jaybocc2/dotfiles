@@ -55,9 +55,9 @@ if [ -d ${HOME}/.okta/bin ]; then
   fi
 fi
 
-DART_PATH="/usr/lib/dart/bin"
-if [ -d "${DART_PATH}" ];then
-  if [ "$(echo ${PATH} |grep -o '/usr/lib/dart/bin')" != '/usr/lib/dart/bin' ]; then
-    source "${DART_PATH}"
+FLUTTER_PATH="${HOME}/flutter"
+if [ -d "${FLUTTER_PATH}" ];then
+  if [ "$(echo ${PATH} |grep -o \"${FLUTTER_PATH}/bin\")" != "${FLUTTER_PATH}/bin" ]; then
+    export PATH="${FLUTTER_PATH}/bin:${PATH}"
   fi
 fi
