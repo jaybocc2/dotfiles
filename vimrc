@@ -57,7 +57,7 @@ syntax on
 if has('nvim')
   set termguicolors
 endif
-let g:deoplete#enable_at_startup = 1
+" let g:deoplete#enable_at_startup = 1
 " let g:solarized_termcolors=256
 let g:solarized_termtrans = 1
 " let g:solarized_visibility = "high"
@@ -116,8 +116,8 @@ autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 expandtab
 autocmd FileType groovy setlocal shiftwidth=4 tabstop=4 expandtab
 autocmd FileType java setlocal shiftwidth=4 tabstop=4 expandtab
 
-au FileType python call FT_Python()
-au FileType python set omnifunc=pythoncomplete#Complete
+" au FileType python call FT_Python()
+" au FileType python set omnifunc=pythoncomplete#Complete
 
 autocmd! BufNewFile,BufRead *.pde setlocal ft=arduino
 autocmd! BufNewFile,BufRead *.ino setlocal ft=arduino

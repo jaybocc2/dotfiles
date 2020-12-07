@@ -12,7 +12,7 @@ GO_VERSION=1.15.3
 ARCH=amd64
 PY3_VERSION=3.8.5
 PY2_VERSION=2.7.18
-NODE_VERSION=10.16.2
+NODE_VERSION=14.15.0
 FLUTTER_VERSION=1.22.3
 NEOVIM_PYENV_PACKAGES="pip pynvim flake8 pylint"
 NEOVIM_UNINSTALL_PYENV_PACKAGES="pynvim neovim"
@@ -133,11 +133,12 @@ install_golang() {
 }
 
 install_flutter() {
-  export FLUTTER_PATH=${HOME}/flutter
+  export FLUTTER_PATH=${HOME}/.flutter.d
 
   if [ -d ${FLUTTER_PATH} ]; then
     if [ "$(${FLUTTER_PATH}/bin/flutter --version |grep Flutter |cut -f2 -d' ')" != "${FLUTTER_VERSION}" ]; then
       rm -rf ${HOME}/flutter
+      rm -rf ${FLUTTER_PATH}
     else
       return
     fi
@@ -228,11 +229,27 @@ install_vim_plugins() {
   mkdir -p ${GOPATH}
   export PATH=${PATH}:${GOPATH}/bin:${GOROOT}/bin
   
-  nvim +PlugInstall +qall
-  nvim +PlugUpgrade +qall
-  nvim +PlugUpdate +qall
-  nvim +GoInstallBinaries +qall
-  nvim +GoUpdateBinaries +qall
+  nvim \
+    +PlugInstall \
+    +qall
+  nvim \
+    +PlugUpgrade \
+    +qall
+  nvim \
+    +PlugUpdate \
+    +qall
+  nvim \
+    +GoInstallBinaries \
+    +qall
+  nvim \
+    +GoUpdateBinaries \
+    +qall
+  nvim \
+    +'CocInstall -sync coc-flutter-tools' \
+    +qall
+  nvim \
+    +'CocInstall -sync coc-python coc-snippets coc-go' \
+    +qall
 }
 
 install() {
@@ -286,6 +303,9 @@ case "$1" in
     ;;
   install_deps)
     install_deps
+    ;;
+  config)
+    install_configs
     ;;
   *)
     echo "Usage: $0 {install|purge}"

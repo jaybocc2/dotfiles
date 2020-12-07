@@ -55,9 +55,22 @@ if [ -d ${HOME}/.okta/bin ]; then
   fi
 fi
 
-FLUTTER_PATH="${HOME}/flutter"
-if [ -d "${FLUTTER_PATH}" ];then
+if [ -d "${FLUTTER_PATH}" ]; then
   if [ "$(echo ${PATH} |grep -o \"${FLUTTER_PATH}/bin\")" != "${FLUTTER_PATH}/bin" ]; then
     export PATH="${FLUTTER_PATH}/bin:${PATH}"
+  fi
+fi
+
+if [ -d "${ANDROID_PATH}" ]; then
+  if [ "$(echo ${PATH} |grep -o \"${ANDROID_PATH}/bin\")" != "${ANDROID_PATH}/bin" ]; then
+    export PATH="${ANDROID_PATH}/bin:${PATH}"
+  fi
+fi
+
+if [ -d "${ANDROID_HOME}/Sdk/platform-tools" ]; then
+  if [ "$(echo ${PATH} |grep -o \"${ANDROID_HOME}/Sdk/platform-tools\")" != "${ANDROID_HOME}/Sdk/platform-tools" ]; then
+    export PATH="${ANDROID_HOME}/Sdk/platform-tools:${PATH}"
+    export PATH="${ANDROID_HOME}/Sdk/build-tools:${PATH}"
+    export PATH="${ANDROID_HOME}/Sdk/cmdline-tools:${PATH}"
   fi
 fi
