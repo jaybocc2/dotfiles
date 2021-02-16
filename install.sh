@@ -13,7 +13,8 @@ ARCH=amd64
 PY3_VERSION=3.8.5
 PY2_VERSION=2.7.18
 NODE_VERSION=14.15.0
-FLUTTER_VERSION=1.22.3
+FLUTTER_VERSION=1.26.0-17.5.pre
+FLUTTER_CHANNEL=beta
 NEOVIM_PYENV_PACKAGES="pip pynvim flake8 pylint"
 NEOVIM_UNINSTALL_PYENV_PACKAGES="pynvim neovim"
 GLOBAL_PYENV_PACKAGES="pip glances"
@@ -136,15 +137,17 @@ install_flutter() {
   export FLUTTER_PATH=${HOME}/.flutter.d
 
   if [ -d ${FLUTTER_PATH} ]; then
-    if [ "$(${FLUTTER_PATH}/bin/flutter --version |grep Flutter |cut -f2 -d' ')" != "${FLUTTER_VERSION}" ]; then
-      rm -rf ${HOME}/flutter
-      rm -rf ${FLUTTER_PATH}
+    flutter upgrade --verify-only
+    if [ $? -gt 0 ]; then
+      flutter channel ${FLUTTER_CHANNEL}
+      flutter upgrade
     else
       return
     fi
   fi
 
-  curl https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_${FLUTTER_VERSION}-stable.tar.xz |tar x -J -C ${HOME}
+  flutter_url="https://storage.googleapis.com/flutter_infra/releases/beta/linux/flutter_linux_${FLUTTER_VERSION}-${FLUTTER_CHANNEL}.tar.xz"
+  curl ${flutter_url} |tar x -J -C ${HOME}
 }
 
 install_deps() {
