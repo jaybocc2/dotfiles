@@ -1,0 +1,7 @@
+{
+  "coc.preferences.snippets.enable": true,
+  "coc.preferences.extenstionUpdateCheck": "daily",
+
+  // coc-flutter
+  "flutter.provider.enableSnippet": true
+}

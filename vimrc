@@ -85,6 +85,7 @@ map <F5> :NERDTreeToggle<CR>
 map <F6> :w <CR>
 set pastetoggle=<F8>
 
+" arduino binds
 map <silent> <LocalLeader>am :!make<CR>
 map <silent> <LocalLeader>ac :!make clean<CR>
 map <silent> <LocalLeader>au :!make upload<CR>
@@ -298,3 +299,8 @@ let g:airline_powerline_fonts = 1
 "let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 "" If you want :UltiSnipsEdit to split your window.
 "" let g:UltiSnipsEditSplit="vertical"
+
+" load CoC Config
+if filereadable(expand('~/.vim/coc-vim-config.vim'))
+  source $HOME/.vim/coc-vim-config.vim
+endif

@@ -73,6 +73,7 @@ Plug 'edkolev/promptline.vim'
 Plug 'edkolev/tmuxline.vim'
 
 """ syntax & linting
+Plug 'kevinoid/vim-jsonc'
 Plug 'FooSoft/vim-argwrap' " arg (de)wrapping
 Plug 'dense-analysis/ale' " lint
 Plug 'junegunn/vim-easy-align' " code alignment
@@ -81,6 +82,11 @@ Plug 'scrooloose/nerdtree' " tree explorer
 Plug 'nathanaelkane/vim-indent-guides' " indent guides
 Plug 'hashivim/vim-terraform' " vim TF formatting/style
 Plug 'tmhedberg/SimpylFold' " python folding
+
+" Snippets
+Plug 'Neevash/awesome-flutter-snippets'
+Plug 'honza/vim-snippets'
+Plug 'bonsaiben/bootstrap-snippets'
 
 "" Lang Specific
 

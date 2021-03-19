@@ -210,6 +210,7 @@ install_configs() {
 
   ln -s ~/.vimrc ~/.config/nvim/init.vim
   ln -s ~/.vim ~/.local/share/nvim/site
+  ln -s ~/.vim/coc-settings.json ~/.config/nvim/coc-settings.json
 }
 
 install_vim_plugins() {
@@ -248,10 +249,10 @@ install_vim_plugins() {
     +GoUpdateBinaries \
     +qall
   nvim \
-    +'CocInstall -sync coc-flutter-tools' \
+    +'CocInstall -sync coc-flutter' \
     +qall
   nvim \
-    +'CocInstall -sync coc-python coc-snippets coc-go' \
+    +'CocInstall -sync coc-python coc-snippets coc-go coc-git' \
     +qall
 }
 
