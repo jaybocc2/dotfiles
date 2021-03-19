@@ -146,7 +146,13 @@ install_flutter() {
     fi
   fi
 
-  flutter_url="https://storage.googleapis.com/flutter_infra/releases/beta/linux/flutter_linux_${FLUTTER_VERSION}-${FLUTTER_CHANNEL}.tar.xz"
+  if [ ${OS} == 'darwin' ]; then
+    FL_OS='macos'
+  else
+    FL_OS='linux'
+  fi
+
+  flutter_url="https://storage.googleapis.com/flutter_infra/releases/${FLUTTER_CHANNEL}/${FL_OS}/flutter_${FL_OS}_${FLUTTER_VERSION}-${FLUTTER_CHANNEL}.tar.xz"
   curl ${flutter_url} |tar x -J -C ${HOME}
 }
 
