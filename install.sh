@@ -7,14 +7,15 @@ libncurses5-dev libssl-dev build-essential htop hub libffi-dev libffi7 libffi6 x
 DEB_BACKPORTS_DEPS=""
 DEB_BACKPORTS_REPO="buster"
 DEB_TESTING_DEPS="neovim"
-OSX_DEPS="ctags wget neovim tmux zsh vim git hub readline xz"
-GO_VERSION=1.15.3
+OSX_DEPS="ctags wget neovim tmux zsh vim git hub gh readline xz"
+GO_VERSION=1.16.5
 ARCH=amd64
 PY3_VERSION=3.8.5
 PY2_VERSION=2.7.18
 NODE_VERSION=14.15.0
 FLUTTER_VERSION=2.0.2
 FLUTTER_CHANNEL=stable
+GHCLI_VERSION=1.11.0
 NEOVIM_PYENV_PACKAGES="pip pynvim flake8 pylint"
 NEOVIM_UNINSTALL_PYENV_PACKAGES="pynvim neovim"
 GLOBAL_PYENV_PACKAGES="pip glances"
@@ -156,6 +157,18 @@ install_flutter() {
   curl ${flutter_url} |tar x -J -C ${HOME}
 }
 
+install_ghcli() {
+  if [[ "${OS}" == "darwin" ]]; then
+    return
+  fi
+
+  pushd /tmp
+  curl -LO "https://github.com/cli/cli/releases/download/v${GHCLI_VERSION}/gh_${GHCLI_VERSION}_linux_amd64.deb"
+  sudo dpkg -i gh_${GHCLI_VERSION}_linux_amd64.deb
+  rm -rf gh_${GHCLI_VERSION}_linux_amd64.deb
+  popd
+}
+
 install_deps() {
   echo ""
   echo "installing deps. . . ."
@@ -180,6 +193,7 @@ install_deps() {
     fi
   fi
 
+  install_ghcli
   install_golang
   install_pyenv
   install_rbenv

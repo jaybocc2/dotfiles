@@ -3,5 +3,25 @@
   "coc.preferences.extenstionUpdateCheck": "daily",
 
   // coc-flutter
-  "flutter.provider.enableSnippet": true
+  "flutter.provider.enableSnippet": true,
+
+  // language server config
+  "languageserver": {
+    // golang
+    "golang": {
+      "command": "gopls",
+      "rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"],
+      "filetypes": ["go"],
+      "initializationOptions": {
+				"gofumpt": true,
+        "usePlaceholders": true
+      }
+    }
+  },
+
+  "go.goplsOptions": {
+			"formatting.gofumpt": true,
+			"gofumpt": true,
+			"completeUnimported": true
+	}
 }
