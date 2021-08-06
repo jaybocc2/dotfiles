@@ -2,6 +2,11 @@
 # Set up the Environment
 # -----------------------------------------------
 export PATH=${PATH}
+if [ -d ${HOME}/bin ]; then
+  if [ "$(echo ${PATH} |grep -o \"${HOME}/bin\")" != "${HOME}/bin" ];then
+    export PATH=${HOME}/bin:${PATH}
+  fi
+fi
 
 if [ -e ${GOROOT} -a -e ${GOPATH} ];then
   if [ "$(echo ${PATH} |grep -o "${GOROOT}"|head -n 1)" != "${GOROOT}" ]; then
@@ -23,6 +28,7 @@ if [ -d ${HOME}/.pyenv ]; then
     export PATH=${PYENV_ROOT}/bin:${PATH}
   fi
   if [ "$(echo ${PATH} |grep -o '.pyenv/shims')" != '.pyenv/shims' ]; then
+    eval "$(pyenv init --path)"
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
   fi

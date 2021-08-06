@@ -56,7 +56,9 @@ install_pyenv() {
 
   PYENV_ROOT="${HOME}/.pyenv"
   PATH=${PYENV_ROOT}/bin:${PATH}
+  eval "$(pyenv init --path)"
   eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
 
   pyenv versions |grep ${PY3_VERSION} || pyenv install ${PY3_VERSION}
   pyenv versions |grep ${PY2_VERSION} || pyenv install ${PY2_VERSION}
@@ -272,7 +274,7 @@ install_vim_plugins() {
     +'CocInstall -sync coc-flutter' \
     +qall
   nvim \
-    +'CocInstall -sync coc-python coc-snippets coc-go coc-git' \
+    +'CocInstall -sync coc-pyright coc-snippets coc-go coc-git' \
     +qall
 }
 

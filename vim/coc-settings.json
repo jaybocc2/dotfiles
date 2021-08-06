@@ -23,5 +23,6 @@
 			"formatting.gofumpt": true,
 			"gofumpt": true,
 			"completeUnimported": true
-	}
+	},
+  "python.pythonPath": "${HOME}/bin/cocpython"
 }
