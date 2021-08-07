@@ -208,7 +208,7 @@ make_dirs() {
   echo ""
   echo "creating directories. . . ."
 
-  for dir in {.ssh/keys,.tmux,.zsh,.vim/autoload,.local/share/nvim,.config/nvim}; do
+  for dir in {.ssh/keys,.tmux,.zsh,.vim/autoload,.local/share/nvim,.config/nvim,bin}; do
     echo creating directory ~/${dir}
     mkdir -p ~/${dir}
   done
@@ -225,7 +225,11 @@ install_configs() {
       cp ${file} ~/.${file}
     elif [[ -d ${file} ]];then
       for sub_file in $(ls -1 ${file});do
-        cp -r ${file}/${sub_file} ~/.${file}/${sub_file}
+        prefix='.'
+        if [[ ${file} = "bin" ]];then
+          prefix=''
+        fi
+        cp -r ${file}/${sub_file} ~/${prefix}${file}/${sub_file}
       done
     fi
   done
