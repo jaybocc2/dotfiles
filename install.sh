@@ -7,7 +7,7 @@ libncurses5-dev libssl-dev build-essential htop hub libffi-dev libffi7 libffi6 x
 DEB_BACKPORTS_DEPS=""
 DEB_BACKPORTS_REPO="buster"
 DEB_TESTING_DEPS="neovim"
-OSX_DEPS="ctags wget neovim tmux zsh vim git hub gh readline xz"
+OSX_DEPS="ctags wget neovim tmux zsh vim git hub gh readline xz htop"
 GO_VERSION=1.16.5
 ARCH=amd64
 PY3_VERSION=3.8.5
@@ -18,7 +18,7 @@ FLUTTER_CHANNEL=stable
 GHCLI_VERSION=1.13.1
 NEOVIM_PYENV_PACKAGES="pip pynvim flake8 pylint"
 NEOVIM_UNINSTALL_PYENV_PACKAGES="pynvim neovim"
-GLOBAL_PYENV_PACKAGES="pip glances"
+GLOBAL_PYENV_PACKAGES="pip"
 CFLAGS='-O2'
 TFENV_VERSIONS="0.11.10 latest"
 

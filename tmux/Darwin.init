@@ -9,5 +9,5 @@ neww -d -n dev -t :4
 splitw -h -p 50 -t :4 
 neww -d -n dev -t :5 
 splitw -h -p 50 -t :5 
-neww -d -n glances -t :10 "glances"
+neww -d -n htop -t :10 "htop"
 selectw -t 1
