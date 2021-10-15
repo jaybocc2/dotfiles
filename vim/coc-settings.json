@@ -24,5 +24,7 @@
 			"gofumpt": true,
 			"completeUnimported": true
 	},
-  "python.pythonPath": "cocpython"
+  "python.pythonPath": "cocpython",
+  "python.blackPath": "cocblack",
+  "python.blackdPath": "cocblackd"
 }

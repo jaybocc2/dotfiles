@@ -9,6 +9,9 @@ map <silent> <Leader>ds :CocCommand flutter.run -d web-server --web-port 8080 --
 map <silent> <Leader>dr :CocCommand flutter.dev.hotReload<CR>
 map <silent> <Leader>dR :CocCommand flutter.dev.hotRestart<CR>
 
+" coc filetype project root settings...
+autocmd FileType python let b:coc_root_patterns = ['.git', '.env', 'venv', '.venv', 'setup.cfg', 'setup.py', 'pyproject.toml', 'pyrightconfig.json', '.python-version', 'app.py', 'main.py', 'manage.py']
+
 " coc tab completion
 inoremap <silent><expr> <TAB>
   \ pumvisible() ? coc#_select_confirm() :
