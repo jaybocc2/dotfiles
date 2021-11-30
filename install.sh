@@ -3,12 +3,12 @@
 DOT_FILES=$(git ls-tree @{u}|awk '{print $4}' |egrep -v '(/|LICENSE|README|install.sh)')
 OS=$(uname |tr '[:upper:]' '[:lower:]')
 DEB_DEPS="curl exuberant-ctags wget tmux zsh vim git xclip zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
-libncurses5-dev libssl-dev build-essential htop hub libffi-dev libffi7 libffi6 xz-utils"
+libncurses5-dev libssl-dev build-essential htop hub libffi-dev libffi7 xz-utils neovim"
 DEB_BACKPORTS_DEPS=""
-DEB_BACKPORTS_REPO="buster"
-DEB_TESTING_DEPS="neovim"
+DEB_BACKPORTS_REPO=""
+DEB_TESTING_DEPS=""
 OSX_DEPS="ctags wget neovim tmux zsh vim git hub gh readline xz htop"
-GO_VERSION=1.16.5
+GO_VERSION=1.17.3
 ARCH=amd64
 PY3_VERSION=3.8.5
 PY2_VERSION=2.7.18
