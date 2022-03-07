@@ -10,17 +10,17 @@ DEB_TESTING_DEPS=""
 OSX_DEPS="ctags wget neovim tmux zsh vim git hub gh readline xz htop"
 GO_VERSION=1.17.3
 ARCH=amd64
-PY3_VERSION=3.8.5
+PY3_VERSION=3.10.0
 PY2_VERSION=2.7.18
 NODE_VERSION=16.14.0
 FLUTTER_VERSION=2.0.2
 FLUTTER_CHANNEL=stable
-GHCLI_VERSION=1.13.1
+GHCLI_VERSION=2.5.2
 NEOVIM_PYENV_PACKAGES="pip pynvim flake8 pylint"
 NEOVIM_UNINSTALL_PYENV_PACKAGES="pynvim neovim"
 GLOBAL_PYENV_PACKAGES="pip"
 CFLAGS='-O2'
-TFENV_VERSIONS="0.11.10 latest"
+TFENV_VERSIONS="latest"
 
 # backup dotfiles
 backup_dotfiles() {
@@ -209,7 +209,7 @@ make_dirs() {
   echo ""
   echo "creating directories. . . ."
 
-  for dir in {.ssh/keys,.tmux,.zsh,.vim/autoload,.local/share/nvim,.config/nvim,bin}; do
+  for dir in {.ssh/keys,.tmux,.zsh,.vim/autoload,.local/share/nvim,.config,bin}; do
     echo creating directory ~/${dir}
     mkdir -p ~/${dir}
   done
@@ -235,9 +235,25 @@ install_configs() {
     fi
   done
 
-  ln -s ~/.vimrc ~/.config/nvim/init.vim
-  ln -s ~/.vim ~/.local/share/nvim/site
-  ln -s ~/.vim/coc-settings.json ~/.config/nvim/coc-settings.json
+  ln -s ~/.nvim ~/.config/nvim
+  # ln -s ~/.vimrc ~/.config/nvim/init.vim
+  # ln -s ~/.vim ~/.local/share/nvim/site
+  # ln -s ~/.vim/coc-settings.json ~/.config/nvim/coc-settings.json
+}
+
+setup_env() {
+  export PYENV_ROOT="${HOME}/.pyenv"
+  export PATH=${PYENV_ROOT}/bin:${PATH}
+  eval "$(pyenv init -)"
+
+  export NODENV_ROOT="${HOME}/.nodenv"
+  export PATH=${NODENV_ROOT}/bin:${PATH}
+  eval "$(nodenv init -)"
+
+  export GOROOT=${HOME}/go
+  export GOPATH=${HOME}/go-workspace
+  mkdir -p ${GOPATH}
+  export PATH=${PATH}:${GOPATH}/bin:${GOROOT}/bin
 }
 
 install_vim_plugins() {
@@ -283,6 +299,13 @@ install_vim_plugins() {
     +qall
 }
 
+install_nvim() {
+  setup_env
+  nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+  nvim --headless -c 'autocmd User PackerComplete quitall' -c 'GoInstallBinaries'
+  nvim --headless -c 'autocmd User PackerComplete quitall' -c 'GoUpdateBinaries'
+}
+
 install() {
   # echo "  ++  NOTICE  ++"
   # echo "Please install ctags, and go.  Also be sure to run :GoInstallBinaries in vim on first run, or some functionality will be missing."
@@ -305,7 +328,10 @@ install() {
   install_configs
 
   # install vim plugins
-  install_vim_plugins
+  # install_vim_plugins
+  
+  # install nvim
+  install_nvim
 }
 
 purge_all() {
@@ -337,6 +363,9 @@ case "$1" in
     ;;
   config)
     install_configs
+    ;;
+  nvim)
+    install_nvim
     ;;
   *)
     echo "Usage: $0 {install|purge}"
