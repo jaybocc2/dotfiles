@@ -278,7 +278,7 @@ install_vim_plugins() {
     +'CocInstall -sync coc-flutter' \
     +qall
   nvim \
-    +'CocInstall -sync coc-pyright coc-snippets coc-go coc-git' \
+    +'CocInstall -sync coc-pyright coc-snippets coc-go coc-git coc-lua' \
     +qall
 }
 

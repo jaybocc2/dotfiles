@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# open vault of souls
+sudo cryptsetup luksOpen $1 vault_of_souls && sleep 15 && sudo vgchange -a y /dev/vos && sleep 15 && sudo mount /dev/vos/vos00_data /mnt/usb
