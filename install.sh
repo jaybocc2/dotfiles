@@ -43,12 +43,12 @@ backup_dotfiles() {
 install_fonts() {
   pushd /tmp
   fontdir=~/.fonts
-  if [[ $(OS) == "darwin" ]];then
+  if [[ ${OS} == "darwin" ]];then
     fontdir=~/Library/Fonts
   fi
   mkdir -p ${fontdir}
   wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Hasklig.zip
-  unzip /tmp/Hasklig.zip -o -d ${fontdir}
+  unzip -o /tmp/Hasklig.zip -d ${fontdir}
   popd
 }
 
