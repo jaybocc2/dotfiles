@@ -8,6 +8,13 @@ if [ -d ${HOME}/bin ]; then
   fi
 fi
 
+export PATH=${PATH}
+if [ -d /opt/homebrew/bin ]; then
+  if [ "$(echo ${PATH} |grep -o "/opt/homebrew/bin")" != "/opt/homebrew/bin" ];then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  fi
+fi
+
 if [ -e ${GOROOT} -a -e ${GOPATH} ];then
   if [ "$(echo ${PATH} |grep -o "${GOROOT}"|head -n 1)" != "${GOROOT}" ]; then
     export PATH=${GOPATH}/bin:${GOROOT}/bin:${PATH}

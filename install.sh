@@ -12,7 +12,7 @@ GO_VERSION=1.17.3
 ARCH=amd64
 PY3_VERSION=3.8.5
 PY2_VERSION=2.7.18
-NODE_VERSION=16.8.0
+NODE_VERSION=16.14.0
 FLUTTER_VERSION=2.0.2
 FLUTTER_CHANNEL=stable
 GHCLI_VERSION=1.13.1
@@ -181,6 +181,7 @@ install_deps() {
     which brew
     if [ "$?" -gt 0 ]; then
       /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+      eval "$(/opt/homebrew/bin/brew shellenv)"
     else
       brew update
     fi
