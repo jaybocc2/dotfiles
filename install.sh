@@ -1,15 +1,17 @@
 #!/bin/bash
 # install for jaybocc2@'s dotfiles
+source utils.sh
+if [[ -f /etc/os-release ]];then source /etc/os-release; fi
 DOT_FILES=$(git ls-tree @{u}|awk '{print $4}' |egrep -v '(/|LICENSE|README|install.sh)')
-OS=$(uname |tr '[:upper:]' '[:lower:]')
-DEB_DEPS="curl exuberant-ctags wget tmux zsh vim git xclip zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
-libncurses5-dev libssl-dev build-essential htop hub libffi-dev libffi7 xz-utils neovim"
+# OS=$(uname |tr '[:upper:]' '[:lower:]') # comes from utils.sh now
+DEB_DEPS="curl exuberant-ctags wget tmux zsh zsh-common vim git xclip zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
+libncurses5-dev libssl-dev build-essential htop hub libffi-dev libffi7 xz-utils"
 DEB_BACKPORTS_DEPS=""
 DEB_BACKPORTS_REPO=""
-DEB_TESTING_DEPS=""
+DEB_TESTING_DEPS="neovim"
 OSX_DEPS="ctags wget neovim tmux zsh vim git hub gh readline xz htop"
-GO_VERSION=1.17.3
-ARCH=amd64
+GO_VERSION=1.17.8
+# ARCH=amd64 # comes from utils.sh now
 PY3_VERSION=3.10.0
 PY2_VERSION=2.7.18
 NODE_VERSION=16.14.0
@@ -21,6 +23,7 @@ NEOVIM_UNINSTALL_PYENV_PACKAGES="pynvim neovim"
 GLOBAL_PYENV_PACKAGES="pip"
 CFLAGS='-O2'
 TFENV_VERSIONS="latest"
+source lsps.sh
 
 # backup dotfiles
 backup_dotfiles() {
@@ -37,17 +40,29 @@ backup_dotfiles() {
   done
 }
 
+install_fonts() {
+  pushd /tmp
+  fontdir=~/.fonts
+  if [[ $(OS) == "darwin" ]];then
+    fontdir=~/Library/Fonts
+  fi
+  mkdir -p ${fontdir}
+  wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Hasklig.zip
+  unzip /tmp/Hasklig.zip -o -d ${fontdir}
+  popd
+}
+
 upstall_repo() {
- test -d $2 && {
-   echo "Updating ${2} . . ."
-   pushd $2
-   git checkout master
-   git pull
-   popd
- } || {
-   echo "Installing $1 to $2 . . ."
-   git clone $1 $2
- }
+  test -d $2 && {
+    echo "Updating ${2} . . ."
+    pushd $2
+    git checkout master
+    git pull
+    popd
+  } || {
+    echo "Installing $1 to $2 . . ."
+    git clone $1 $2
+  }
 }
 
 install_pyenv() {
@@ -132,7 +147,7 @@ install_golang() {
     fi
   fi
 
-  curl https://storage.googleapis.com/golang/go${GO_VERSION}.${OS}-${ARCH}.tar.gz \
+  curl https://storage.googleapis.com/golang/go${GO_VERSION}.${OS}-$(ARCH).tar.gz \
     | tar -C ${HOME} -xz
 }
 
@@ -190,8 +205,8 @@ install_deps() {
   elif [[ "${OS}" == "linux" ]];then
     source /etc/*-release
     if [[ "${ID}" == "debian" ]];then
-      sudo apt-get install ${DEB_DEPS}
-      sudo apt-get -t ${DEB_BACKPORTS_REPO}-backports install ${DEB_BACKPORTS_DEPS}
+      sudo apt-get -t ${VERSION_CODENAME} install ${DEB_DEPS}
+      sudo apt-get -t ${VERSION_CODENAME}-backports install ${DEB_BACKPORTS_DEPS}
       sudo apt-get -t testing install ${DEB_TESTING_DEPS}
     fi
   fi
@@ -225,11 +240,14 @@ install_configs() {
     if [[ -f ${file} ]];then
       cp ${file} ~/.${file}
     elif [[ -d ${file} ]];then
+       prefix='.'
+       if [[ ${file} = "bin" ]];then
+           prefix=''
+       fi
+       if [[ ! -d ~/${prefix}${file} ]];then
+           mkdir -p ~/${prefix}${file}
+       fi
       for sub_file in $(ls -1 ${file});do
-        prefix='.'
-        if [[ ${file} = "bin" ]];then
-          prefix=''
-        fi
         cp -r ${file}/${sub_file} ~/${prefix}${file}/${sub_file}
       done
     fi
@@ -254,6 +272,12 @@ setup_env() {
   export GOPATH=${HOME}/go-workspace
   mkdir -p ${GOPATH}
   export PATH=${PATH}:${GOPATH}/bin:${GOROOT}/bin
+}
+
+install_nvim() {
+  setup_env
+  nvim --headless -u NONE -c 'lua require("bootstrap").bootstrap_paq()'
+  echo ""
 }
 
 install_vim_plugins() {
@@ -299,21 +323,20 @@ install_vim_plugins() {
     +qall
 }
 
-install_nvim() {
-  setup_env
-  nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
-  nvim --headless -c 'autocmd User PackerComplete quitall' -c 'GoInstallBinaries'
-  nvim --headless -c 'autocmd User PackerComplete quitall' -c 'GoUpdateBinaries'
-}
-
 install() {
   # echo "  ++  NOTICE  ++"
   # echo "Please install ctags, and go.  Also be sure to run :GoInstallBinaries in vim on first run, or some functionality will be missing."
   # echo "Press [Enter] to continue..."
   # read
 
-  # install_dependencies
-  install_deps
+  if [[ "X${FAST}" != "Xfast" ]]; then
+    # install_dependencies
+    install_deps
+
+    install_fonts
+
+    install_lsps
+  fi
 
   # backup existing dotfiles
   backup_dotfiles
@@ -337,8 +360,10 @@ install() {
 purge_all() {
   echo "  ++  NOTICE  ++"
   echo "This will potentially remove all dotfiles checked into this repository from your home dir."
-  echo "Press [Enter] to continue..."
-  read
+  if [[ "X${FAST}" != "Xfast" ]]; then
+    echo "Press [Enter] to continue..."
+    read
+  fi
   for file in $(echo ${DOT_FILES});do
     if [[ -e ~/.${file} ]] || [[ -h ~/.${file} ]]; then
       rm -rf ~/.${file}
@@ -350,6 +375,10 @@ purge_all() {
 
 #parameter handling here
 case "$1" in
+  fast)
+    export FAST="fast"
+    install
+    ;;
   install)
     install
     ;;
@@ -360,6 +389,8 @@ case "$1" in
     ;;
   install_deps)
     install_deps
+    install_fonts
+    install_lsps
     ;;
   config)
     install_configs

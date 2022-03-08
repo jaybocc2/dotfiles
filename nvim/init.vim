@@ -1,6 +1,8 @@
-
 " autostart CoQ
-let g:coq_settings = { 'auto_start': v:true }
+" let g:coq_settings = { 'auto_start': v:true }
 
 " require our lua plugins script
-lua require('plugins')
+lua require('bootstrap').run_paq()
+lua require('init')
+
+lua require('lsp')
