@@ -369,8 +369,11 @@ purge_all() {
       rm -rf ~/.${file}
     fi
   done
-  rm -rf ~/.local/share/nvim/site
-  rm -rf ~/.config/nvim
+
+  if [[ "X${CLEAN}" != "Xclean" ]]; then
+    rm -rf ~/.local/share/nvim/site
+    rm -rf ~/.config/nvim
+  fi
 }
 
 #parameter handling here
@@ -381,6 +384,7 @@ case "$1" in
     ;;
   install)
     install
+    export CLEAN="clean"
     ;;
   plugins)
     install_vim_plugins
