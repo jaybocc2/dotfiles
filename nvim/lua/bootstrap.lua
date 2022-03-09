@@ -2,10 +2,11 @@ local PKGS = {
   "savq/paq-nvim";
 
   -- new solarized truecolor pallete
-  { 'overcache/NeoSolarized' }; --, opt = false,  cmd = 'colorscheme NeoSolarized' } --, config = 'vim.cmd[[colorscheme NeoSolarized]]' }
+  {'overcache/NeoSolarized'}; --, opt = false,  cmd = 'colorscheme NeoSolarized' } --, config = 'vim.cmd[[colorscheme NeoSolarized]]' }
 
   -- show indents with virtual lines
-  { 'lukas-reineke/indent-blankline.nvim', opt = false };
+  -- { 'lukas-reineke/indent-blankline.nvim', opt = false };
+  {'nathanaelkane/vim-indent-guides'};
 
   -- required by nvim-tree
   -- { 'kyazdani42/nvim-web-devicons' };
@@ -16,7 +17,7 @@ local PKGS = {
   -- };
 
   -- use nvim-lspconfig (default lsp configs for built-in lsp)
-  { 'neovim/nvim-lspconfig', opt = false };
+  {'neovim/nvim-lspconfig', opt = false};
 
   -- lsp plugin & ui
   -- { 'tami5/lspsaga.nvim', opt = false };
@@ -28,31 +29,31 @@ local PKGS = {
   -- }
 
   -- LSP progress eye candy in bottom right
-  { 'j-hui/fidget.nvim', opt = false };
+  {'j-hui/fidget.nvim', opt = false};
 
   -- vscode style code actions
   -- use 'kosayoda/nvim-lightbulb'
 
   -- required by telescope
   {'nvim-lua/plenary.nvim'};
-  {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' };
+  {'nvim-telescope/telescope-fzf-native.nvim', run = 'make'};
   -- suggested to telescope & aerial && neat / improved syntax highlighting and more?
-  { 'nvim-treesitter/nvim-treesitter', run = function() vim.cmd('TSUpdate') end };
+  {'nvim-treesitter/nvim-treesitter', run = function() vim.cmd('TSUpdate') end};
   -- telescope
-  { 'nvim-telescope/telescope.nvim' };
+  {'nvim-telescope/telescope.nvim'};
 
   -- TypeScript Plugins
-  { 'jose-elias-alvarez/null-ls.nvim' };
-  { 'jose-elias-alvarez/nvim-lsp-ts-utils' };
+  -- { 'jose-elias-alvarez/null-ls.nvim' };
+  -- { 'jose-elias-alvarez/nvim-lsp-ts-utils' };
 
   -- code signature hints
   -- use 'ray-x/lsp_signature.nvim'
 
   -- coq completion
-  { 'ms-jpq/coq_nvim', branch = 'coq'};
-  { 'ms-jpq/coq.artifacts', branch = 'artifacts' };
-  { 'ms-jpq/coq.thirdparty', branch = '3p' };
-  { 'ms-jpq/chadtree', branch = 'chad', run = 'nvpython -m chadtree deps'};
+  {'ms-jpq/coq_nvim', branch = 'coq'};
+  {'ms-jpq/coq.artifacts', branch = 'artifacts'};
+  {'ms-jpq/coq.thirdparty', branch = '3p'};
+  {'ms-jpq/chadtree', branch = 'chad', run = os.getenv('HOME')..'/bin/nvpython -m chadtree deps'};
 
   -- Load on a combination of conditions: specific filetypes or commands
   -- Also run code after load (see the 'config' key)

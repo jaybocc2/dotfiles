@@ -19,24 +19,7 @@ local function config()
   -- end
 
   local function tsserver()
-    lspconfig.tsserver.setup(coq.lsp_ensure_capabilities(
-      {
-        on_attach = function(client, bufnr)
-          client.resolved_capabilities.document_formatting = false
-          client.resolved_capabilities.document_range_formatting = false
-
-          local ts_utils = require('nvim-lsp-ts-utils')
-          ts_utils.setup({})
-          ts_utils.setup_client(client)
-
-          vim.api.nvim_buf_set_keymap(bufnr, "n", "gs", ":TSLspOrganize<CR>", {silent = true})
-          vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", ":TSLspRenameFile<CR>", {silent = true})
-          vim.api.nvim_buf_set_keymap(bufnr, "n", "go", ":TSLspImportAll<CR>", {silent = true})
-
-          on_attach(client, bufnr)
-        end,
-      }
-    ))
+    lspconfig.tsserver.setup(coq.lsp_ensure_capabilities())
   end
 
   local function luaserver()
