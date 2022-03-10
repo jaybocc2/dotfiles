@@ -16,7 +16,7 @@ end
 local function keybinds()
   mapkeybind('n', '<C-n>', ':CHADopen<CR>')
   mapkeybind('n', '<F2>', ':set nonumber!<CR>:set foldcolumn=0<CR>')
-  mapkeybind('n', 'tn', ':tabnew')
+  mapkeybind('n', 'tn', ':tabnew<CR>')
 
   -- CoC keybinds
   mapkeybind('i', "<C-Space>", "coc#refresh()", { silent = true, expr = true })
