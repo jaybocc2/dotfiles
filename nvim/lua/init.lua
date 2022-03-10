@@ -40,47 +40,6 @@ local function keybinds()
   mapkeybind('n', 'gr', '<Plug>(coc-references)', { silent = true })
 end
 
-local function coc_user_config()
-  local config = {
-    coc = {
-      preferences = {
-        snippets = {
-          enable = true,
-        },
-        extenstionUpdateCheck = "daily",
-      },
-    },
-    flutter = {
-      provider = {
-        enableSnippet = true,
-      },
-    },
-
-    languageserver = {
-      golang = {
-        command = "gopls",
-        rootPatterns = {"go.mod", ".vim/", ".git/", ".hg/"},
-        filetypes = {"go"},
-        initializationOptions = {
-          gofumpt = true,
-          usePlaceholders = true,
-        },
-      }
-    },
-    go = {
-      goplsOptions = {
-        gofumpt = true
-      },
-    },
-    python = {
-      pythonPath = "cocpython",
-      blackPath = "cocblack",
-      blackdPath = "cocblackd",
-    },
-  }
-  return config
-end
-
 local function options()
   vim.opt.termguicolors = true
   vim.opt.shiftwidth = 2
@@ -97,12 +56,8 @@ local function options()
   vim.opt.numberwidth = 3
   vim.opt.colorcolumn = '120'
   vim.opt.showmode = true -- set to false when / if use lualine
-  -- vim.opt.showcolumn = 'yes'
   vim.opt.mouse = 'a'
 
-  -- coq vars
-  -- vim.api.nvim_set_var('coq_settings', {auto_start=true})
-  -- vim.api.nvim_set_var('python3_host_prog', os.getenv('HOME')..'/bin/nvpython')
   -- coc vars
   vim.api.nvim_set_var('coc_global_extensions', {
     'coc-markdownlint',
@@ -114,16 +69,12 @@ local function options()
     'coc-lua',
     'coc-tsserver',
   })
-  vim.api.nvim_set_var('coc_user_config', coc_user_config())
+  vim.api.nvim_set_var('coc_user_config', require('lsp').config())
   vim.api.nvim_set_var('coc_snippet_next', '<tab>')
 end
 
 local function indent_blankline()
-  -- solarized light tints
-  -- local untinted = 'eee8d5'
-  -- local tinted = 'ec7c3b2'
   vim.opt.list = true
-  -- vim.opt.listchars:append("space:⋅")
   vim.opt.listchars:append("eol:↴")
   require('indent_blankline').setup({
     space_char_blankline = " ",
@@ -171,9 +122,7 @@ local config = function()
   telescope()
   nvim_treesitter()
 
-  -- require('nvim-tree').setup()
   require('fidget').setup()
-  -- require('lspsaga').setup()
 end
 
 return config()
