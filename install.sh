@@ -277,7 +277,8 @@ setup_env() {
 install_nvim() {
   setup_env
   nvim --headless -u NONE -c 'lua require("bootstrap").bootstrap_paq()'
-  echo ""
+  echo "" && nvim +'CocInstall -sync' +'CHADdeps' +qall
+  # nvim --headless -u NONE -c 'CocInstall'
 }
 
 install_vim_plugins() {

@@ -5,11 +5,12 @@ local PKGS = {
   {'overcache/NeoSolarized'}; --, opt = false,  cmd = 'colorscheme NeoSolarized' } --, config = 'vim.cmd[[colorscheme NeoSolarized]]' }
 
   -- show indents with virtual lines
-  -- { 'lukas-reineke/indent-blankline.nvim', opt = false };
-  {'nathanaelkane/vim-indent-guides'};
+  { 'lukas-reineke/indent-blankline.nvim', opt = false };
+  -- {'nathanaelkane/vim-indent-guides'};
 
   -- required by nvim-tree
-  -- { 'kyazdani42/nvim-web-devicons' };
+  -- nvim colored web icons
+  { 'kyazdani42/nvim-web-devicons' };
   -- {
   --   'kyazdani42/nvim-tree.lua',
   --   -- requires = { 'kyazdani42/nvim-web-devicons' },
@@ -42,6 +43,11 @@ local PKGS = {
   -- telescope
   {'nvim-telescope/telescope.nvim'};
 
+  -- comment stuff out easily...
+  {'tpope/vim-commentary'};
+  -- handle comments for multi-language-file-types
+  {'JoosepAlviste/nvim-ts-context-commentstring'};
+
   -- TypeScript Plugins
   -- { 'jose-elias-alvarez/null-ls.nvim' };
   -- { 'jose-elias-alvarez/nvim-lsp-ts-utils' };
@@ -50,10 +56,11 @@ local PKGS = {
   -- use 'ray-x/lsp_signature.nvim'
 
   -- coq completion
-  {'ms-jpq/coq_nvim', branch = 'coq'};
-  {'ms-jpq/coq.artifacts', branch = 'artifacts'};
-  {'ms-jpq/coq.thirdparty', branch = '3p'};
+  -- {'ms-jpq/coq_nvim', branch = 'coq'};
+  -- {'ms-jpq/coq.artifacts', branch = 'artifacts'};
+  -- {'ms-jpq/coq.thirdparty', branch = '3p'};
   {'ms-jpq/chadtree', branch = 'chad', run = os.getenv('HOME')..'/bin/nvpython -m chadtree deps'};
+  {'neoclide/coc.nvim', branch= 'release'};
 
   -- Load on a combination of conditions: specific filetypes or commands
   -- Also run code after load (see the 'config' key)
