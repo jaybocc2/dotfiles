@@ -276,8 +276,9 @@ setup_env() {
 
 install_nvim() {
   setup_env
-  nvim --headless -u NONE -c 'lua require("bootstrap").bootstrap_paq()'
-  echo "" && nvim +'CocInstall -sync' +qall
+  PYENV_VERSION=neovim3 nvim --headless -u NONE -c 'lua require("bootstrap").bootstrap_paq()'
+  echo ""
+  # nvim +'CocInstall -sync' +qall
   # nvim --headless -u NONE -c 'CocInstall'
 }
 
@@ -365,13 +366,16 @@ purge_all() {
     echo "Press [Enter] to continue..."
     read
   fi
+
+  echo -e "\nremoving dotfiles"
   for file in $(echo ${DOT_FILES});do
     if [[ -e ~/.${file} ]] || [[ -h ~/.${file} ]]; then
       rm -rf ~/.${file}
     fi
   done
 
-  if [[ "X${CLEAN}" != "Xclean" ]]; then
+  if [[ "X${CLEAN}" == "Xclean" ]]; then
+    echo -e "\ncleaning nvim"
     rm -rf ~/.local/share/nvim/site
     rm -rf ~/.config/nvim
   fi
@@ -380,12 +384,17 @@ purge_all() {
 #parameter handling here
 case "$1" in
   fast)
-    export FAST="fast"
+    export FAST=${FAST:="fast"}
+    install
+    ;;
+  fastclean)
+    export CLEAN=${CLEAN:="clean"}
+    export FAST=${FAST:="fast"}
     install
     ;;
   install)
+    export CLEAN=${CLEAN:="clean"}
     install
-    export CLEAN="clean"
     ;;
   plugins)
     install_vim_plugins

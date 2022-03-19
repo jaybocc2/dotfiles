@@ -18,6 +18,18 @@ function _G.check_back_space()
   return (col == 0 or vim.api.nvim_get_current_line():sub(col, col):match('%s')) and true
 end
 
+function _G.show_documentation()
+  local ft = vim.bo.filetype
+  local cword = vim.fn.expand('<cword>')
+  if vim.fn.index({'vim', 'help'}, ft) then
+    vim.fn.execute('help ' .. cword)
+  elseif vim.fn['coc#rpc#ready']() then
+    vim.fn.call('CocActionAsync', {'doHover'})
+  else
+    vim.fn.execute(vim.o.keywordprg .. ' ' .. cword)
+  end
+end
+
 local function keybinds()
   mapkeybind('n', '<C-n>', ':CHADopen<CR>')
   mapkeybind('n', '<F2>', ':set nonumber!<CR>:set foldcolumn=0<CR>')
@@ -27,12 +39,12 @@ local function keybinds()
   mapkeybind('i', "<C-Space>", "coc#refresh()", { silent = true, expr = true })
   mapkeybind('i', '<CR>', "pumvisible() ? coc#_select_confirm() : '<C-G>u<CR><C-R>=coc#on_enter()<CR>'", { silent = true, expr = true })
   mapkeybind('i', '<TAB>', 'pumvisible() ? coc#_select_confirm() : coc#expandableOrJumpable() ? "<C-r>=coc#rpc#request(\'doKeymap\', [\'snippets-expand-jump\',\'\'])<CR>" : v:lua.check_back_space() ? "<TAB>" : coc#refresh()', { silent = true, expr = true })
-  mapkeybind('n', 'K', ':SID>show_documentation()<CR>', { silent = true })
+  mapkeybind('n', 'K', ': v:lua.show_documentation() <CR>', { silent = true })
   -- rename
   mapkeybind('n', '<LEADER>rn', '<Plug>(coc-rename)')
   -- format
   mapkeybind('n', '<LEADER>f', '<Plug>(coc-format-selected)')
-  mapkeybind('n', '<LEADER>gd', ':CoCDiagnostics<CR>')
+  mapkeybind('n', '<LEADER>gd', ':CocDiagnostics<CR>')
   mapkeybind('n', 'gd', '<Plug>(coc-definition)', { silent = true })
   mapkeybind('n', 'gy', '<Plug>(coc-type-definition)', { silent = true })
   mapkeybind('n', 'gi', '<Plug>(coc-implementation)', { silent = true })

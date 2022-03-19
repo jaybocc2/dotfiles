@@ -179,6 +179,7 @@ alias grep='grep --color'
 # alias bjs='ssh-add -s libeToken.so.8 -t 28800'
 alias ka='pkill ssh-agent'
 alias fa='source ~/.zshrc'
+alias fnv="nvim --headless -u NONE -c 'lua require(\"bootstrap\").bootstrap_paq()'"
 alias tmuxmain='tmux -2 attach -t main'
 alias tmuxside='tmux -2 attach -t sideprojects'
 alias gows="cd ${GOPATH}/src/github.com/jaybocc2"
