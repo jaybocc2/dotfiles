@@ -23,7 +23,12 @@ local function config()
           gofumpt = true,
           usePlaceholders = true,
         },
-      }
+      },
+      terraform = {
+        command = "terraform-ls",
+        filetypes = {"terraform"},
+        initializationOptions = {},
+      },
     },
     go = {
       goplsOptions = {
