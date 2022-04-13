@@ -106,7 +106,19 @@ end
 
 local function nvim_treesitter()
   require('nvim-treesitter.configs').setup({
-    ensure_installed = 'maintained',
+    ensure_installed = {
+      "bash",
+      "dockerfile",
+      "go",
+      "hcl",
+      "javascript",
+      "lua",
+      "make",
+      "python",
+      "typescript",
+      "tsx",
+      "vim",
+    },
     context_commentstring = {
       enable = true
     },

@@ -276,10 +276,8 @@ setup_env() {
 
 install_nvim() {
   setup_env
-  PYENV_VERSION=neovim3 nvim --headless -u NONE -c 'lua require("bootstrap").bootstrap_paq()'
+  # PYENV_VERSION=neovim3 nvim --headless -u NONE -c 'lua require("packages").bootstrap()'
   echo ""
-  # nvim +'CocInstall -sync' +qall
-  # nvim --headless -u NONE -c 'CocInstall'
 }
 
 install_vim_plugins() {

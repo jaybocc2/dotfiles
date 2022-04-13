@@ -26,8 +26,10 @@ local function config()
       },
       terraform = {
         command = "terraform-ls",
-        filetypes = {"terraform"},
+        args = {"serve"},
+        filetypes = {"terraform", "tf"},
         initializationOptions = {},
+        settings = {},
       },
     },
     go = {
