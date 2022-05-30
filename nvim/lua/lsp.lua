@@ -42,6 +42,8 @@ local function config()
       blackPath = "cocblack",
       blackdPath = "cocblackd",
     },
+    -- rust = {
+    -- },
   }
   return config
 end

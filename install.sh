@@ -8,18 +8,17 @@ DEB_DEPS="curl exuberant-ctags wget tmux zsh zsh-common vim git xclip zlib1g-dev
 libncurses5-dev libssl-dev build-essential htop hub libffi-dev libffi7 xz-utils"
 DEB_BACKPORTS_DEPS=""
 DEB_BACKPORTS_REPO=""
-DEB_TESTING_DEPS="neovim"
+DEB_TESTING_DEPS=""
 OSX_DEPS="ctags wget neovim tmux zsh vim git hub gh readline xz htop"
 GO_VERSION=1.17.8
 # ARCH=amd64 # comes from utils.sh now
 PY3_VERSION=3.10.0
-PY2_VERSION=2.7.18
 NODE_VERSION=16.14.0
+NEOVIM_VERSION="v0.7.0"
 FLUTTER_VERSION=2.0.2
 FLUTTER_CHANNEL=stable
-GHCLI_VERSION=2.5.2
+GHCLI_VERSION=2.11.3
 NEOVIM_PYENV_PACKAGES="pip pynvim flake8 pylint"
-NEOVIM_UNINSTALL_PYENV_PACKAGES="pynvim neovim"
 GLOBAL_PYENV_PACKAGES="pip"
 CFLAGS='-O2'
 TFENV_VERSIONS="latest"
@@ -57,7 +56,7 @@ upstall_repo() {
     echo "Updating ${2} . . ."
     pushd $2
     git checkout master
-    git pull
+    git pull --ff-only
     popd
   } || {
     echo "Installing $1 to $2 . . ."
@@ -78,27 +77,19 @@ install_pyenv() {
   pyenv versions |grep ${PY3_VERSION} || pyenv install ${PY3_VERSION}
   pyenv versions |grep ${PY2_VERSION} || pyenv install ${PY2_VERSION}
   pyenv versions |grep 3global || pyenv virtualenv ${PY3_VERSION} 3global
-  pyenv versions |grep 2global || pyenv virtualenv ${PY2_VERSION} 2global
   pyenv global 3global
   pyenv versions |grep neovim3 || pyenv virtualenv ${PY3_VERSION} neovim3
-  pyenv versions |grep neovim || pyenv virtualenv ${PY2_VERSION} neovim
 
   for package in $(echo $GLOBAL_PYENV_PACKAGES);do
     export PYENV_VERSION='3global'
-    pip list |grep ${package} || pip install ${package}
-    pip list --outdated |grep ${package} && pip install ${package} -U
-    export PYENV_VERSION='2global'
-    pip list |grep ${package} || pip install ${package}
-    pip list --outdated |grep ${package} && pip install ${package} -U
+    pyenv exec pip list |grep ${package} || pyenv exec pip install ${package}
+    pyenv exec pip list --outdated |grep ${package} && pyenv exec pip install ${package} -U
   done
 
   for package in $(echo $NEOVIM_PYENV_PACKAGES);do
     export PYENV_VERSION='neovim3'
-    pip list |grep ${package} || pip install ${package}
-    pip list --outdated |grep ${package} && pip install ${package} -U
-    export PYENV_VERSION='neovim'
-    pip list |grep ${package} || pip install ${package}
-    pip list --outdated |grep ${package} && pip install ${package} -U
+    pyenv exec pip list |grep ${package} || pyenv exec pip install ${package}
+    pyenv exec pip list --outdated |grep ${package} && pyenv exec pip install ${package} -U
   done
 
   unset PYENV_VERSION
@@ -208,6 +199,9 @@ install_deps() {
       sudo apt-get -t ${VERSION_CODENAME} install ${DEB_DEPS}
       sudo apt-get -t ${VERSION_CODENAME}-backports install ${DEB_BACKPORTS_DEPS}
       sudo apt-get -t testing install ${DEB_TESTING_DEPS}
+      pushd /tmp
+      curl -LO "https://github.com/neovim/neovim/releases/download/${NEOVIM_VERSION}/nvim-linux64.deb"
+      sudo dpkg -i nvim-linux64.deb
     fi
   fi
 
@@ -335,7 +329,7 @@ install() {
 
     install_fonts
 
-    install_lsps
+    # install_lsps
   fi
 
   # backup existing dotfiles
@@ -402,7 +396,7 @@ case "$1" in
   install_deps)
     install_deps
     install_fonts
-    install_lsps
+    # install_lsps
     ;;
   config)
     install_configs

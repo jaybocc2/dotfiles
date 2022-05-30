@@ -71,13 +71,14 @@ local function options()
 
   -- coc vars
   vim.api.nvim_set_var('coc_global_extensions', {
-    'coc-markdownlint',
     -- 'coc-flutter',
-    'coc-pyright',
-    'coc-snippets',
-    'coc-go',
     'coc-git',
+    'coc-go',
     'coc-lua',
+    'coc-markdownlint',
+    'coc-pyright',
+    'coc-rls',
+    'coc-snippets',
     'coc-tsserver',
   })
   vim.api.nvim_set_var('coc_user_config', require('lsp').config())
