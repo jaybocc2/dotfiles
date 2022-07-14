@@ -69,6 +69,8 @@ local function options()
   vim.opt.showmode = true -- set to false when / if use lualine
   vim.opt.mouse = 'a'
 
+  vim.api.nvim_set_var('python3_host_prog', vim.fn.expand('~/.pyenv/versions/neovim3/bin/python'))
+
   -- coc vars
   vim.api.nvim_set_var('coc_global_extensions', {
     -- 'coc-flutter',
@@ -116,8 +118,9 @@ local function nvim_treesitter()
       "lua",
       "make",
       "python",
-      "typescript",
+      "rust",
       "tsx",
+      "typescript",
       "vim",
     },
     context_commentstring = {

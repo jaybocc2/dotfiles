@@ -88,6 +88,6 @@ if [ -d "${ANDROID_HOME}/Sdk/platform-tools" ]; then
   fi
 fi
 
-if [ -d "${HOME}/.cargo/env" ];then
+if [ -e "${HOME}/.cargo/env" ];then
   source ${HOME}/.cargo/env
 fi

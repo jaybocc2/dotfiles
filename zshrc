@@ -166,7 +166,6 @@ alias c=clear
 alias b=byobu
 alias s=screen
 alias r='screen -R'
-alias vi='vim'
 alias ls='ls --color=auto -F'
 alias ll='ls -lAFh --color=auto'
 alias ld='ls -ltr --color=auto'
@@ -179,11 +178,13 @@ alias grep='grep --color'
 # alias bjs='ssh-add -s libeToken.so.8 -t 28800'
 alias ka='pkill ssh-agent'
 alias fa='source ~/.zshrc'
-alias fnv="nvim --headless -u NONE -c 'lua require(\"bootstrap\").bootstrap_paq()'"
+alias fnv="nvimvenv --headless -u NONE -c 'lua require(\"bootstrap\").bootstrap_paq()'"
 alias tmuxmain='tmux -2 attach -t main'
 alias tmuxside='tmux -2 attach -t sideprojects'
 alias gows="cd ${GOPATH}/src/github.com/jaybocc2"
-alias vim="nvim"
+alias vim="nvimvenv"
+alias nvim="nvimvenv"
+alias vi='vim'
 eval "$(hub alias -s)"
 
 ## Pipe Aliases (Global)
