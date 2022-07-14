@@ -19,3 +19,13 @@ prompt_git_info () {
 tmux_load_avg () {
   cat /proc/loadavg || uptime |awk '{print $10, $11, $12}'
 }
+
+nvimvenv () {
+  if [[ -e "${VIRTUAL_ENV}" && -f "${VIRTUAL_ENV}/bin/activate" ]]; then
+    source "${VIRTUAL_ENV}/bin/activate"
+    command nvim $@
+    deactivate
+  else
+    command nvim $@
+  fi
+}

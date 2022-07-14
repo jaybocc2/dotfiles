@@ -1,26 +1,28 @@
 #!/bin/bash
 # install for jaybocc2@'s dotfiles
+source utils.sh
+if [[ -f /etc/os-release ]];then source /etc/os-release; fi
 DOT_FILES=$(git ls-tree @{u}|awk '{print $4}' |egrep -v '(/|LICENSE|README|install.sh)')
-OS=$(uname |tr '[:upper:]' '[:lower:]')
-DEB_DEPS="curl exuberant-ctags wget tmux zsh vim git xclip zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
-libncurses5-dev libssl-dev build-essential htop hub libffi-dev libffi7 xz-utils neovim"
+# OS=$(uname |tr '[:upper:]' '[:lower:]') # comes from utils.sh now
+DEB_DEPS="curl exuberant-ctags wget tmux zsh zsh-common vim git xclip zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
+libncurses5-dev libssl-dev build-essential htop libffi-dev libffi7 xz-utils"
 DEB_BACKPORTS_DEPS=""
 DEB_BACKPORTS_REPO=""
 DEB_TESTING_DEPS=""
 OSX_DEPS="ctags wget neovim tmux zsh vim git hub gh readline xz htop"
-GO_VERSION=1.17.3
-ARCH=amd64
-PY3_VERSION=3.8.5
-PY2_VERSION=2.7.18
+GO_VERSION=1.17.8
+# ARCH=amd64 # comes from utils.sh now
+PY3_VERSION=3.10.0
 NODE_VERSION=16.14.0
+NEOVIM_VERSION="v0.7.0"
 FLUTTER_VERSION=2.0.2
 FLUTTER_CHANNEL=stable
-GHCLI_VERSION=1.13.1
+GHCLI_VERSION=2.11.3
 NEOVIM_PYENV_PACKAGES="pip pynvim flake8 pylint"
-NEOVIM_UNINSTALL_PYENV_PACKAGES="pynvim neovim"
 GLOBAL_PYENV_PACKAGES="pip"
 CFLAGS='-O2'
-TFENV_VERSIONS="0.11.10 latest"
+TFENV_VERSIONS="latest"
+source lsps.sh
 
 # backup dotfiles
 backup_dotfiles() {
@@ -37,17 +39,29 @@ backup_dotfiles() {
   done
 }
 
+install_fonts() {
+  pushd /tmp
+  fontdir=~/.fonts
+  if [[ ${OS} == "darwin" ]];then
+    fontdir=~/Library/Fonts
+  fi
+  mkdir -p ${fontdir}
+  wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Hasklig.zip
+  unzip -o /tmp/Hasklig.zip -d ${fontdir}
+  popd
+}
+
 upstall_repo() {
- test -d $2 && {
-   echo "Updating ${2} . . ."
-   pushd $2
-   git checkout master
-   git pull
-   popd
- } || {
-   echo "Installing $1 to $2 . . ."
-   git clone $1 $2
- }
+  test -d $2 && {
+    echo "Updating ${2} . . ."
+    pushd $2
+    git checkout master
+    git pull --ff-only
+    popd
+  } || {
+    echo "Installing $1 to $2 . . ."
+    git clone $1 $2
+  }
 }
 
 install_pyenv() {
@@ -63,27 +77,19 @@ install_pyenv() {
   pyenv versions |grep ${PY3_VERSION} || pyenv install ${PY3_VERSION}
   pyenv versions |grep ${PY2_VERSION} || pyenv install ${PY2_VERSION}
   pyenv versions |grep 3global || pyenv virtualenv ${PY3_VERSION} 3global
-  pyenv versions |grep 2global || pyenv virtualenv ${PY2_VERSION} 2global
   pyenv global 3global
   pyenv versions |grep neovim3 || pyenv virtualenv ${PY3_VERSION} neovim3
-  pyenv versions |grep neovim || pyenv virtualenv ${PY2_VERSION} neovim
 
   for package in $(echo $GLOBAL_PYENV_PACKAGES);do
     export PYENV_VERSION='3global'
-    pip list |grep ${package} || pip install ${package}
-    pip list --outdated |grep ${package} && pip install ${package} -U
-    export PYENV_VERSION='2global'
-    pip list |grep ${package} || pip install ${package}
-    pip list --outdated |grep ${package} && pip install ${package} -U
+    pyenv exec pip list |grep ${package} || pyenv exec pip install ${package}
+    pyenv exec pip list --outdated |grep ${package} && pyenv exec pip install ${package} -U
   done
 
   for package in $(echo $NEOVIM_PYENV_PACKAGES);do
     export PYENV_VERSION='neovim3'
-    pip list |grep ${package} || pip install ${package}
-    pip list --outdated |grep ${package} && pip install ${package} -U
-    export PYENV_VERSION='neovim'
-    pip list |grep ${package} || pip install ${package}
-    pip list --outdated |grep ${package} && pip install ${package} -U
+    pyenv exec pip list |grep ${package} || pyenv exec pip install ${package}
+    pyenv exec pip list --outdated |grep ${package} && pyenv exec pip install ${package} -U
   done
 
   unset PYENV_VERSION
@@ -132,7 +138,7 @@ install_golang() {
     fi
   fi
 
-  curl https://storage.googleapis.com/golang/go${GO_VERSION}.${OS}-${ARCH}.tar.gz \
+  curl https://storage.googleapis.com/golang/go${GO_VERSION}.${OS}-$(ARCH).tar.gz \
     | tar -C ${HOME} -xz
 }
 
@@ -165,9 +171,9 @@ install_ghcli() {
   fi
 
   pushd /tmp
-  curl -LO "https://github.com/cli/cli/releases/download/v${GHCLI_VERSION}/gh_${GHCLI_VERSION}_linux_amd64.deb"
-  sudo dpkg -i gh_${GHCLI_VERSION}_linux_amd64.deb
-  rm -rf gh_${GHCLI_VERSION}_linux_amd64.deb
+  curl -LO "https://github.com/cli/cli/releases/download/v${GHCLI_VERSION}/gh_${GHCLI_VERSION}_linux_$(ARCH).deb"
+  sudo dpkg -i gh_${GHCLI_VERSION}_linux_$(ARCH).deb
+  rm -rf gh_${GHCLI_VERSION}_linux_$(ARCH).deb
   popd
 }
 
@@ -190,9 +196,12 @@ install_deps() {
   elif [[ "${OS}" == "linux" ]];then
     source /etc/*-release
     if [[ "${ID}" == "debian" ]];then
-      sudo apt-get install ${DEB_DEPS}
-      sudo apt-get -t ${DEB_BACKPORTS_REPO}-backports install ${DEB_BACKPORTS_DEPS}
+      sudo apt-get -t ${VERSION_CODENAME} install ${DEB_DEPS}
+      sudo apt-get -t ${VERSION_CODENAME}-backports install ${DEB_BACKPORTS_DEPS}
       sudo apt-get -t testing install ${DEB_TESTING_DEPS}
+      pushd /tmp
+      curl -LO "https://github.com/neovim/neovim/releases/download/${NEOVIM_VERSION}/nvim-linux64.deb"
+      sudo dpkg -i nvim-linux64.deb
     fi
   fi
 
@@ -209,7 +218,7 @@ make_dirs() {
   echo ""
   echo "creating directories. . . ."
 
-  for dir in {.ssh/keys,.tmux,.zsh,.vim/autoload,.local/share/nvim,.config/nvim,bin}; do
+  for dir in {.ssh/keys,.tmux,.zsh,.vim/autoload,.local/share/nvim,.config,bin}; do
     echo creating directory ~/${dir}
     mkdir -p ~/${dir}
   done
@@ -225,19 +234,44 @@ install_configs() {
     if [[ -f ${file} ]];then
       cp ${file} ~/.${file}
     elif [[ -d ${file} ]];then
+      prefix='.'
+      if [[ ${file} = "bin" ]];then
+        prefix=''
+      fi
+      if [[ ! -d ~/${prefix}${file} ]];then
+        mkdir -p ~/${prefix}${file}
+      fi
       for sub_file in $(ls -1 ${file});do
-        prefix='.'
-        if [[ ${file} = "bin" ]];then
-          prefix=''
-        fi
         cp -r ${file}/${sub_file} ~/${prefix}${file}/${sub_file}
       done
     fi
   done
 
-  ln -s ~/.vimrc ~/.config/nvim/init.vim
-  ln -s ~/.vim ~/.local/share/nvim/site
-  ln -s ~/.vim/coc-settings.json ~/.config/nvim/coc-settings.json
+  ln -s ~/.nvim ~/.config/nvim
+  # ln -s ~/.vimrc ~/.config/nvim/init.vim
+  # ln -s ~/.vim ~/.local/share/nvim/site
+  # ln -s ~/.vim/coc-settings.json ~/.config/nvim/coc-settings.json
+}
+
+setup_env() {
+  export PYENV_ROOT="${HOME}/.pyenv"
+  export PATH=${PYENV_ROOT}/bin:${PATH}
+  eval "$(pyenv init -)"
+
+  export NODENV_ROOT="${HOME}/.nodenv"
+  export PATH=${NODENV_ROOT}/bin:${PATH}
+  eval "$(nodenv init -)"
+
+  export GOROOT=${HOME}/go
+  export GOPATH=${HOME}/go-workspace
+  mkdir -p ${GOPATH}
+  export PATH=${PATH}:${GOPATH}/bin:${GOROOT}/bin
+}
+
+install_nvim() {
+  setup_env
+  # PYENV_VERSION=neovim3 nvim --headless -u NONE -c 'lua require("packages").bootstrap()'
+  echo ""
 }
 
 install_vim_plugins() {
@@ -289,8 +323,14 @@ install() {
   # echo "Press [Enter] to continue..."
   # read
 
-  # install_dependencies
-  install_deps
+  if [[ "X${FAST}" != "Xfast" ]]; then
+    # install_dependencies
+    install_deps
+
+    install_fonts
+
+    # install_lsps
+  fi
 
   # backup existing dotfiles
   backup_dotfiles
@@ -305,26 +345,47 @@ install() {
   install_configs
 
   # install vim plugins
-  install_vim_plugins
+  # install_vim_plugins
+  
+  # install nvim
+  install_nvim
 }
 
 purge_all() {
   echo "  ++  NOTICE  ++"
   echo "This will potentially remove all dotfiles checked into this repository from your home dir."
-  echo "Press [Enter] to continue..."
-  read
+  if [[ "X${FAST}" != "Xfast" ]]; then
+    echo "Press [Enter] to continue..."
+    read
+  fi
+
+  echo -e "\nremoving dotfiles"
   for file in $(echo ${DOT_FILES});do
     if [[ -e ~/.${file} ]] || [[ -h ~/.${file} ]]; then
       rm -rf ~/.${file}
     fi
   done
-  rm -rf ~/.local/share/nvim/site
-  rm -rf ~/.config/nvim
+
+  if [[ "X${CLEAN}" == "Xclean" ]]; then
+    echo -e "\ncleaning nvim"
+    rm -rf ~/.local/share/nvim/site
+    rm -rf ~/.config/nvim
+  fi
 }
 
 #parameter handling here
 case "$1" in
+  fast)
+    export FAST=${FAST:="fast"}
+    install
+    ;;
+  fastclean)
+    export CLEAN=${CLEAN:="clean"}
+    export FAST=${FAST:="fast"}
+    install
+    ;;
   install)
+    export CLEAN=${CLEAN:="clean"}
     install
     ;;
   plugins)
@@ -334,9 +395,14 @@ case "$1" in
     ;;
   install_deps)
     install_deps
+    install_fonts
+    # install_lsps
     ;;
   config)
     install_configs
+    ;;
+  nvim)
+    install_nvim
     ;;
   *)
     echo "Usage: $0 {install|purge}"

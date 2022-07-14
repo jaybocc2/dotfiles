@@ -87,3 +87,7 @@ if [ -d "${ANDROID_HOME}/Sdk/platform-tools" ]; then
     export PATH="${ANDROID_HOME}/Sdk/cmdline-tools:${PATH}"
   fi
 fi
+
+if [ -e "${HOME}/.cargo/env" ];then
+  source ${HOME}/.cargo/env
+fi
