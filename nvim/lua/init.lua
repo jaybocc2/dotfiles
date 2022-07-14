@@ -49,6 +49,8 @@ local function keybinds()
   mapkeybind('n', 'gy', '<Plug>(coc-type-definition)', { silent = true })
   mapkeybind('n', 'gi', '<Plug>(coc-implementation)', { silent = true })
   mapkeybind('n', 'gr', '<Plug>(coc-references)', { silent = true })
+  -- mapkeybind('n', '<LEADER>S', ':SymbolsOutline<CR>')
+  mapkeybind('n', '<LEADER>S', ':Vista coc<CR>')
 end
 
 local function options()
@@ -85,6 +87,19 @@ local function options()
   })
   vim.api.nvim_set_var('coc_user_config', require('lsp').config())
   vim.api.nvim_set_var('coc_snippet_next', '<tab>')
+end
+
+local function chadtree_config()
+  local chadtree_settings = {
+    ignore = {
+      name_glob = {
+        "*.d.ts",
+        "*.js",
+      },
+    }
+  }
+
+  vim.api.nvim_set_var("chadtree_settings", chadtree_settings)
 end
 
 local function indent_blankline()
@@ -139,6 +154,9 @@ local config = function()
   if findcolor('NeoSolarized') then
     vim.cmd('colorscheme NeoSolarized')
     vim.opt.background = 'light'
+  elseif findcolor('solarized') then
+    vim.cmd('colorscheme solarized')
+    vim.opt.background = 'light'
   else
     vim.cmd('colorscheme slate')
   end
@@ -148,6 +166,7 @@ local config = function()
   indent_blankline()
   telescope()
   nvim_treesitter()
+  chadtree_config()
 
   require('fidget').setup()
 end

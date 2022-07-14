@@ -2,7 +2,8 @@ local packages = function(use)
   use 'wbthomason/packer.nvim'
 
   -- new solarized truecolor pallete
-  use {'overcache/NeoSolarized'} --, opt = false,  cmd = 'colorscheme NeoSolarized' } --, config = 'vim.cmd[[colorscheme NeoSolarized]]' }
+  -- use {'overcache/NeoSolarized'} --, opt = false,  cmd = 'colorscheme NeoSolarized' } --, config = 'vim.cmd[[colorscheme NeoSolarized]]' }
+  use {'ishan9299/nvim-solarized-lua'}
 
   -- show indents with virtual lines
   use { 'lukas-reineke/indent-blankline.nvim', opt = false }
@@ -36,6 +37,9 @@ local packages = function(use)
   use {'ms-jpq/chadtree', branch = 'chad', run = os.getenv('HOME')..'/bin/nvpython -m chadtree deps'}
   -- coc is like coq but has its own lsp so i don't have to waste time configuring neovim-lsp's
   use {'neoclide/coc.nvim', branch= 'release'}
+
+  -- use {'simrat39/symbols-outline.nvim'} -- did not work with CoC
+  use {'liuchengxu/vista.vim'}
 
   require('packer').sync()
 end
