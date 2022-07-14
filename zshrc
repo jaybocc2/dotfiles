@@ -185,7 +185,7 @@ alias gows="cd ${GOPATH}/src/github.com/jaybocc2"
 alias vim="nvimvenv"
 alias nvim="nvimvenv"
 alias vi='vim'
-eval "$(hub alias -s)"
+# eval "$(hub alias -s)"
 
 ## Pipe Aliases (Global)
 #alias -g L='|less'

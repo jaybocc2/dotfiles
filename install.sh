@@ -5,7 +5,7 @@ if [[ -f /etc/os-release ]];then source /etc/os-release; fi
 DOT_FILES=$(git ls-tree @{u}|awk '{print $4}' |egrep -v '(/|LICENSE|README|install.sh)')
 # OS=$(uname |tr '[:upper:]' '[:lower:]') # comes from utils.sh now
 DEB_DEPS="curl exuberant-ctags wget tmux zsh zsh-common vim git xclip zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
-libncurses5-dev libssl-dev build-essential htop hub libffi-dev libffi7 xz-utils"
+libncurses5-dev libssl-dev build-essential htop libffi-dev libffi7 xz-utils"
 DEB_BACKPORTS_DEPS=""
 DEB_BACKPORTS_REPO=""
 DEB_TESTING_DEPS=""
@@ -171,9 +171,9 @@ install_ghcli() {
   fi
 
   pushd /tmp
-  curl -LO "https://github.com/cli/cli/releases/download/v${GHCLI_VERSION}/gh_${GHCLI_VERSION}_linux_amd64.deb"
-  sudo dpkg -i gh_${GHCLI_VERSION}_linux_amd64.deb
-  rm -rf gh_${GHCLI_VERSION}_linux_amd64.deb
+  curl -LO "https://github.com/cli/cli/releases/download/v${GHCLI_VERSION}/gh_${GHCLI_VERSION}_linux_$(ARCH).deb"
+  sudo dpkg -i gh_${GHCLI_VERSION}_linux_$(ARCH).deb
+  rm -rf gh_${GHCLI_VERSION}_linux_$(ARCH).deb
   popd
 }
 
@@ -234,13 +234,13 @@ install_configs() {
     if [[ -f ${file} ]];then
       cp ${file} ~/.${file}
     elif [[ -d ${file} ]];then
-       prefix='.'
-       if [[ ${file} = "bin" ]];then
-           prefix=''
-       fi
-       if [[ ! -d ~/${prefix}${file} ]];then
-           mkdir -p ~/${prefix}${file}
-       fi
+      prefix='.'
+      if [[ ${file} = "bin" ]];then
+        prefix=''
+      fi
+      if [[ ! -d ~/${prefix}${file} ]];then
+        mkdir -p ~/${prefix}${file}
+      fi
       for sub_file in $(ls -1 ${file});do
         cp -r ${file}/${sub_file} ~/${prefix}${file}/${sub_file}
       done
