@@ -38,8 +38,9 @@ local packages = function(use)
   -- coc is like coq but has its own lsp so i don't have to waste time configuring neovim-lsp's
   use {'neoclide/coc.nvim', branch= 'release'}
 
-  -- use {'simrat39/symbols-outline.nvim'} -- did not work with CoC
-  use {'liuchengxu/vista.vim'}
+  -- use {'simrat39/symbols-outline.nvim'} -- did not work with CoC -- blank - https://github.com/simrat39/symbols-outline.nvim/issues/131
+  -- use {'liuchengxu/vista.vim'} -- sucks to use -- shows **everything ever defined w/out collapsable sections**
+  use {'stevearc/aerial.nvim', config = function() require('aerial').setup() end}
 
   require('packer').sync()
 end

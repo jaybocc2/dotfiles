@@ -49,8 +49,24 @@ local function keybinds()
   mapkeybind('n', 'gy', '<Plug>(coc-type-definition)', { silent = true })
   mapkeybind('n', 'gi', '<Plug>(coc-implementation)', { silent = true })
   mapkeybind('n', 'gr', '<Plug>(coc-references)', { silent = true })
+  mapkeybind('n', '<space>S', ':CocList outline<CR>', {silent = true})
+  mapkeybind('n', '<LEADER>S', ':AerialToggle<CR>')
   -- mapkeybind('n', '<LEADER>S', ':SymbolsOutline<CR>')
-  mapkeybind('n', '<LEADER>S', ':Vista coc<CR>')
+  -- mapkeybind('n', '<LEADER>S', ':Vista coc<CR>')
+end
+
+local function custom_commands()
+  -- " Add `:Format` command to format current buffer.
+  -- command! -nargs=0 Format :call CocActionAsync('format')
+  vim.api.nvim_create_user_command('Format', 'call CocActionAsync("format")', {nargs = 0})
+
+  -- " Add `:Fold` command to fold current buffer.
+  -- command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+  vim.api.nvim_create_user_command('Fold', 'call CocAction("fold", <f-args>)', {nargs = "?"})
+
+  -- " Add `:OR` command for organize imports of the current buffer.
+  -- command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
+  vim.api.nvim_create_user_command('OR', 'call CocActionAsync("runCommand", "editor.action.organizeImport")', {nargs = 0})
 end
 
 local function options()
@@ -84,6 +100,7 @@ local function options()
     'coc-rls',
     'coc-snippets',
     'coc-tsserver',
+    'coc-eslint',
   })
   vim.api.nvim_set_var('coc_user_config', require('lsp').config())
   vim.api.nvim_set_var('coc_snippet_next', '<tab>')
@@ -163,6 +180,7 @@ local config = function()
 
   keybinds()
   options()
+  custom_commands()
   indent_blankline()
   telescope()
   nvim_treesitter()
