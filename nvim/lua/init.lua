@@ -79,6 +79,7 @@ local function options()
   vim.opt.et = true
   vim.opt.number = true
   vim.opt.relativenumber = true -- might disable this.
+  vim.opt.cursorline = true
   vim.opt.autoread = true
   vim.opt.incsearch = true
   vim.opt.scrolloff = 5
@@ -104,6 +105,48 @@ local function options()
   })
   vim.api.nvim_set_var('coc_user_config', require('lsp').config())
   vim.api.nvim_set_var('coc_snippet_next', '<tab>')
+end
+
+-- configure lightline
+local function lightline_config()
+  vim.api.nvim_set_var('lightline', {
+    colorscheme = 'solarized',
+    active = {
+      left = {
+        { 'mode', 'paste' },
+        { 'gitbranch', 'readonly', 'filename', 'modified' },
+      },
+      right = {
+        { 'lineinfo' },
+        { 'percent' },
+        {
+          'cocstatus',
+          'fileformat',
+          'fileencoding',
+          'filetype',
+        },
+      }
+    },
+    component = {
+      lineinfo = '%31:%-2v',
+    },
+    component_function = {
+      cocstatus = 'coc#status',
+      gitbranch = 'fugitive#head'
+    },
+    separator = {
+      left = '\ue0b0',
+      right = '\ue0b2',
+    },
+    subseparator = {
+      left = '\ue0b0',
+      right = '\ue0b2',
+    },
+    tabline = {
+      left = { { 'tabs' } },
+      right = { { 'close' } },
+    },
+  })
 end
 
 local function chadtree_config()

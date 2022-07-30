@@ -5,6 +5,11 @@ local packages = function(use)
   -- use {'overcache/NeoSolarized'} --, opt = false,  cmd = 'colorscheme NeoSolarized' } --, config = 'vim.cmd[[colorscheme NeoSolarized]]' }
   use {'ishan9299/nvim-solarized-lua'}
 
+  -- use lightline
+  use {'itchyny/lightline.vim'}
+  -- use vim fugitive idk why tho maybe i'll like it
+  use {'tpope/vim-fugitive'}
+
   -- show indents with virtual lines
   use { 'lukas-reineke/indent-blankline.nvim', opt = false }
 
