@@ -5,8 +5,8 @@ local packages = function(use)
   -- use {'overcache/NeoSolarized'} --, opt = false,  cmd = 'colorscheme NeoSolarized' } --, config = 'vim.cmd[[colorscheme NeoSolarized]]' }
   use {'ishan9299/nvim-solarized-lua'}
 
-  -- use lightline
-  use {'itchyny/lightline.vim'}
+  -- use lualine
+  use { 'nvim-lualine/lualine.nvim', requires = { 'kyazdani42/nvim-web-devicons', opt = true } }
   -- use vim fugitive idk why tho maybe i'll like it
   use {'tpope/vim-fugitive'}
 

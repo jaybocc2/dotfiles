@@ -95,7 +95,7 @@ local function options()
     -- 'coc-flutter',
     'coc-git',
     'coc-go',
-    'coc-lua',
+    'coc-sumneko-lua',
     'coc-markdownlint',
     'coc-pyright',
     'coc-rust-analyzer',
@@ -107,46 +107,23 @@ local function options()
   vim.api.nvim_set_var('coc_snippet_next', '<tab>')
 end
 
--- configure lightline
-local function lightline_config()
-  vim.api.nvim_set_var('lightline', {
-    colorscheme = 'solarized',
-    active = {
-      left = {
-        { 'mode', 'paste' },
-        { 'gitbranch', 'readonly', 'filename', 'modified' },
-      },
-      right = {
-        { 'lineinfo' },
-        { 'percent' },
-        {
-          'cocstatus',
-          'fileformat',
-          'fileencoding',
-          'filetype',
-        },
-      }
+-- configure lualine
+local function lualine_config()
+  require('lualine').setup {
+    options = {
+      icons_enabled = true,
+      theme = 'auto',
     },
-    component = {
-      lineinfo = '%31:%-2v',
+    sections = {
+      lualine_a = {'mode'},
+      lualine_b = {'branch', 'diff', 'diagnostics', 'modified'},
+      lualine_c = {'filename'},
+      lualine_x = {'g:coc_status', 'encoding', 'fileformat', 'filetype'},
+      lualine_y = {'progress'},
+      lualine_z = {'location'},
     },
-    component_function = {
-      cocstatus = 'coc#status',
-      gitbranch = 'fugitive#head'
-    },
-    separator = {
-      left = '\ue0b0',
-      right = '\ue0b2',
-    },
-    subseparator = {
-      left = '\ue0b0',
-      right = '\ue0b2',
-    },
-    tabline = {
-      left = { { 'tabs' } },
-      right = { { 'close' } },
-    },
-  })
+  }
+  vim.opt.showmode = false -- set to false when / if use lualine
 end
 
 local function chadtree_config()
@@ -228,6 +205,7 @@ local config = function()
   telescope()
   nvim_treesitter()
   chadtree_config()
+  lualine_config()
 
   require('fidget').setup()
 end
