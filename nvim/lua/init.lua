@@ -97,7 +97,7 @@ local function options()
     'coc-lua',
     'coc-markdownlint',
     'coc-pyright',
-    'coc-rls',
+    'coc-rust-analyzer',
     'coc-snippets',
     'coc-tsserver',
     'coc-eslint',
