@@ -8,9 +8,16 @@ local function config()
         extenstionUpdateCheck = "daily",
       },
     },
+
     flutter = {
       provider = {
         enableSnippet = true,
+      },
+    },
+
+    go = {
+      goplsOptions = {
+        gofumpt = true
       },
     },
 
@@ -32,11 +39,7 @@ local function config()
         settings = {},
       },
     },
-    go = {
-      goplsOptions = {
-        gofumpt = true
-      },
-    },
+
     python = {
       pythonPath = "cocpython",
       blackPath = "cocblack",
@@ -44,6 +47,8 @@ local function config()
     },
     -- rust = {
     -- },
+
+    ["sumneko-lua.enableNvimLuaDev"] = true,
   }
   return config
 end

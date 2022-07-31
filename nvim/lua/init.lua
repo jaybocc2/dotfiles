@@ -109,6 +109,14 @@ end
 
 -- configure lualine
 local function lualine_config()
+  local function modified_buffer()
+    if vim.bo.modified then
+      return [[Modified]]
+    else
+      return [[]]
+    end
+  end
+
   require('lualine').setup {
     options = {
       icons_enabled = true,
@@ -116,11 +124,11 @@ local function lualine_config()
     },
     sections = {
       lualine_a = {'mode'},
-      lualine_b = {'branch', 'diff', 'diagnostics', 'modified'},
+      lualine_b = {'branch', 'diff', modified_buffer},
       lualine_c = {'filename'},
-      lualine_x = {'g:coc_status', 'encoding', 'fileformat', 'filetype'},
-      lualine_y = {'progress'},
-      lualine_z = {'location'},
+      lualine_x = {'diagnostics', 'g:coc_status'},
+      lualine_y = {'encoding', 'fileformat', 'filetype'},
+      lualine_z = {'progress', 'location'},
     },
   }
   vim.opt.showmode = false -- set to false when / if use lualine
