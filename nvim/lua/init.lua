@@ -37,8 +37,8 @@ local function keybinds()
 
   -- CoC keybinds
   mapkeybind('i', "<C-Space>", "coc#refresh()", { silent = true, expr = true })
-  mapkeybind('i', '<CR>', "pumvisible() ? coc#_select_confirm() : '<C-G>u<CR><C-R>=coc#on_enter()<CR>'", { silent = true, expr = true })
-  mapkeybind('i', '<TAB>', 'pumvisible() ? coc#_select_confirm() : coc#expandableOrJumpable() ? "<C-r>=coc#rpc#request(\'doKeymap\', [\'snippets-expand-jump\',\'\'])<CR>" : v:lua.check_back_space() ? "<TAB>" : coc#refresh()', { silent = true, expr = true })
+  mapkeybind('i', '<CR>', "coc#pum#visible() ? coc#_select_confirm() : '<C-G>u<CR><C-R>=coc#on_enter()<CR>'", { silent = true, expr = true })
+  mapkeybind('i', '<TAB>', 'coc#pum#visible() ? coc#_select_confirm() : coc#expandableOrJumpable() ? "<C-r>=coc#rpc#request(\'doKeymap\', [\'snippets-expand-jump\',\'\'])<CR>" : v:lua.check_back_space() ? "<TAB>" : coc#refresh()', { silent = true, expr = true })
   mapkeybind('n', 'K', ': v:lua.show_documentation() <CR>', { silent = true })
   -- rename
   mapkeybind('n', '<LEADER>rn', '<Plug>(coc-rename)')
