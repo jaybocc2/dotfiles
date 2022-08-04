@@ -202,3 +202,5 @@ alias vi='vim'
 if [ -e ~/.localized.zsh ]; then
   source ~/.localized.zsh
 fi
+
+cd
