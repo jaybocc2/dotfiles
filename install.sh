@@ -197,11 +197,16 @@ install_deps() {
     source /etc/*-release
     if [[ "${ID}" == "debian" ]];then
       sudo apt-get -t ${VERSION_CODENAME} install ${DEB_DEPS}
-      sudo apt-get -t ${VERSION_CODENAME}-backports install ${DEB_BACKPORTS_DEPS}
-      sudo apt-get -t testing install ${DEB_TESTING_DEPS}
-      pushd /tmp
-      curl -LO "https://github.com/neovim/neovim/releases/download/${NEOVIM_VERSION}/nvim-linux64.deb"
-      sudo dpkg -i nvim-linux64.deb
+
+      if [ "$(nvim -v|head -n 1)" != "NVIM v0.8.0" ]; then
+        compile_neovim
+      fi
+      # sudo apt-get -t ${VERSION_CODENAME}-backports install ${DEB_BACKPORTS_DEPS}
+      # sudo apt-get -t testing install ${DEB_TESTING_DEPS}
+      # pushd /tmp
+      # curl -LO "https://github.com/neovim/neovim/releases/download/${NEOVIM_VERSION}/nvim-linux64.deb"
+      # sudo dpkg -i nvim-linux64.deb
+
     fi
   fi
 
@@ -212,6 +217,28 @@ install_deps() {
   install_nodenv
   install_tfenv
   install_flutter
+}
+
+compile_neovim() {
+  pushd /tmp
+  # install fdfind
+  wget https://github.com/sharkdp/fd/releases/download/v8.5.2/fd-v8.5.2-arm-unknown-linux-musleabihf.tar.gz
+  tar xvzf fd-v8.5.2-arm-unknown-linux-musleabihf.tar.gz
+  mv fd-v8.5.2-arm-unknown-linux-musleabihf/fd ${HOME}/bin/
+  rm -rf fd-v8.5.2*
+
+  # install ripgrep
+  sudo apt-get -t testing install ripgrep # install ripgrep v13.0.0-4 from testing
+
+  # install nvim build deps
+  sudo apt-get install ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl doxygen git build-essential
+  git clone https://github.com/neovim/neovim.git
+  pushd neovim
+  git checkout release-0.8
+  make CMAKE_BUILD_TYPE=RelWithDebInfo
+  sudo make install
+
+  popd;popd
 }
 
 make_dirs() {
