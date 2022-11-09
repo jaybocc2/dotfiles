@@ -45,6 +45,23 @@ local packages = function(use)
 
   use {'ms-jpq/chadtree', branch = 'chad', run = os.getenv('HOME')..'/bin/nvpython -m chadtree deps'}
   -- coc is like coq but has its own lsp so i don't have to waste time configuring neovim-lsp's
+  local coc_java_run = function()
+    local java_path = vim.api.nvim_command("echo coc#util#extension_root().'/coc-java-data/server'")
+    local handle
+    handle = vim.loop.spawn(
+      'wget',
+      { args = {
+        ""
+      },
+      },
+      vim.schedule_wrap(
+        function(code, _)
+          --handle success
+          handle:close()
+        end
+      )
+    )
+  end
   use {'neoclide/coc.nvim', branch= 'release'}
 
   -- use {'simrat39/symbols-outline.nvim'} -- did not work with CoC -- blank - https://github.com/simrat39/symbols-outline.nvim/issues/131

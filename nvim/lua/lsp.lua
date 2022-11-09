@@ -40,6 +40,19 @@ local function config()
       },
     },
 
+    java = {
+      home = '/Library/Java/JavaVirtualMachines/jdk-19.jdk/Contents/Home',
+      configuration = {
+        runtimes = {
+          {
+            name = 'Corretto-8',
+            path = '/Library/Java/JavaVirtualMachines/amazon-corretto-8.jdk/Contents/Home',
+            default = true
+          }
+        }
+      }
+    },
+
     python = {
       pythonPath = "cocpython",
       blackPath = "cocblack",

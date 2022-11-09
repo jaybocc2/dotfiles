@@ -103,15 +103,17 @@ local function options()
   -- coc vars
   vim.api.nvim_set_var('coc_global_extensions', {
     -- 'coc-flutter',
+    'coc-eslint',
     'coc-git',
     'coc-go',
-    'coc-sumneko-lua',
+    'coc-java',
+    'coc-json',
     'coc-markdownlint',
     'coc-pyright',
     'coc-rust-analyzer',
     'coc-snippets',
+    'coc-sumneko-lua',
     'coc-tsserver',
-    'coc-eslint',
   })
   vim.api.nvim_set_var('coc_user_config', require('lsp').config())
   vim.api.nvim_set_var('coc_snippet_next', '<tab>')
