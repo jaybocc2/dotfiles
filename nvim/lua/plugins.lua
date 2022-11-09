@@ -26,7 +26,11 @@ local packages = function(use)
   use {'nvim-lua/plenary.nvim'}
   use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make'}
   -- suggested to telescope & aerial && neat / improved syntax highlighting and more?
-  use {'nvim-treesitter/nvim-treesitter', run = function() vim.cmd('TSUpdate') end}
+  local treesitter_run = function()
+    local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
+    ts_update()
+  end
+  use {'nvim-treesitter/nvim-treesitter', run = treesitter_run}
   -- telescope
   use {'nvim-telescope/telescope.nvim'}
 
