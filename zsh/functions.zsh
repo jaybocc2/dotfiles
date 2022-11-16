@@ -1,4 +1,3 @@
-
 prompt_git_info () {
   git_repo_path=$(git rev-parse --git-dir 2>/dev/null)
 

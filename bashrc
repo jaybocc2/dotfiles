@@ -107,3 +107,4 @@ export ARDUINO=/usr/bin/arduino
 export ARDUINO_DIR=/usr/share/arduino
 export ARDMK_DIR=/usr
 export AVR_TOOLS_DIR=/usr
+. "$HOME/.cargo/env"

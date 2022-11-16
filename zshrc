@@ -1,7 +1,11 @@
 # -----------------------------------------------
 # Set up the Environment
 # -----------------------------------------------
-source ~/.zsh/env.zsh
+
+# reset to home for sourcing zshrc
+local old_cwd=$(pwd)
+cd
+
 source ~/.zsh/colors.zsh
 source ~/.zsh/functions.zsh
 
@@ -151,7 +155,6 @@ if [ ${SSHEC} -eq 0 ]; then
   for i in $(ls ~/.ssh/keys/ |grep -v '.pub'); do
     ssh-add ~/.ssh/keys/${i}
   done
-  # ssh-add -s libeToken.so.8 -t 28800
 else
   source ~/.ssh/agent.${HOSTNAME}.${USER}
 fi
@@ -163,29 +166,22 @@ fi
 ## Command Aliases
 alias x=exit
 alias c=clear
-alias b=byobu
-alias s=screen
-alias r='screen -R'
 alias ls='ls --color=auto -F'
 alias ll='ls -lAFh --color=auto'
 alias ld='ls -ltr --color=auto'
-alias sls='screen -ls'
 alias zrc='vim ~/.zshrc'
 alias dv='dirs -v'
 alias hist='history -rd'
 alias zc='zcalc'
 alias grep='grep --color'
-# alias bjs='ssh-add -s libeToken.so.8 -t 28800'
 alias ka='pkill ssh-agent'
 alias fa='source ~/.zshrc'
-alias fnv="nvimvenv --headless -u NONE -c 'lua require(\"bootstrap\").bootstrap_paq()'"
 alias tmuxmain='tmux -2 attach -t main'
 alias tmuxside='tmux -2 attach -t sideprojects'
 alias gows="cd ${GOPATH}/src/github.com/jaybocc2"
 alias vim="nvimvenv"
 alias nvim="nvimvenv"
 alias vi='vim'
-# eval "$(hub alias -s)"
 
 ## Pipe Aliases (Global)
 #alias -g L='|less'
@@ -203,4 +199,5 @@ if [ -e ~/.localized.zsh ]; then
   source ~/.localized.zsh
 fi
 
-cd
+# reset to old_cwd after zshrc sourced
+cd ${old_cwd}

@@ -204,20 +204,22 @@ function __promptline_git_status {
   [[ $is_clean -gt 0 ]]            && { printf "%s" "$leading_whitespace$clean_symbol"; leading_whitespace=" "; }
 }
 function __promptline_right_prompt {
-  # local slice_prefix slice_empty_prefix slice_joiner slice_suffix
+  if [ -n "${ENABLE_RIGHT_PROMPT}" ]; then
+    local slice_prefix slice_empty_prefix slice_joiner slice_suffix
 
-  # # section "y" header
-  # slice_prefix="${y_sep_fg}${rsep}${y_fg}${y_bg}${space}" slice_suffix="$space${y_sep_fg}" slice_joiner="${y_fg}${y_bg}${alt_rsep}${space}" slice_empty_prefix=""
-  # # section "y" slices
-  # __promptline_wrapper "$(__promptline_jobs)" "$slice_prefix" "$slice_suffix" && { slice_prefix="$slice_joiner"; }
+    # section "y" header
+    slice_prefix="${y_sep_fg}${rsep}${y_fg}${y_bg}${space}" slice_suffix="$space${y_sep_fg}" slice_joiner="${y_fg}${y_bg}${alt_rsep}${space}" slice_empty_prefix=""
+    # section "y" slices
+    __promptline_wrapper "$(__promptline_jobs)" "$slice_prefix" "$slice_suffix" && { slice_prefix="$slice_joiner"; }
 
-  # # section "z" header
-  # slice_prefix="${z_sep_fg}${rsep}${z_fg}${z_bg}${space}" slice_suffix="$space${z_sep_fg}" slice_joiner="${z_fg}${z_bg}${alt_rsep}${space}" slice_empty_prefix=""
-  # # section "z" slices
-  # __promptline_wrapper "%D{%A %Y-%m-%d} %T" "$slice_prefix" "$slice_suffix" && { slice_prefix="$slice_joiner"; }
+    # section "z" header
+    slice_prefix="${z_sep_fg}${rsep}${z_fg}${z_bg}${space}" slice_suffix="$space${z_sep_fg}" slice_joiner="${z_fg}${z_bg}${alt_rsep}${space}" slice_empty_prefix=""
+    # section "z" slices
+    __promptline_wrapper "%D{%A %Y-%m-%d} %T" "$slice_prefix" "$slice_suffix" && { slice_prefix="$slice_joiner"; }
 
-  # # close sections
-  # printf "%s" "$reset"
+    # close sections
+    printf "%s" "$reset"
+  fi
 }
 
 function __promptline_jobs {

@@ -13,3 +13,5 @@ ARCH() {
     echo 'unknown'
   fi
 }
+
+if [[ -f /etc/os-release ]];then source /etc/os-release; fi
