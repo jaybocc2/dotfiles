@@ -9,7 +9,7 @@ mktmp() {
 
 rmtmp() {
   local tdir=/tmp/${FUNCNAME[1]}
-  popd -n
+  popd
   rm -rf ${tdir}
 }
 

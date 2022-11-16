@@ -2,16 +2,19 @@ local function setup()
   local package_name = "Comment"
   local status_ok, comment = pcall(require, package_name)
   if not status_ok then
+    vim.notify("failed to load Comment in plugins/comment.lua", "error")
     return
   end
 
   local status_ok2, hints = pcall(require, "lsp-inlayhints")
   if not status_ok2 then
+    vim.notify("failed to load lsp-inlayhints in plugins/comment.lua", "error")
     return
   end
 
   local status_ok3, ts_context = pcall(require, "ts_context_commentstring")
   if not status_ok3 then
+    vim.notify("failed to load ts_context_commentstring in plugins/comment.lua", "error")
     return
   end
 

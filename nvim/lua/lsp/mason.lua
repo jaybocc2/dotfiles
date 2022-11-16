@@ -14,6 +14,25 @@ local lsp_servers = {
   "yamlls", -- yaml
 }
 
+local auto_mason_install = {
+  -- "bash-language-server", -- bash
+  -- "jdtls", -- java
+  -- "json-language-server", -- json
+  "marksman", -- markdown
+  "misspell", -- english spelling
+  -- "protolint", -- protobuff linter
+  -- "prosemd-lsp", -- markdown && nlprule processing
+  "pyright", -- python
+  -- "rust_analyzer", -- rust
+  "shellcheck", -- shell checker for null-ls
+  "shfmt", -- shell formatter
+  "stylua", -- lua style
+  -- "sumneko_lua", -- lua
+  -- "terraformls", -- terraform
+  -- "tsserver", -- typescript server
+  -- "yamlls", -- yaml
+}
+
 local settings = {
   ui = {
     border = "rounded",
@@ -39,7 +58,7 @@ local function setup()
   end
 
   mason_tool_installer.setup({
-    ensure_installed = lsp_servers,
+    ensure_installed = auto_mason_install,
     auto_update = true,
     run_on_start = true,
   })

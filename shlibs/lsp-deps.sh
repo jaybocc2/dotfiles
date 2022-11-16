@@ -29,4 +29,5 @@ lua_lsp() {
 
 install_lsp_binaries() {
   # lua_lsp
+  echo "install_lsp_binaries complete"
 }

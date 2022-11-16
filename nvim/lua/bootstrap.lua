@@ -32,8 +32,8 @@ local function init(packages)
     for i, pkg in ipairs(packages) do
       use(pkg)
     end
-    packer.sync()
   end)
+  packer.sync()
 end
 
 local setup = function(packages)

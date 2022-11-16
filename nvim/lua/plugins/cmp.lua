@@ -19,18 +19,21 @@ local icons = require("icons")
 local function setup()
   local status_ok, cmp = pcall(require, "cmp")
   if not status_ok then
+    vim.notify("failed to load cmp in plugins/cmp.lua", "error")
     return
   end
 
   local status_ok2, luasnip = pcall(require, "luasnip")
   if not status_ok2 then
+    vim.notify("failed to load luasnip in plugins/cmp.lua", "error")
     return
-  else
-    require("luasnip.loaders.from_vscode").lazy_load()
   end
+
+  require("luasnip.loaders.from_vscode").lazy_load()
 
   local status_ok3, tabnine = pcall(require, "plugins.tabnine")
   if not status_ok3 then
+    vim.notify("failed to load tabnine in plugins/cmp.lua", "error")
     return
   else
     tabnine.setup()
@@ -97,7 +100,7 @@ local function setup()
           luasnip.expand_or_jump()
         elseif luasnip.expandable() then
           luasnip.expand()
-        elseif check_backspace() then
+        elseif _G.check_backspace() then
           -- cmp.complete()
           fallback()
         else

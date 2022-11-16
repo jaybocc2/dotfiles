@@ -3,7 +3,7 @@ local function setup()
   if not status_ok then
     return
   end
-  require("nvim-treesitter.configs").setup({
+  ts_configs.setup({
     ensure_installed = "all",
     sync_install = false,
     auto_install = true,

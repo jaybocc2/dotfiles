@@ -80,11 +80,14 @@
 local setup = function()
   -- load impatient plugin to profile start time
   require("plugins.impatient").setup()
+  -- override default vim notification w/ notify plugin
+  require("plugins.notify").setup()
 
   -- load packages
-  -- local plugins = require("plugins")
+  local plugins = require("plugins")
   -- bootstrap w/ packages
-  require("bootstrap").setup(require("plugins").packages)
+  require("bootstrap").setup(plugins.packages)
+  -- require("bootstrap").setup(require("plugins").packages)
 
   -- load vim options
   require("options").setup()
@@ -101,11 +104,11 @@ local setup = function()
   require("plugins.telescope").setup()
   require("plugins.treesitter").setup()
   require("plugins.comment").setup()
-  -- gitsigns
+  require("plugins.gitsigns").setup()
   -- autopairs
   -- nvim-tree
-  -- bufferline
-  -- lualine
+  require("plugins.bufferline").setup()
+  require("plugins.lualine").setup()
   -- toggleterm
   -- project
   -- illuminate

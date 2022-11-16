@@ -9,7 +9,7 @@ git rev-parse --abbrev-ref --symbolic-full-name @{u} || {
   exit 1
 }
 
-DOT_FILES=$(git ls-tree @{u}|awk '{print $4}' |egrep -v '(/|LICENSE|README|install.sh|shlibs|test.sh|.gitignore|.gitmodules|bashrc|vim|vimrc|screenrc)')
+DOT_FILES=$(git ls-tree @{u}|awk '{print $4}' |egrep -v '(/|LICENSE|README|install.sh|shlibs|test.sh|.gitignore|.gitmodules|bashrc|^vim|vimrc|screenrc)')
 # OS=$(uname |tr '[:upper:]' '[:lower:]') # comes from utils.sh now
 DEB_DEPS="curl exuberant-ctags wget tmux zsh zsh-common vim git xclip zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
 libncurses5-dev libssl-dev build-essential htop libffi-dev libffi7 xz-utils"
@@ -269,6 +269,7 @@ install_configs() {
         echo "linking directory ~/${prefix}${file}"
         ln -s $(pwd)/${file} ~/${prefix}${file}
         if [ "${file}" == "nvim" ]; then
+          echo "linking directory ~/.config/${prefix}${file}"
           ln -s $(pwd)/${file} ~/.config/nvim
         fi
       fi
@@ -286,6 +287,8 @@ install() {
   install_deps
 
   install_fonts
+
+  echo "cwd is $(pwd)"
 
   # install configs
   install_configs

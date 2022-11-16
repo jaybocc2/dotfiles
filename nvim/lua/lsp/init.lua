@@ -24,19 +24,16 @@ end
 M.setup = function()
   local status_ok, _ = pcall(require, "lspconfig")
   if not status_ok then
+    vim.notify("failed to load lspconfig in lsp/init.lua", "error")
     return
   end
-  -- require "user.lsp.lsp-signature"
-  -- -- require "user.lsp.lsp-installer"
-  -- require("user.lsp.mason")
-  -- require("user.lsp.handlers").setup()
-  -- require "user.lsp.null-ls"
   require("lsp.signature").setup()
   require("lsp.mason").setup()
   require("lsp.handlers").setup()
   require("lsp.null-ls").setup()
   local status_ok2, lsp_lines = pcall(require, "lsp_lines")
   if not status_ok2 then
+    vim.notify("failed to load lsp_lines in lsp/init.lua", "error")
     return
   end
   lsp_lines.setup()
