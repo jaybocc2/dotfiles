@@ -2,6 +2,7 @@ local M = {}
 
 local status_cmp_ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
 if not status_cmp_ok then
+    vim.notify("failed to load cmp_nvim_lsp in lsp/handlers.lua", "error")
   return
 end
 

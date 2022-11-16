@@ -1,5 +1,6 @@
 local status_ok, null_ls = pcall(require, "null-ls")
 if not status_ok then
+  vim.notify("failed to load null-ls in lsp/null-ls.lua", "error")
   return
 end
 

@@ -1,5 +1,6 @@
 local status_ok, signature = pcall(require, "lsp_signature")
 if not status_ok then
+  vim.notify("failed to load lsp_signature in lsp/signature.lua", "error")
   return
 end
 

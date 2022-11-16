@@ -47,6 +47,7 @@ local settings = {
 local function setup()
   local status_ok, mason = pcall(require, "mason")
   if not status_ok then
+    vim.notify("failed to load mason in lsp/mason.lua", "error")
     return
   end
 
@@ -54,6 +55,7 @@ local function setup()
 
   local status_ok1, mason_tool_installer = pcall(require, "mason-tool-installer")
   if not status_ok1 then
+    vim.notify("failed to load mason-tool-installer in lsp/mason.lua", "error")
     return
   end
 
@@ -65,6 +67,7 @@ local function setup()
 
   local status_ok2, mason_lspconfig = pcall(require, "mason-lspconfig")
   if not status_ok2 then
+    vim.notify("failed to load mason-lspconfig in lsp/mason.lua", "error")
     return
   end
 
@@ -77,6 +80,7 @@ local function setup()
 
   local lua_status_ok, neodev = pcall(require, "neodev")
   if not lua_status_ok then
+    vim.notify("failed to load neodev in lsp/mason.lua", "error")
     return
   end
 
@@ -89,6 +93,7 @@ local function setup()
 
   local lsp_status_ok, lspconfig = pcall(require, "lspconfig")
   if not lsp_status_ok then
+    vim.notify("failed to load lspconfig in lsp/mason.lua", "error")
     return
   end
 
@@ -144,6 +149,7 @@ local function setup()
       local rust_opts = require("lsp.settings.rust")
       local rust_tools_status_ok, rust_tools = pcall(require, "rust-tools")
       if not rust_tools_status_ok then
+        vim.notify("failed to load rust-tools in lsp/mason.lua", "error")
         return
       end
       rust_tools.setup(rust_opts)

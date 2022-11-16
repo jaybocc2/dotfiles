@@ -2,6 +2,7 @@ local function setup()
   local package_name = "impatient"
   local status_ok, package = pcall(require, package_name)
   if not status_ok then
+    vim.notify("failed to load impatient in plugins/impatient.lua", "error")
     return
   end
 

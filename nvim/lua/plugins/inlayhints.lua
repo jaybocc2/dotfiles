@@ -1,6 +1,7 @@
 local function setup()
   local status_ok, hints = pcall(require, "lsp-inlayhints")
   if not status_ok then
+    vim.notify("failed to load lsp-inlayhints in plugins/inlayhints.lua", "error")
     return
   end
 

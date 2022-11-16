@@ -14,7 +14,7 @@ local function init(packages)
   -- require('packer').startup(packages)
   local status_ok, packer = pcall(require, "packer")
   if not status_ok then
-    info("[packer]: Not found...")
+    vim.notify("[packer]: Not found... /bootstrap.lua", "error")
     return
   end
 
