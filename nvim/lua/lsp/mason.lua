@@ -1,3 +1,5 @@
+local icons = require('icons')
+
 local lsp_servers = {
   "bashls", -- bash
   "jdtls", -- java
@@ -37,9 +39,9 @@ local settings = {
   ui = {
     border = "rounded",
     icons = {
-      package_installed = "✓",
-      package_pending = "➜",
-      package_uninstalled = "✗",
+      package_installed = icons.ui.Check,
+      package_pending = icons.ui.ArrowRight,
+      package_uninstalled = icons.ui.Close,
     },
   },
 }
