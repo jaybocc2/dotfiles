@@ -1,4 +1,4 @@
-local icons = require('icons')
+local icons = require("icons")
 
 local lsp_servers = {
   "bashls", -- bash
@@ -47,32 +47,20 @@ local settings = {
 }
 
 local function setup()
-  local status_ok, mason = pcall(require, "mason")
-  if not status_ok then
-    vim.notify("failed to load mason in lsp/mason.lua", "error")
-    return
-  end
-
+  local mason = jaylib.loadpkg("mason")
+  if mason == nil then return end
   mason.setup(settings)
 
-  local status_ok1, mason_tool_installer = pcall(require, "mason-tool-installer")
-  if not status_ok1 then
-    vim.notify("failed to load mason-tool-installer in lsp/mason.lua", "error")
-    return
-  end
-
+  local mason_tool_installer = jaylib.loadpkg("mason-tool-installer")
+  if mason_tool_installer == nil then return end
   mason_tool_installer.setup({
     ensure_installed = auto_mason_install,
     auto_update = true,
     run_on_start = true,
   })
 
-  local status_ok2, mason_lspconfig = pcall(require, "mason-lspconfig")
-  if not status_ok2 then
-    vim.notify("failed to load mason-lspconfig in lsp/mason.lua", "error")
-    return
-  end
-
+  local mason_lspconfig = jaylib.loadpkg("mason-lspconfig")
+  if mason_lspconfig == nil then return end
   mason_lspconfig.setup({
     ensure_installed = lsp_servers,
     automatic_installation = true,
@@ -80,12 +68,8 @@ local function setup()
 
   local handlers = require("lsp.handlers")
 
-  local lua_status_ok, neodev = pcall(require, "neodev")
-  if not lua_status_ok then
-    vim.notify("failed to load neodev in lsp/mason.lua", "error")
-    return
-  end
-
+  local neodev = jaylib.loadpkg("neodev")
+  if neodev == nil then return end
   neodev.setup({
     lspconfig = {
       on_attach = handlers.on_attach,
@@ -93,11 +77,8 @@ local function setup()
     },
   })
 
-  local lsp_status_ok, lspconfig = pcall(require, "lspconfig")
-  if not lsp_status_ok then
-    vim.notify("failed to load lspconfig in lsp/mason.lua", "error")
-    return
-  end
+  local lspconfig = jaylib.loadpkg("lspconfig")
+  if lspconfig == nil then return end
 
   local opts = {}
 
@@ -149,11 +130,8 @@ local function setup()
 
     if server == "rust_analyzer" then
       local rust_opts = require("lsp.settings.rust")
-      local rust_tools_status_ok, rust_tools = pcall(require, "rust-tools")
-      if not rust_tools_status_ok then
-        vim.notify("failed to load rust-tools in lsp/mason.lua", "error")
-        return
-      end
+      local rust_tools = jaylib.loadpkg("rust-tools")
+      if rust_tools == nil then return end
       rust_tools.setup(rust_opts)
       goto continue
     end

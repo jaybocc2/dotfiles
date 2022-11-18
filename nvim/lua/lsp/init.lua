@@ -22,20 +22,17 @@ M.server_capabilities = function()
 end
 
 M.setup = function()
-  local status_ok, _ = pcall(require, "lspconfig")
-  if not status_ok then
-    vim.notify("failed to load lspconfig in lsp/init.lua", "error")
-    return
-  end
+  -- TODO: lspconfig is loaded by lsp.mason, what is loading it here do?
+  local lspconfig = jaylib.loadpkg("lspconfig")
+  if lspconfig == nil then return end
+
   require("lsp.signature").setup()
   require("lsp.mason").setup()
   require("lsp.handlers").setup()
   require("lsp.null-ls").setup()
-  local status_ok2, lsp_lines = pcall(require, "lsp_lines")
-  if not status_ok2 then
-    vim.notify("failed to load lsp_lines in lsp/init.lua", "error")
-    return
-  end
+
+  local lsp_lines = jaylib.loadpkg("lsp_lines")
+  if lsp_lines == nil then return end
   lsp_lines.setup()
 end
 

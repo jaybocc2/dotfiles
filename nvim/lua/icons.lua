@@ -99,7 +99,7 @@ return {
     ChevronShortUp = "",
     Circle = "",
     Close = "",
-    CloseAlt = "✗",,
+    CloseAlt = "✗",
     CloudDownload = "",
     Code = "",
     Comment = "",

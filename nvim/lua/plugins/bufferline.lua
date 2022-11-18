@@ -42,12 +42,8 @@ local function custom_filter(buf, buf_nums)
 end
 
 local function setup()
-  local package_name = "bufferline"
-  local status_ok, bufferline = pcall(require, package_name)
-  if not status_ok then
-    vim.notify("failed to load bufferline in plugins/bufferline.lua", "error")
-    return
-  end
+  local bufferline = jaylib.loadpkg("bufferline")
+  if bufferline == nil then return end
 
   bufferline.setup({
     options = {

@@ -73,16 +73,10 @@ local gitopts = {
 }
 
 local function setup()
-  local package_name = "gitsigns"
-  local status_ok, gitsigns = pcall(require, package_name)
-  if not status_ok then
-    vim.notify("failed to load gitsigns in plugins/gitsigns.lua", "error")
-    return
-  end
+  local gitsigns = jaylib.loadpkg("gitsigns")
+  if gitsigns == nil then return end
 
-  gitsigns.setup(
-    gitopts
-  )
+  gitsigns.setup(gitopts)
 end
 
 return { setup = setup }

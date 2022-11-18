@@ -1,10 +1,7 @@
 local M = {}
 
-local status_cmp_ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-if not status_cmp_ok then
-    vim.notify("failed to load cmp_nvim_lsp in lsp/handlers.lua", "error")
-  return
-end
+local cmp_nvim_lsp = jaylib.loadpkg("cmp_nvim_lsp")
+if cmp_nvim_lsp == nil then return end
 
 M.capabilities = cmp_nvim_lsp.default_capabilities()
 M.capabilities.textDocument.completion.completionItem.snippetSupport = true
@@ -56,10 +53,8 @@ end
 
 local function attach_navic(client, bufnr)
   vim.g.navic_silence = true
-  local status_ok, navic = pcall(require, "nvim-navic")
-  if not status_ok then
-    return
-  end
+  local navic = jaylib.loadpkg("nvim-navic")
+  if navic == nil then return end
   navic.attach(client, bufnr)
 end
 

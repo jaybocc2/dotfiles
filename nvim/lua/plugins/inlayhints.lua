@@ -1,9 +1,6 @@
 local function setup()
-  local status_ok, hints = pcall(require, "lsp-inlayhints")
-  if not status_ok then
-    vim.notify("failed to load lsp-inlayhints in plugins/inlayhints.lua", "error")
-    return
-  end
+  local hints = jaylib.loadpkg("lsp-inlayhints")
+  if hints == nil then return end
 
   local group = vim.api.nvim_create_augroup("LspAttach_inlayhints", {})
   vim.api.nvim_create_autocmd("LspAttach", {
@@ -21,7 +18,7 @@ local function setup()
   hints.setup({
     inlay_hints = {
       parameter_hints = {
-        show = false,
+        show = true,
         separator = ", ",
       },
       type_hints = {

@@ -1,8 +1,6 @@
 local function setup()
-  local package = jaylib.loadpkg("notify")
+  local package = jaylib.loadpkg("nvim-tree")
   if package == nil then return end
-
-  vim.notify = package
 end
 
 return { setup = setup }

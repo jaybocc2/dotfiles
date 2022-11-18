@@ -1,8 +1,80 @@
+local icons = require("icons")
+-- local comparators = require("plugins.cmp.comparators")
+-- local servers = require("plugins.cmp.servers")
+
 local buffer_fts = {
   "markdown",
   "toml",
   "yaml",
   "json",
+}
+
+local source_names = {
+  nvim_lsp = "(LSP)",
+  emoji = "(Emoji)",
+  path = "(Path)",
+  calc = "(Calc)",
+  cmp_tabnine = "(Tabnine)",
+  vsnip = "(Snippet)",
+  luasnip = "(Snippet)",
+  buffer = "(Buffer)",
+  tmux = "(TMUX)",
+  copilot = "(Copilot)",
+  treesitter = "(TreeSitter)",
+}
+
+local custom_sources = {
+  copilot = {
+    name = "copilot",
+    -- keyword_length = 0,
+    max_item_count = 3,
+    trigger_characters = {
+      {
+        ".",
+        ":",
+        "(",
+        "'",
+        '"',
+        "[",
+        ",",
+        "#",
+        "*",
+        "@",
+        "|",
+        "=",
+        "-",
+        "{", -- have to put this here for syntax weirdness }
+        "/",
+        "\\",
+        "+",
+        "?",
+        " ",
+        -- '\t',
+        -- '\n',
+      },
+    },
+  },
+  nvim_lsp = {
+    name = "nvim_lsp",
+    entry_filter = function(entry, ctx)
+      local kind = require("cmp.types.lsp").CompletionItemKind[entry:get_kind()]
+      if kind == "Snippet" and ctx.prev_context.filetype == "java" then
+        return false
+      end
+
+      if kind == "Text" then
+        return false
+      end
+      return true
+    end,
+  },
+}
+
+local duplicates = {
+  buffer = 1,
+  path = 1,
+  nvim_lsp = 0,
+  luasnip = 1,
 }
 
 local function contains(t, value)
@@ -14,30 +86,51 @@ local function contains(t, value)
   return false
 end
 
-local icons = require("icons")
+local function format(entry, vim_item)
+  local max_width = 0 -- lvim.builtin.cmp.formatting.max_width
+  if max_width ~= 0 and #vim_item.abbr > max_width then
+    vim_item.abbr = string.sub(vim_item.abbr, 1, max_width - 1) .. icons.ui.Ellipsis
+  end
+  vim_item.kind = icons.kind[vim_item.kind]
+
+  if entry.source.name == "copilot" then
+    vim_item.kind = icons.git.Octoface
+    vim_item.kind_hl_group = "CmpItemKindCopilot"
+  end
+
+  if entry.source.name == "cmp_tabnine" then
+    vim_item.kind = icons.misc.Robot
+    vim_item.kind_hl_group = "CmpItemKindTabnine"
+  end
+
+  if entry.source.name == "crates" then
+    vim_item.kind = icons.misc.Package
+    vim_item.kind_hl_group = "CmpItemKindCrate"
+  end
+
+  if entry.source.name == "lab.quick_data" then
+    vim_item.kind = icons.misc.CircuitBoard
+    vim_item.kind_hl_group = "CmpItemKindConstant"
+  end
+
+  if entry.source.name == "emoji" then
+    vim_item.kind = icons.misc.Smiley
+    vim_item.kind_hl_group = "CmpItemKindEmoji"
+  end
+  vim_item.menu = source_names[entry.source.name]
+  vim_item.dup = duplicates[entry.source.name] or 0
+  return vim_item
+end
 
 local function setup()
-  local status_ok, cmp = pcall(require, "cmp")
-  if not status_ok then
-    vim.notify("failed to load cmp in plugins/cmp.lua", "error")
-    return
-  end
+  local cmp = jaylib.loadpkg("cmp")
+  if cmp == nil then return end
 
-  local status_ok2, luasnip = pcall(require, "luasnip")
-  if not status_ok2 then
-    vim.notify("failed to load luasnip in plugins/cmp.lua", "error")
-    return
-  end
+  local luasnip = jaylib.loadpkg("luasnip")
+  if luasnip == nil then return end
 
   require("luasnip.loaders.from_vscode").lazy_load()
-
-  local status_ok3, tabnine = pcall(require, "plugins.tabnine")
-  if not status_ok3 then
-    vim.notify("failed to load tabnine in plugins/cmp.lua", "error")
-    return
-  else
-    tabnine.setup()
-  end
+  require("plugins.tabnine").setup()
 
   vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
   vim.api.nvim_set_hl(0, "CmpItemKindTabnine", { fg = "#CA42F0" })
@@ -53,7 +146,7 @@ local function setup()
       end
       return vim.g.cmp_active
     end,
-    preselect = cmp.PreselectMode.None,
+    -- preselect = cmp.PreselectMode.None,
     snippet = {
       expand = function(args)
         luasnip.lsp_expand(args.body)
@@ -100,7 +193,7 @@ local function setup()
           luasnip.expand_or_jump()
         elseif luasnip.expandable() then
           luasnip.expand()
-        elseif _G.check_backspace() then
+        elseif jaylib.check_backspace() then
           -- cmp.complete()
           fallback()
         else
@@ -119,108 +212,22 @@ local function setup()
     }),
     formatting = {
       fields = { "kind", "abbr", "menu" },
-      format = function(entry, vim_item)
-        -- Kind icons
-        vim_item.kind = icons.kind[vim_item.kind]
-
-        if entry.source.name == "cmp_tabnine" then
-          vim_item.kind = icons.misc.Robot
-          vim_item.kind_hl_group = "CmpItemKindTabnine"
-        end
-        if entry.source.name == "copilot" then
-          vim_item.kind = icons.git.Octoface
-          vim_item.kind_hl_group = "CmpItemKindCopilot"
-        end
-
-        if entry.source.name == "emoji" then
-          vim_item.kind = icons.misc.Smiley
-          vim_item.kind_hl_group = "CmpItemKindEmoji"
-        end
-
-        if entry.source.name == "crates" then
-          vim_item.kind = icons.misc.Package
-          vim_item.kind_hl_group = "CmpItemKindCrate"
-        end
-
-        if entry.source.name == "lab.quick_data" then
-          vim_item.kind = icons.misc.CircuitBoard
-          vim_item.kind_hl_group = "CmpItemKindConstant"
-        end
-
-        -- NOTE: order matters
-        vim_item.menu = ({
-          nvim_lsp = "",
-          nvim_lua = "",
-          luasnip = "",
-          buffer = "",
-          path = "",
-          emoji = "",
-        })[entry.source.name]
-        return vim_item
-      end,
+      format = format,
     },
     sources = {
-      { name = "crates", group_index = 1 },
-      {
-        name = "copilot",
-        -- keyword_length = 0,
-        max_item_count = 3,
-        trigger_characters = {
-          {
-            ".",
-            ":",
-            "(",
-            "'",
-            "'",
-            "[",
-            ",",
-            "#",
-            "*",
-            "@",
-            "|",
-            "=",
-            "-",
-            "{",
-            "/",
-            "\\",
-            "+",
-            "?",
-            " ",
-            -- '\t',
-            -- '\n',
-          },
-        },
-        group_index = 2,
-      },
-      {
-        name = "nvim_lsp",
-        filter = function(entry, ctx)
-          local kind = require("cmp.types.lsp").CompletionItemKind[entry:get_kind()]
-          if kind == "Snippet" and ctx.prev_context.filetype == "java" then
-            return true
-          end
-
-          if kind == "Text" then
-            return true
-          end
-        end,
-        group_index = 2,
-      },
-      { name = "nvim_lua", group_index = 2 },
-      { name = "luasnip", group_index = 2 },
-      {
-        name = "buffer",
-        group_index = 2,
-        filter = function(entry, ctx)
-          if not contains(buffer_fts, ctx.prev_context.filetype) then
-            return true
-          end
-        end,
-      },
-      { name = "cmp_tabnine", group_index = 2 },
-      { name = "path", group_index = 2 },
-      { name = "emoji", group_index = 2 },
-      { name = "lab.quick_data", keyword_length = 4, group_index = 2 },
+      custom_sources.copilot,
+      custom_sources.nvim_lsp,
+      { name = "path" },
+      { name = "luasnip" },
+      { name = "cmp_tabnine" },
+      { name = "nvim_lua" },
+      { name = "buffer" },
+      { name = "calc" },
+      { name = "emoji" },
+      { name = "treesitter" },
+      { name = "crates" },
+      { name = "tmux" },
+      -- { name = "lab.quick_data", keyword_length = 4, group_index = 2 }, maybe enable if i like https://github.com/0x100101/lab.nvim
     },
     sorting = {
       priority_weight = 2,
@@ -246,15 +253,17 @@ local function setup()
       select = false,
     },
     window = {
-      documentation = false,
+      completion = cmp.config.window.bordered(),
+      documentation = cmp.config.window.bordered(),
+      -- documentation = false,
       -- documentation = {
       --   border = "rounded",
       --   winhighlight = "NormalFloat:Pmenu,NormalFloat:Pmenu,CursorLine:PmenuSel,Search:None",
       -- },
-      completion = {
-        border = "rounded",
-        winhighlight = "NormalFloat:Pmenu,NormalFloat:Pmenu,CursorLine:PmenuSel,Search:None",
-      },
+      -- completion = {
+      --   border = "rounded",
+      --   winhighlight = "NormalFloat:Pmenu,NormalFloat:Pmenu,CursorLine:PmenuSel,Search:None",
+      -- },
     },
     experimental = {
       ghost_text = true,

@@ -78,6 +78,9 @@
 -- end
 
 local setup = function()
+  -- load my libs
+  -- jaylib = require("jaylib")
+  require("jaylib")
   -- load impatient plugin to profile start time
   require("plugins.impatient").setup()
   -- override default vim notification w/ notify plugin
@@ -106,7 +109,7 @@ local setup = function()
   require("plugins.comment").setup()
   require("plugins.gitsigns").setup()
   -- autopairs
-  -- nvim-tree
+  require("plugins.nvim-tree").setup()
   require("plugins.bufferline").setup()
   require("plugins.lualine").setup()
   -- toggleterm

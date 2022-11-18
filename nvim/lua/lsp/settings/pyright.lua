@@ -1,5 +1,4 @@
 local opts = {
-  cmd = { "py" },
   settings = {
     python = {
       analysis = {

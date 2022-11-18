@@ -1,8 +1,6 @@
 local function setup()
-  local status_ok, telescope = pcall(require, "telescope")
-  if not status_ok then
-    return
-  end
+  local telescope = jaylib.loadpkg("telescope")
+  if telescope == nil then return end
 
   local icons = require("icons")
 

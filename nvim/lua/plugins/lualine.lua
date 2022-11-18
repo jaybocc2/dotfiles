@@ -9,14 +9,10 @@ local function modified_buffer()
 end
 
 local function get_null_ls_registered_providers(ft)
-  local package_name = "null-ls.sources"
-  local status_ok, pkg = pcall(require, package_name)
-  if not status_ok then
-    vim.notify("failed to load null-ls.sources in plugins/lualine.lua", "error")
-    return
-  end
+  local package = jaylib.loadpkg("null-ls.sources")
+  if package == nil then return end
 
-  local available_sources = pkg.get_available(ft)
+  local available_sources = package.get_available(ft)
   local registered = {}
 
   for _, source in ipairs(available_sources) do
@@ -29,32 +25,24 @@ local function get_null_ls_registered_providers(ft)
 end
 
 local function get_null_ls_formatters(ft)
-  local package_name = "null-ls.methods"
-  local status_ok, pkg = pcall(require, package_name)
-  if not status_ok then
-    vim.notify("failed to load null-ls.methods in plugins/lualine.lua", "error")
-    return
-  end
+  local package = jaylib.loadpkg("null-ls.methods")
+  if package == nil then return end
 
   local providers = get_null_ls_registered_providers(ft)
-  return providers[pkg.FORMATTING] or {}
+  return providers[package.FORMATTING] or {}
 end
 
 local function get_null_ls_linters(ft)
-  local package_name = "null-ls.methods"
-  local status_ok, pkg = pcall(require, package_name)
-  if not status_ok then
-    vim.notify("failed to load null-ls.methods in plugins/lualine.lua", "error")
-    return
-  end
+  local package = jaylib.loadpkg("null-ls.methods")
+  if package == nil then return end
 
   local providers = get_null_ls_registered_providers(ft)
   local methods = vim.tbl_flatten(vim.tbl_map(function(m)
     return providers[m] or {}
   end, {
-    pkg.DIAGNOSTICS,
-    pkg.DIAGNOSTICS_ON_OPEN,
-    pkg.DIAGNOSTICS_ON_SAVE,
+    package.DIAGNOSTICS,
+    package.DIAGNOSTICS_ON_OPEN,
+    package.DIAGNOSTICS_ON_SAVE,
   }))
   return methods
 end
@@ -148,12 +136,8 @@ local components = {
 }
 
 local function setup()
-  local package_name = "lualine"
-  local status_ok, lualine = pcall(require, package_name)
-  if not status_ok then
-    vim.notify("failed to load lualine in plugins/lualine.lua", "error")
-    return
-  end
+  local lualine = jaylib.loadpkg("lualine")
+  if package == nil then return end
 
   lualine.setup({
     options = {
@@ -177,7 +161,7 @@ local function setup()
           icon = icons.git.Branch,
           color = { gui = "bold" },
         },
-        "filename" 
+        "filename",
       },
       lualine_c = { components.diff },
       lualine_x = {
@@ -187,8 +171,14 @@ local function setup()
       },
       lualine_y = { "encoding", "fileformat", "filetype" },
       lualine_z = {
-        {"progress", fmt = function() return "%P/%L" end, color = {}},
-        "location"
+        {
+          "progress",
+          fmt = function()
+            return "%P/%L"
+          end,
+          color = {},
+        },
+        "location",
       },
     },
   })

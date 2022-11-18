@@ -63,6 +63,7 @@ local packages = {
   { "saadparwaiz1/cmp_luasnip", requires = { "hrsh7th/nvim-cmp", "L3MON4D3/LuaSnip" } }, -- luasnip compltion source - https://github.com/saadparwaiz1/cmp_luasnip
   { "hrsh7th/cmp-nvim-lsp", requires = { "hrsh7th/nvim-cmp" } }, -- use neovim lsp protocol for completion - https://github.com/hrsh7th/cmp-nvim-lsp
   { "hrsh7th/cmp-nvim-lua", requires = { "hrsh7th/nvim-cmp" } }, -- completion for neovim api - https://github.com/hrsh7th/cmp-nvim-lua
+  { "lukas-reineke/cmp-under-comparator", requires = { "hrsh7th/nvim-cmp" } }, -- completion for neovim api - https://github.com/lukas-reineke/cmp-under-comparator
   { "tzachar/cmp-tabnine", requires = { "hrsh7th/nvim-cmp" }, run = "./install.sh" }, -- tabnine cmp integration - https://github.com/tzachar/cmp-tabnine
   -- use { 'zbirenbaum/copilot-cmp', requires = { "hrsh7th/nvim-cmp" } } -- cmp integration for copilot.lua - https://github.com/zbirenbaum/copilot-cmp
 

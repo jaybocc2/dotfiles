@@ -1,8 +1,5 @@
-local status_ok, signature = pcall(require, "lsp_signature")
-if not status_ok then
-  vim.notify("failed to load lsp_signature in lsp/signature.lua", "error")
-  return
-end
+local signature = jaylib.loadpkg("lsp_signature")
+if signature == nil then return end
 
 local icons = require("icons")
 
