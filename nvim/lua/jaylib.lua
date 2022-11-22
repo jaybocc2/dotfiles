@@ -1,8 +1,8 @@
 local _M = {}
 
 ---Get and return caller info for error debugging
----@param t int stack object to grab callerinfo for default: 3 (the func that called this func)
----@return { src = string, caller = string, line = integer, name = string }
+---@param t integer|nil stack object to grab callerinfo for default: 3 (the func that called this func)
+---@return { src: string, caller: string, line: integer, name: string }
 local function getcallerinfo(t)
   if not t then t = 3 end
   local callerinfo = debug.getinfo(t, 'nSl')
@@ -61,4 +61,5 @@ function _M.clear_augroup(name)
   end)
 end
 
-jaylib = _M
+-- make jaylib a global library for neovim
+_G.jaylib = _M
