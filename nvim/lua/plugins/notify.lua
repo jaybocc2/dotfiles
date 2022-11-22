@@ -2,6 +2,7 @@ local function setup()
   local package = jaylib.loadpkg("notify")
   if package == nil then return end
 
+  ---vim notifications for notifying/alerting users
   ---@param msg string
   ---@param level string|nil
   ---@param opts table|nil

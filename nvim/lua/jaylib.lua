@@ -2,23 +2,36 @@ local _M = {}
 
 ---Get and return caller info for error debugging
 ---@param t integer|nil stack object to grab callerinfo for default: 3 (the func that called this func)
----@return { src: string, caller: string, line: integer, name: string }
-local function getcallerinfo(t)
+---@return { src: string, src_path: string, caller: string, line: integer, name: string }
+function _M.getcallerinfo(t)
   if not t then t = 3 end
   local callerinfo = debug.getinfo(t, 'nSl')
-  -- local src = callerinfo.short_src:match("[^\\^/]*[.]lua$")
-  local src = callerinfo.source
-  local caller = src:match("(.*)[.]lua$")[1]
+  local src_path, src =  callerinfo.source:match(".*[/][.]config[/](.*[/])(.*[.]lua)$")
+  local caller = src:match("(.*)[.]lua$")
   local name = "???"
   if callerinfo.name ~= nil then
 	  name = callerinfo.name
   end
   return {
     src = src,
+    src_path = src_path,
     caller = caller,
     line = callerinfo.currentline,
     name = name
   }
+end
+
+---vim notifications for notifying/alerting users w/ debug hints
+---@param msg string
+---@param level string|nil
+---@param opts table|nil
+function _M.notify(msg, level, opts)
+  local callerinfo = _M.getcallerinfo()
+  -- if loadpkg is calling us we need to get next caller in the stack
+  if callerinfo.name == "loadpkg" then
+    callerinfo = _M.getcallerinfo(4)
+  end
+  vim.notify(callerinfo.src_path ..  callerinfo.src .. "::" .. callerinfo.line .. "::" .. callerinfo.name .. "() - " .. msg, level, opts)
 end
 
 --- Safely load package and log error on failure
@@ -27,8 +40,7 @@ end
 function _M.loadpkg(pkg_name)
   local status_ok, package = pcall(require, pkg_name)
   if not status_ok then
-    local callerinfo = getcallerinfo()
-    vim.notify("failed to load '" .. pkg_name .. "' in " .. callerinfo.src .. "::" .. callerinfo.name .. "::" .. callerinfo.line, "error")
+    _M.notify("failed to load pkg - missing or not installed - " .. pkg_name, "warn")
     return nil
   end
   return package
