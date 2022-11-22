@@ -1,3 +1,41 @@
+local binds = {
+  normal_mode = {
+    -- nvim-tree
+    ["<C-n>"] = ":NvimTreeToggle<CR>",
+    -- new TAB
+    ["tn"] = ":tabnew<CR>",
+    -- misc
+    ["<F2>"] = ":set nonumber!<CR>:set foldcolumn=0<CR>",
+    -- whichkey
+    ["wk"] = ":WhichKey<CR>",
+    -- quick fix
+    ["]q"] = ":cnext<CR>",
+    ["[q"] = ":cprev<CR>",
+    ["<C-q>"] = ":call QuickFixToggle()<CR>",
+  },
+  insert_mode = {
+  },
+}
+
+local modes = {
+  normal_mode = "n",
+  insert_mode = "i",
+  term_mode = "t",
+  visual_mode = "v",
+  visual_block_mode = "x",
+  command_mode = "c",
+}
+
+local base_opts = { noremap = true, silent = true }
+local bind_opts = {
+  normal_mode = base_opts,
+  insert_mode = base_opts,
+  visual_mode = base_opts,
+  visual_block_mode = base_opts,
+  command_mode = base_opts,
+  term_mode = { silent = true },
+}
+
 local function mapkeybind(mode, lhs, rhs, opts)
   local options = { noremap = true }
   local override = {}
@@ -11,9 +49,10 @@ local function mapkeybind(mode, lhs, rhs, opts)
 end
 
 local function setup()
-  -- mapkeybind("n", "<C-n>", ":CHADopen<CR>")
-  mapkeybind("n", "<F2>", ":set nonumber!<CR>:set foldcolumn=0<CR>")
+  mapkeybind("n", "<C-n>", ":NvimTreeToggle<CR>")
   mapkeybind("n", "tn", ":tabnew<CR>")
+  mapkeybind("n", "<F2>", ":set nonumber!<CR>:set foldcolumn=0<CR>")
+  mapkeybind("n", "wk", ":WhichKey<CR>")
 
   -- CoC keybinds
   -- mapkeybind("i", "<C-Space>", "coc#refresh()", { silent = true, expr = true })
@@ -40,7 +79,7 @@ local function setup()
   -- mapkeybind("n", "gi", "<Plug>(coc-implementation)", { silent = true })
   -- mapkeybind("n", "gr", "<Plug>(coc-references)", { silent = true })
   -- mapkeybind("n", "<space>S", ":CocList outline<CR>", { silent = true })
-  mapkeybind("n", "<LEADER>S", ":AerialToggle<CR>")
+  -- mapkeybind("n", "<LEADER>S", ":AerialToggle<CR>")
   -- mapkeybind('n', '<LEADER>S', ':SymbolsOutline<CR>')
   -- mapkeybind('n', '<LEADER>S', ':Vista coc<CR>')
 end

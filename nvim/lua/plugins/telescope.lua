@@ -1,6 +1,9 @@
 local icons = require("icons")
 
 local function get_pickers(actions)
+  local actions = jaylib.loadpkg("telescope.actions")
+  if actions == nil then return {} end
+
   local default = {
     theme = "dropdown",
     initial_mode = "normal"
@@ -46,6 +49,30 @@ local function get_pickers(actions)
     lsp_declarations = vim.tbl_deep_extend("force", default, {}),
     lsp_implementations = vim.tbl_deep_extend("force", default, {}),
   }
+end
+
+local function get_mappings()
+
+  local actions = jaylib.loadpkg("telescope.actions")
+  if actions == nil then return {} end
+
+  local mappings = {
+    i = {
+      ["<C-n>"] = actions.move_selection_next,
+      ["<C-p>"] = actions.move_selection_previous,
+      ["<C-c>"] = actions.close,
+      ["<C-j>"] = actions.cycle_history_next,
+      ["<C-k>"] = actions.cycle_history_prev,
+      ["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
+      ["<CR>"] = actions.select_default,
+    },
+    n = {
+      ["<C-n>"] = actions.move_selection_next,
+      ["<C-p>"] = actions.move_selection_previous,
+      ["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
+    },
+  }
+  return mappings
 end
 
 local telescope_extensions = {
@@ -108,9 +135,6 @@ local file_ignore_patterns = {
   "%.tar.gz",
 }
 
-local actions = jaylib.loadpkg("telescope.actions")
-if actions == nil then return end
-
 local defaults = {
   prompt_prefix = icons.ui.Telescope .. " ",
   selection_caret = icons.ui.Forward .. " ",
@@ -145,23 +169,8 @@ local defaults = {
     "--glob=!.git/",
   },
   ---@usage Mappings are fully customizable. Many familiar mapping patterns are setup as defaults.
-  mappings = {
-    i = {
-      ["<C-n>"] = actions.move_selection_next,
-      ["<C-p>"] = actions.move_selection_previous,
-      ["<C-c>"] = actions.close,
-      ["<C-j>"] = actions.cycle_history_next,
-      ["<C-k>"] = actions.cycle_history_prev,
-      ["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
-      ["<CR>"] = actions.select_default,
-    },
-    n = {
-      ["<C-n>"] = actions.move_selection_next,
-      ["<C-p>"] = actions.move_selection_previous,
-      ["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
-    },
-  },
-  pickers = get_pickers(actions),
+  mappings = get_mappings(),
+  pickers = get_pickers(),
   file_ignore_patterns = file_ignore_patterns,
   path_display = { "smart" },
   winblend = 0,
@@ -171,7 +180,7 @@ local defaults = {
   set_env = { ["COLORTERM"] = "truecolor" }, -- default = nil,
 }
 
-local pickers = get_pickers(actions)
+local pickers = get_pickers()
 
 local extensions = {
   fzf = {

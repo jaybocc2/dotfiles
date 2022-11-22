@@ -26,17 +26,15 @@ local setup = function()
   -- override default vim notification w/ notify plugin
   require("plugins.notify").setup()
 
-  -- load packages
-  local plugins = require("plugins")
   -- bootstrap w/ packages
-  require("bootstrap").setup(plugins.packages)
-  -- require("bootstrap").setup(require("plugins").packages)
+  require("bootstrap").setup(require("plugins").packages)
 
   -- load vim options
   require("options").setup()
   -- load globals
   require("globals").setup()
   -- load keybinds
+  require("plugins.whichkey").setup()
   require("keybinds").setup()
   -- load custom commands
   require("commands").setup()

@@ -137,7 +137,7 @@ local components = {
 
 local function setup()
   local lualine = jaylib.loadpkg("lualine")
-  if package == nil then return end
+  if lualine == nil then return end
 
   lualine.setup({
     options = {

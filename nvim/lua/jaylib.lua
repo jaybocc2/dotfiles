@@ -1,12 +1,18 @@
 local _M = {}
 
+---Get and return caller info for error debugging
+---@param t int stack object to grab callerinfo for default: 3 (the func that called this func)
+---@return { src = string, caller = string, line = integer, name = string }
 local function getcallerinfo(t)
   if not t then t = 3 end
   local callerinfo = debug.getinfo(t, 'nSl')
   -- local src = callerinfo.short_src:match("[^\\^/]*[.]lua$")
   local src = callerinfo.source
   local caller = src:match("(.*)[.]lua$")[1]
-  local name = callerinfo.name
+  local name = "???"
+  if callerinfo.name ~= nil then
+	  name = callerinfo.name
+  end
   return {
     src = src,
     caller = caller,
@@ -15,12 +21,15 @@ local function getcallerinfo(t)
   }
 end
 
+--- Safely load package and log error on failure
+---@param pkg_name string the package to load
+---@return table|nil the package or nil
 function _M.loadpkg(pkg_name)
   local status_ok, package = pcall(require, pkg_name)
   if not status_ok then
     local callerinfo = getcallerinfo()
     vim.notify("failed to load '" .. pkg_name .. "' in " .. callerinfo.src .. "::" .. callerinfo.name .. "::" .. callerinfo.line, "error")
-    return
+    return nil
   end
   return package
 end
