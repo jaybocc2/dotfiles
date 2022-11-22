@@ -1,23 +1,3 @@
--- local function options()
---     vim.api.nvim_set_var("python3_host_prog", vim.fn.expand("~/.pyenv/versions/neovim3/bin/python"))
---
---     -- coc vars
---     vim.api.nvim_set_var("coc_global_extensions", {
---         -- 'coc-flutter',
---         "coc-git",
---         "coc-go",
---         "coc-sumneko-lua",
---         "coc-markdownlint",
---         "coc-pyright",
---         "coc-rust-analyzer",
---         "coc-snippets",
---         "coc-tsserver",
---         "coc-eslint",
---     })
---     vim.api.nvim_set_var("coc_user_config", require("lsp").config())
---     vim.api.nvim_set_var("coc_snippet_next", "<tab>")
--- end
-
 local setup = function()
   -- load my libs
   require("jaylib")
@@ -55,6 +35,7 @@ local setup = function()
   require("plugins.illuminate").setup()
   require("plugins.indentline").setup()
   require("plugins.alpha").setup()
+  require("plugins.symbols").setup()
   -- dap
 end
 

@@ -19,6 +19,7 @@ return {
     Folder = "",
     Function = "",
     Interface = "",
+    Key = "",
     Keyword = "",
     Method = "",
     Module = "",
