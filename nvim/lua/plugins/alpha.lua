@@ -1,5 +1,6 @@
 local icons = require("icons")
 
+-- generated at https://patorjk.com/software/taag/#p=display&c=lua&f=Electronic&t=the%20S.O.%0APaster
 local header = {
 " ▄▄▄▄▄▄▄▄▄▄▄  ▄         ▄  ▄▄▄▄▄▄▄▄▄▄▄       ▄▄▄▄▄▄▄▄▄▄▄     ▄▄▄▄▄▄▄▄▄▄▄      ",
 "▐░░░░░░░░░░░▌▐░▌       ▐░▌▐░░░░░░░░░░░▌     ▐░░░░░░░░░░░▌   ▐░░░░░░░░░░░▌     ",
