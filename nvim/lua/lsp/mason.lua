@@ -1,13 +1,12 @@
 local icons = require("icons")
 
+-- install list for lsp for mason
 local lsp_servers = {
   "bashls", -- bash
   "jdtls", -- java
   "jsonls", -- json
   "marksman", -- markdown
-  -- "misspell", -- english spelling
-  -- "protolint", -- protobuff linter
-  -- "prosemd-lsp", -- markdown && nlprule processing
+  "prosemd_lsp", -- markdown && nlprule processing
   "pyright", -- python
   "rust_analyzer", -- rust
   "sumneko_lua", -- lua
@@ -16,24 +15,25 @@ local lsp_servers = {
   "yamlls", -- yaml
 }
 
+local mason_server_mappings = jaylib.loadpkg("mason-lspconfig.mappings.server")
+if mason_server_mappings == nil then return end
+local lsp_servers_translated = {}
+for _, s in ipairs(lsp_servers) do
+  table.insert(lsp_servers_translated, mason_server_mappings.lspconfig_to_package[s])
+end
+
+-- install list for non lsp binaries
 local auto_mason_install = {
-  -- "bash-language-server", -- bash
-  -- "jdtls", -- java
-  -- "json-language-server", -- json
   "marksman", -- markdown
   "misspell", -- english spelling
-  -- "protolint", -- protobuff linter
-  -- "prosemd-lsp", -- markdown && nlprule processing
-  "pyright", -- python
-  -- "rust_analyzer", -- rust
+  "protolint", -- protobuff linter
+  "pylint8",
   "shellcheck", -- shell checker for null-ls
   "shfmt", -- shell formatter
   "stylua", -- lua style
-  -- "sumneko_lua", -- lua
-  -- "terraformls", -- terraform
-  -- "tsserver", -- typescript server
-  -- "yamlls", -- yaml
 }
+
+
 
 local settings = {
   ui = {
@@ -54,7 +54,7 @@ local function setup()
   local mason_tool_installer = jaylib.loadpkg("mason-tool-installer")
   if mason_tool_installer == nil then return end
   mason_tool_installer.setup({
-    ensure_installed = auto_mason_install,
+    ensure_installed = vim.tbl_deep_extend("force", auto_mason_install, lsp_servers_translated),
     auto_update = true,
     run_on_start = true,
   })

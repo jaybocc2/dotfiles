@@ -30,4 +30,26 @@ function _M.check_backspace()
   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 end
 
+---Get the full path to cache directory
+---@return string
+function _M.get_cache_dir()
+  local cache_dir = os.getenv "NEOVIM_CACHE_DIR"
+  if not cache_dir then
+    return vim.fn.stdpath("cache")
+  end
+  return cache_dir
+end
+
+--- Clean autocommand in a group if it exists
+--- This is safer than trying to delete the augroup itself
+---@param name string the augroup name
+function _M.clear_augroup(name)
+  -- defer the function in case the autocommand is still in-use
+  vim.schedule(function()
+    pcall(function()
+      vim.api.nvim_clear_autocmds { group = name }
+    end)
+  end)
+end
+
 jaylib = _M

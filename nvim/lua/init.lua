@@ -18,68 +18,8 @@
 --     vim.api.nvim_set_var("coc_snippet_next", "<tab>")
 -- end
 
--- configure lualine
--- local function lualine_config()
---     local function modified_buffer()
---         if vim.bo.modified then
---             return [[Modified]]
---         else
---             return [[]]
---         end
---     end
---
---     require("lualine").setup({
---         options = {
---             icons_enabled = true,
---             theme = "auto",
---         },
---         sections = {
---             lualine_a = { "mode" },
---             lualine_b = { "branch", "diff", modified_buffer },
---             lualine_c = { "filename" },
---             lualine_x = { "diagnostics", "g:coc_status" },
---             lualine_y = { "encoding", "fileformat", "filetype" },
---             lualine_z = { "progress", "location" },
---         },
---     })
---     vim.opt.showmode = false -- set to false when / if use lualine
--- end
-
--- local function chadtree_config()
---     local chadtree_settings = {
---         ignore = {
---             name_glob = {
---                 "*.d.ts",
---                 "*.js",
---             },
---         },
---     }
---
---     vim.api.nvim_set_var("chadtree_settings", chadtree_settings)
--- end
-
--- local function indent_blankline()
---     vim.opt.list = true
---     vim.opt.listchars:append("eol:↴")
---     require("indent_blankline").setup({
---         space_char_blankline = " ",
---         show_current_context = true,
---         show_current_context_start = true,
---     })
--- end
-
--- local config = function()
---     options()
---     indent_blankline()
---     chadtree_config()
---     lualine_config()
---
---     require("fidget").setup()
--- end
-
 local setup = function()
   -- load my libs
-  -- jaylib = require("jaylib")
   require("jaylib")
   -- load impatient plugin to profile start time
   require("plugins.impatient").setup()
@@ -113,10 +53,10 @@ local setup = function()
   require("plugins.bufferline").setup()
   require("plugins.lualine").setup()
   -- toggleterm
-  -- project
-  -- illuminate
-  -- indentline
-  -- alpha
+  require("plugins.project").setup()
+  require("plugins.illuminate").setup()
+  require("plugins.indentline").setup()
+  require("plugins.alpha").setup()
   -- dap
 end
 

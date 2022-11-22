@@ -38,11 +38,11 @@ local packages = {
   { "rcarriga/nvim-notify" }, -- notification popups - https://github.com/rcarriga/nvim-notify
   { "stevearc/dressing.nvim" }, -- extensible neovim UI hooks - https://github.com/stevearc/dressing.nvim
   { "lalitmee/browse.nvim", requires = { "stevearc/dressing.nvim", "nvim-telescope/telescope.nvim" } }, -- search the web from vim - https://github.com/lalitmee/browse.nvim
-  { "rmagatti/auto-session" }, -- automatically create && restore vim sessions for working dirs - https://github.com/rmagatti/auto-session
-  {
-    "rmagatti/session-lens",
-    requires = { "nvim-lua/plenary.nvim", "rmagatti/auto-session", "nvim-telescope/telescope.nvim" },
-  }, -- telescope session plugin - https://github.com/rmagatti/session-lens
+  -- { "rmagatti/auto-session" }, -- automatically create && restore vim sessions for working dirs - https://github.com/rmagatti/auto-session
+  -- {
+  --   "rmagatti/session-lens",
+  --   requires = { "nvim-lua/plenary.nvim", "rmagatti/auto-session", "nvim-telescope/telescope.nvim" },
+  -- }, -- telescope session plugin - https://github.com/rmagatti/session-lens
   { "kevinhwang91/nvim-bqf", requires = { "nvim-treesitter/nvim-treesitter" } }, -- quickfix window replacement - https://github.com/kevinhwang91/nvim-bqf
   { "folke/which-key.nvim" }, -- search UI for looking up commands / keybinds - https://github.com/folke/which-key.nvim
 
