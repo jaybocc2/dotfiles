@@ -26,7 +26,7 @@ local setup = function()
   require("plugins.treesitter").setup()
   require("plugins.comment").setup()
   require("plugins.gitsigns").setup()
-  -- autopairs
+  require("plugins.autopairs").setup()
   require("plugins.nvim-tree").setup()
   require("plugins.bufferline").setup()
   require("plugins.lualine").setup()
