@@ -1,44 +1,57 @@
+local config = {
+      ---Add a space b/w comment and the line
+    padding = true,
+    ---Whether the cursor should stay at its position
+    sticky = true,
+    ---Lines to be ignored while (un)comment
+    ignore = "^$", -- default nil
+    ---LHS of toggle mappings in NORMAL mode
+    toggler = {
+        ---Line-comment toggle keymap
+        line = 'gcc',
+        ---Block-comment toggle keymap
+        block = 'gbc',
+    },
+    ---LHS of operator-pending mappings in NORMAL and VISUAL mode
+    opleader = {
+        ---Line-comment keymap
+        line = 'gc',
+        ---Block-comment keymap
+        block = 'gb',
+    },
+    ---LHS of extra mappings
+    extra = {
+        ---Add comment on the line above
+        above = 'gcO',
+        ---Add comment on the line below
+        below = 'gco',
+        ---Add comment at the end of line
+        eol = 'gcA',
+    },
+    ---Enable keybindings
+    ---NOTE: If given `false` then the plugin won't create any mappings
+    mappings = {
+        ---Operator-pending mapping; `gcc` `gbc` `gc[count]{motion}` `gb[count]{motion}`
+        basic = true,
+        ---Extra mapping; `gco`, `gcO`, `gcA`
+        extra = true,
+    },
+    ---Function to call before (un)comment
+    pre_hook = nil,
+    ---Function to call after (un)comment
+    post_hook = nil,
+}
+
 local function setup()
   local comment = jaylib.loadpkg("Comment")
   if comment == nil then return end
 
-  local hints = jaylib.loadpkg("lsp-inlayhints")
-  if hints == nil then return end
+  local ts_comment_nvim = jaylib.loadpkg("ts_context_commentstring.integrations.comment_nvim")
+  if ts_comment_nvim ~= nil then
+    config.pre_hook = ts_comment_nvim.create_pre_hook()
+  end
 
-  local ts_context = jaylib.loadpkg("ts_context_commentstring")
-  if ts_context == nil then return end
-
-  comment.setup({
-    ignore = "^$",
-    pre_hook = function(ctx)
-      -- inlay hints
-      local line_start = (ctx.srow or ctx.range.srow) - 1
-      local line_end = ctx.erow or ctx.range.erow
-      hints.clear(0, line_start, line_end)
-
-      ts_context.create_pre_hook()
-
-      if vim.bo.filetype == "javascript" or vim.bo.filetype == "typescript" or vim.bo.filetype == "typescriptreact" then
-        local U = comment.utils
-
-        -- line or block comments
-        local type = ctx.ctype == U.ctype.linewise and "__default" or "__multiline"
-
-        -- find start of comment
-        local location = nil
-        if ctx.ctype == U.ctype.blockwise then
-          location = ts_context.utils.get_cursor_location()
-        elseif ctx.cmotion == U.cmotion.v or ctx.cmotion == U.cmotion.V then
-          location = ts_context.utils.get_visual_start_location()
-        end
-
-        return ts_context.calculate_commentstring({
-          key = type,
-          location = location,
-        })
-      end
-    end,
-  })
+  comment.setup(config)
 end
 
 return { setup = setup }
