@@ -11,6 +11,14 @@ local mappings = {
     ["<LEADER>"] = {
       S = { "<cmd>SymbolsOutline<CR>", "toggle symbols outline" },
     },
+    b = {
+      name = "Buffer",
+      c = { "<cmd>bd<CR>", "Close active buffer" },
+      n = { "<cmd>bn<CR>", "switch to next buffer" },
+      p = { "<cmd>bp<CR>", "switch to previous buffer" },
+      w = { "<cmd>w<CR>", "write/save buffer" },
+      D = { "<cmd>%bd|e#|bd#<CR>", "close all buffers" },
+    },
     -- new TAB
     ["tn"] = { "<cmd>tabnew<CR>", "open new tab" },
     -- misc
@@ -42,18 +50,20 @@ local function wk_mapping(wk, mode, map)
   end
 end
 
-local function mapkeys(mode_key, mode)
+---@param mode string -- vim mode for keybind map
+---@param map table -- which-key compatible bindings table
+local function mapkeys(mode, map)
   local wk = jaylib.loadpkg("which-key")
   if wk == nil then
-    vim.notify("which-key plugin missing - keybinds are not setup!", "error")
+    jaylib.notify("keybinds are not setup!", "warn")
     return
   end
-  wk_mapping(wk, mode, mappings[mode_key])
+  wk_mapping(wk, mode, map)
 end
 
 local function setup()
   for mode_key, mode in pairs(modes) do
-    mapkeys(mode_key, mode)
+    mapkeys(mode, mappings[mode_key])
   end
 end
 
