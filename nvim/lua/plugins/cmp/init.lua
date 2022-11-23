@@ -117,8 +117,10 @@ local function format(entry, vim_item)
     vim_item.kind = icons.misc.Smiley
     vim_item.kind_hl_group = "CmpItemKindEmoji"
   end
+
   vim_item.menu = source_names[entry.source.name]
   vim_item.dup = duplicates[entry.source.name] or 0
+
   return vim_item
 end
 
