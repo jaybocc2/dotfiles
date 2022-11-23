@@ -40,6 +40,7 @@ local setup = function()
   require("plugins.bqf").setup()
   require("plugins.fidget").setup()
   require("plugins.session").setup()
+  require("plugins.octo").setup()
   -- dap
 end
 
