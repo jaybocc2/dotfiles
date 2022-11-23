@@ -82,6 +82,7 @@ local telescope_extensions = {
   "projects",
   "fzf",
   "notify",
+  "session-lens",
 }
 
 local file_ignore_patterns = {

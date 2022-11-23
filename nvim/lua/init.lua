@@ -39,6 +39,7 @@ local setup = function()
   require("plugins.colorizer").setup()
   require("plugins.bqf").setup()
   require("plugins.fidget").setup()
+  require("plugins.session").setup()
   -- dap
 end
 

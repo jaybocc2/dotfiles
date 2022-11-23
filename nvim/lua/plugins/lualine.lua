@@ -33,7 +33,10 @@ local function get_null_ls_formatters(ft)
   end
 
   local providers = get_null_ls_registered_providers(ft)
-  return providers[package.FORMATTING] or {}
+  if providers ~= nil then
+    return providers[package.FORMATTING] or {}
+  end
+  return {}
 end
 
 local function get_null_ls_linters(ft)
@@ -44,7 +47,10 @@ local function get_null_ls_linters(ft)
 
   local providers = get_null_ls_registered_providers(ft)
   local methods = vim.tbl_flatten(vim.tbl_map(function(m)
-    return providers[m] or {}
+    if providers ~= nil then
+      return providers[m] or {}
+    end
+    return {}
   end, {
     package.DIAGNOSTICS,
     package.DIAGNOSTICS_ON_OPEN,
