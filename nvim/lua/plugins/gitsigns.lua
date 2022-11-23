@@ -74,7 +74,9 @@ local gitopts = {
 
 local function setup()
   local gitsigns = jaylib.loadpkg("gitsigns")
-  if gitsigns == nil then return end
+  if gitsigns == nil then
+    return
+  end
 
   gitsigns.setup(gitopts)
 end

@@ -1,6 +1,8 @@
 local function setup()
   local package = jaylib.loadpkg("cmp_tabnine.config")
-  if package == nil then return end
+  if package == nil then
+    return
+  end
 
   package:setup({
     max_lines = 1000, -- default: 1000

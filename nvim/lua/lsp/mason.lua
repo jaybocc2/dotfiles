@@ -16,7 +16,9 @@ local lsp_servers = {
 }
 
 local mason_server_mappings = jaylib.loadpkg("mason-lspconfig.mappings.server")
-if mason_server_mappings == nil then return end
+if mason_server_mappings == nil then
+  return
+end
 local lsp_servers_translated = {}
 for _, s in ipairs(lsp_servers) do
   table.insert(lsp_servers_translated, mason_server_mappings.lspconfig_to_package[s])
@@ -33,8 +35,6 @@ local auto_mason_install = {
   "stylua", -- lua style
 }
 
-
-
 local settings = {
   ui = {
     border = "rounded",
@@ -48,11 +48,15 @@ local settings = {
 
 local function setup()
   local mason = jaylib.loadpkg("mason")
-  if mason == nil then return end
+  if mason == nil then
+    return
+  end
   mason.setup(settings)
 
   local mason_tool_installer = jaylib.loadpkg("mason-tool-installer")
-  if mason_tool_installer == nil then return end
+  if mason_tool_installer == nil then
+    return
+  end
   mason_tool_installer.setup({
     ensure_installed = vim.tbl_deep_extend("force", auto_mason_install, lsp_servers_translated),
     auto_update = true,
@@ -60,7 +64,9 @@ local function setup()
   })
 
   local mason_lspconfig = jaylib.loadpkg("mason-lspconfig")
-  if mason_lspconfig == nil then return end
+  if mason_lspconfig == nil then
+    return
+  end
   mason_lspconfig.setup({
     ensure_installed = lsp_servers,
     automatic_installation = true,
@@ -69,13 +75,17 @@ local function setup()
   local lsp = require("lsp")
 
   local neodev = jaylib.loadpkg("neodev")
-  if neodev == nil then return end
+  if neodev == nil then
+    return
+  end
   neodev.setup({
     lspconfig = lsp.get_common_options(),
   })
 
   local lspconfig = jaylib.loadpkg("lspconfig")
-  if lspconfig == nil then return end
+  if lspconfig == nil then
+    return
+  end
 
   local opts = {}
 
@@ -125,7 +135,9 @@ local function setup()
     if server == "rust_analyzer" then
       local rust_opts = require("lsp.settings.rust")
       local rust_tools = jaylib.loadpkg("rust-tools")
-      if rust_tools == nil then return end
+      if rust_tools == nil then
+        return
+      end
       rust_tools.setup(rust_opts)
       goto continue
     end

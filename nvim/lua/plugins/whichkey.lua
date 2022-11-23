@@ -55,7 +55,9 @@ local config = {
 
 local function setup()
   local which_key = jaylib.loadpkg("which-key")
-  if which_key == nil then return end
+  if which_key == nil then
+    return
+  end
 
   which_key.setup(config)
 end

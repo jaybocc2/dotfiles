@@ -2,11 +2,13 @@ local icons = require("icons")
 
 local function get_pickers(actions)
   local actions = jaylib.loadpkg("telescope.actions")
-  if actions == nil then return {} end
+  if actions == nil then
+    return {}
+  end
 
   local default = {
     theme = "dropdown",
-    initial_mode = "normal"
+    initial_mode = "normal",
   }
   return {
     find_files = {
@@ -52,9 +54,10 @@ local function get_pickers(actions)
 end
 
 local function get_mappings()
-
   local actions = jaylib.loadpkg("telescope.actions")
-  if actions == nil then return {} end
+  if actions == nil then
+    return {}
+  end
 
   local mappings = {
     i = {
@@ -78,7 +81,7 @@ end
 local telescope_extensions = {
   "projects",
   "fzf",
-  "notify"
+  "notify",
 }
 
 local file_ignore_patterns = {
@@ -193,29 +196,31 @@ local extensions = {
 
 local function setup()
   local telescope = jaylib.loadpkg("telescope")
-  if telescope == nil then return end
+  if telescope == nil then
+    return
+  end
   local previewers = jaylib.loadpkg("telescope.previewers")
-  if previewers == nil then return end
+  if previewers == nil then
+    return
+  end
   local sorters = jaylib.loadpkg("telescope.sorters")
-  if sorters == nil then return end
+  if sorters == nil then
+    return
+  end
 
   local icons = require("icons")
 
-  telescope.setup(vim.tbl_extend(
-    "keep",
-    {
-      file_previewer = previewers.vim_buffer_cat.new,
-      grep_previewer = previewers.vim_buffer_vimgrep.new,
-      qflist_previewer = previewers.vim_buffer_qflist.new,
-      file_sorter = sorters.get_fuzzy_file,
-      generic_sorter = sorters.get_generic_fuzzy_sorter,
-    },
-    {
-      defaults = defaults,
-      pickers = pickers,
-      extensions = extensions,
-    }
-  ))
+  telescope.setup(vim.tbl_extend("keep", {
+    file_previewer = previewers.vim_buffer_cat.new,
+    grep_previewer = previewers.vim_buffer_vimgrep.new,
+    qflist_previewer = previewers.vim_buffer_qflist.new,
+    file_sorter = sorters.get_fuzzy_file,
+    generic_sorter = sorters.get_generic_fuzzy_sorter,
+  }, {
+    defaults = defaults,
+    pickers = pickers,
+    extensions = extensions,
+  }))
 
   for _, ext in ipairs(telescope_extensions) do
     telescope.load_extension(ext)

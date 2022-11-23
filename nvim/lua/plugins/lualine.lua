@@ -10,7 +10,9 @@ end
 
 local function get_null_ls_registered_providers(ft)
   local package = jaylib.loadpkg("null-ls.sources")
-  if package == nil then return end
+  if package == nil then
+    return
+  end
 
   local available_sources = package.get_available(ft)
   local registered = {}
@@ -26,7 +28,9 @@ end
 
 local function get_null_ls_formatters(ft)
   local package = jaylib.loadpkg("null-ls.methods")
-  if package == nil then return end
+  if package == nil then
+    return
+  end
 
   local providers = get_null_ls_registered_providers(ft)
   return providers[package.FORMATTING] or {}
@@ -34,7 +38,9 @@ end
 
 local function get_null_ls_linters(ft)
   local package = jaylib.loadpkg("null-ls.methods")
-  if package == nil then return end
+  if package == nil then
+    return
+  end
 
   local providers = get_null_ls_registered_providers(ft)
   local methods = vim.tbl_flatten(vim.tbl_map(function(m)
@@ -137,7 +143,9 @@ local components = {
 
 local function setup()
   local lualine = jaylib.loadpkg("lualine")
-  if lualine == nil then return end
+  if lualine == nil then
+    return
+  end
 
   lualine.setup({
     options = {

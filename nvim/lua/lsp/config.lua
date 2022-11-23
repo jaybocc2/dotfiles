@@ -1,6 +1,6 @@
 local _M = {}
 
-local icons = require('icons')
+local icons = require("icons")
 
 _M.diagnostics = {
   signs = {
@@ -51,7 +51,7 @@ _M.buffer_mappings = {
       function()
         local config = _M.diagnostics.float
         config.scope = "line"
-        vim.diagnostic.open_float({bufnr = 0, unpack(config)})
+        vim.diagnostic.open_float({ bufnr = 0, unpack(config) })
       end,
       "Show line diagnostics",
     },

@@ -37,13 +37,17 @@ local config = {
 
 local function setup()
   local autopairs = jaylib.loadpkg("nvim-autopairs")
-  if autopairs == nil then return end
+  if autopairs == nil then
+    return
+  end
   local rule = jaylib.loadpkg("nvim-autopairs.rule")
 
   autopairs.setup(config)
 
   local ts_configs = jaylib.loadpkg("nvim-treesitter.configs")
-  if ts_configs ~= nil then ts_configs.setup({autopairs = { enable = true } }) end
+  if ts_configs ~= nil then
+    ts_configs.setup({ autopairs = { enable = true } })
+  end
 
   local ts_conds = jaylib.loadpkg("nvim-autopairs.ts-conds")
   if ts_conds ~= nil and rule ~= nil then

@@ -43,7 +43,9 @@ local config = {
 
 local function setup()
   local illuminate = jaylib.loadpkg("illuminate")
-  if illuminate == nil then return end
+  if illuminate == nil then
+    return
+  end
 
   illuminate.configure(config)
 end

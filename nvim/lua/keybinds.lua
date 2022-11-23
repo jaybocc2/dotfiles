@@ -29,8 +29,7 @@ local mappings = {
     ["]q"] = { ":cnext<CR>", "next fix" },
     ["[q"] = { ":cprev<CR>", "previous fix" },
   },
-  insert_mode = {
-  },
+  insert_mode = {},
 }
 
 local modes = {
@@ -46,7 +45,7 @@ local function wk_mapping(wk, mode, map)
   if mode == "n" then
     wk.register(map)
   else
-    wk.register(map, {mode = mode})
+    wk.register(map, { mode = mode })
   end
 end
 

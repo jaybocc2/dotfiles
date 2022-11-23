@@ -33,7 +33,7 @@ local config = {
   -- * global (default)
   -- * tab
   -- * win
-  scope_chdir = 'global',
+  scope_chdir = "global",
 
   -- Path where project.nvim will store the project history for use in
   -- telescope
@@ -42,7 +42,9 @@ local config = {
 
 local function setup()
   local project_nvim = jaylib.loadpkg("project_nvim")
-  if project_nvim == nil then return end
+  if project_nvim == nil then
+    return
+  end
 
   project_nvim.setup(config)
 end

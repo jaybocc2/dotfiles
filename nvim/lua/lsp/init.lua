@@ -1,6 +1,6 @@
 local _M = {}
 
-local config = require('lsp.config')
+local config = require("lsp.config")
 
 local function add_buffer_options(bufnr)
   for k, v in pairs(config.buffer_options) do
@@ -47,7 +47,9 @@ function _M.common_on_attach(client, bufnr)
   add_buffer_options(bufnr)
   add_buffer_keybindings(bufnr)
   local inlayhints = jaylib.loadpkg("lsp-inlayhints")
-  if inlayhints ~= nil then inlayhints.on_attach(client, bufnr) end
+  if inlayhints ~= nil then
+    inlayhints.on_attach(client, bufnr)
+  end
 end
 
 function _M.get_common_options()
@@ -81,7 +83,9 @@ end
 function _M.setup()
   -- TODO: lspconfig is loaded by lsp.mason, what is loading it here do?
   local lspconfig = jaylib.loadpkg("lspconfig")
-  if lspconfig == nil then return end
+  if lspconfig == nil then
+    return
+  end
 
   for _, sign in ipairs(config.diagnostics.signs.values) do
     vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = sign.name })
@@ -93,7 +97,9 @@ function _M.setup()
   require("lsp.null-ls").setup()
 
   local lsp_lines = jaylib.loadpkg("lsp_lines")
-  if lsp_lines == nil then return end
+  if lsp_lines == nil then
+    return
+  end
   lsp_lines.setup()
 
   -- autocmd format on save?

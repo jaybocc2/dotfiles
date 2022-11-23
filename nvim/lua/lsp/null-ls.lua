@@ -1,5 +1,7 @@
 local null_ls = jaylib.loadpkg("null-ls")
-if null_ls == nil then return end
+if null_ls == nil then
+  return
+end
 
 -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
 local formatting = null_ls.builtins.formatting

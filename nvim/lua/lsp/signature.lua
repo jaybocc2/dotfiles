@@ -1,5 +1,7 @@
 local signature = jaylib.loadpkg("lsp_signature")
-if signature == nil then return end
+if signature == nil then
+  return
+end
 
 local icons = require("icons")
 

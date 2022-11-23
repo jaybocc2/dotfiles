@@ -43,7 +43,9 @@ end
 
 local function setup()
   local bufferline = jaylib.loadpkg("bufferline")
-  if bufferline == nil then return end
+  if bufferline == nil then
+    return
+  end
 
   bufferline.setup({
     options = {

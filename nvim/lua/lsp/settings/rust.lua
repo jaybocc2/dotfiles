@@ -1,9 +1,9 @@
 local opts = {
   tools = {
     inlay_hints = {
-      auto = false
-    }
-  }
+      auto = false,
+    },
+  },
 }
 
 return opts

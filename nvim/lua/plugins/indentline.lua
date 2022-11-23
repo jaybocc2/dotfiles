@@ -21,7 +21,9 @@ local config = {
 
 local function setup()
   local indent_blankline = jaylib.loadpkg("indent_blankline")
-  if indent_blankline == nil then return end
+  if indent_blankline == nil then
+    return
+  end
 
   indent_blankline.setup(config)
 end

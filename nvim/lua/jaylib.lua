@@ -4,20 +4,22 @@ local _M = {}
 ---@param t integer|nil stack object to grab callerinfo for default: 3 (the func that called this func)
 ---@return { src: string, src_path: string, caller: string, line: integer, name: string }
 function _M.getcallerinfo(t)
-  if not t then t = 3 end
-  local callerinfo = debug.getinfo(t, 'nSl')
-  local src_path, src =  callerinfo.source:match(".*[/][.]config[/](.*[/])(.*[.]lua)$")
+  if not t then
+    t = 3
+  end
+  local callerinfo = debug.getinfo(t, "nSl")
+  local src_path, src = callerinfo.source:match(".*[/][.]config[/](.*[/])(.*[.]lua)$")
   local caller = src:match("(.*)[.]lua$")
   local name = "???"
   if callerinfo.name ~= nil then
-	  name = callerinfo.name
+    name = callerinfo.name
   end
   return {
     src = src,
     src_path = src_path,
     caller = caller,
     line = callerinfo.currentline,
-    name = name
+    name = name,
   }
 end
 
@@ -31,7 +33,11 @@ function _M.notify(msg, level, opts)
   if callerinfo.name == "loadpkg" then
     callerinfo = _M.getcallerinfo(4)
   end
-  vim.notify(callerinfo.src_path ..  callerinfo.src .. "::" .. callerinfo.line .. "::" .. callerinfo.name .. "() - " .. msg, level, opts)
+  vim.notify(
+    callerinfo.src_path .. callerinfo.src .. "::" .. callerinfo.line .. "::" .. callerinfo.name .. "() - " .. msg,
+    level,
+    opts
+  )
 end
 
 --- Safely load package and log error on failure
@@ -54,7 +60,7 @@ end
 ---Get the full path to cache directory
 ---@return string
 function _M.get_cache_dir()
-  local cache_dir = os.getenv "NEOVIM_CACHE_DIR"
+  local cache_dir = os.getenv("NEOVIM_CACHE_DIR")
   if not cache_dir then
     return vim.fn.stdpath("cache")
   end
@@ -68,7 +74,7 @@ function _M.clear_augroup(name)
   -- defer the function in case the autocommand is still in-use
   vim.schedule(function()
     pcall(function()
-      vim.api.nvim_clear_autocmds { group = name }
+      vim.api.nvim_clear_autocmds({ group = name })
     end)
   end)
 end

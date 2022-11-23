@@ -1,5 +1,7 @@
 local schema = jaylib.loadpkg("schemastore")
-if schema == nil then return end
+if schema == nil then
+  return
+end
 
 local opts = {
   init_options = {

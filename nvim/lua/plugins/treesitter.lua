@@ -1,6 +1,8 @@
 local function setup()
   local ts_configs = jaylib.loadpkg("nvim-treesitter.configs")
-  if ts_configs == nil then return end
+  if ts_configs == nil then
+    return
+  end
 
   ts_configs.setup({
     ensure_installed = "all",

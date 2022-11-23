@@ -126,10 +126,14 @@ end
 
 local function setup()
   local cmp = jaylib.loadpkg("cmp")
-  if cmp == nil then return end
+  if cmp == nil then
+    return
+  end
 
   local luasnip = jaylib.loadpkg("luasnip")
-  if luasnip == nil then return end
+  if luasnip == nil then
+    return
+  end
 
   require("luasnip.loaders.from_vscode").lazy_load()
   require("plugins.tabnine").setup()

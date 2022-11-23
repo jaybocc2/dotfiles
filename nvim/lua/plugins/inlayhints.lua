@@ -1,6 +1,8 @@
 local function setup()
   local hints = jaylib.loadpkg("lsp-inlayhints")
-  if hints == nil then return end
+  if hints == nil then
+    return
+  end
 
   local group = vim.api.nvim_create_augroup("LspAttach_inlayhints", {})
   vim.api.nvim_create_autocmd("LspAttach", {

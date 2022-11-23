@@ -135,19 +135,23 @@ local options = {
 
 local function start_telescope(mode)
   local ts_builtin = jaylib.loadpkg("telescope.builtin")
-  if ts_builtin == nil then return end
+  if ts_builtin == nil then
+    return
+  end
   local node = require("nvim-derp.lib").get_node_at_cursor()
   local abspath = node.link_to or node.absolute_path
   local is_folder = node.open ~= nil
   local basedir = is_folder and abspath or vim.fn.fnamemodify(abspath, ":h")
-  ts_builtin[mode] {
+  ts_builtin[mode]({
     cwd = basedir,
-  }
+  })
 end
 
 local function setup()
   local nvim_tree = jaylib.loadpkg("nvim-tree")
-  if nvim_tree == nil then return end
+  if nvim_tree == nil then
+    return
+  end
 
   local function ts_find_files(_)
     start_telescope("find_files")
