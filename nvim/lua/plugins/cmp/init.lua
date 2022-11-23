@@ -135,6 +135,32 @@ local function setup()
     return
   end
 
+  local under_comparator = function(entry1, entry2)
+    local under = jaylib.loadpkg("cmp-under-comparator")
+    if under == nil then
+      return cmp.config.compare.score(entry1, entry2)
+    end
+    return under.under(entry1, entry2)
+  end
+
+  local copilot_prioritize = function(entry1, entry2)
+        -- require("copilot_cmp.comparators").prioritize,
+    local copilot_comp_prioritize = jaylib.loadpkg("copilot_cmp.comparators")
+    if copilot_comp_prioritize == nil then
+      return cmp.config.compare.offset(entry1, entry2)
+    end
+    return copilot_comp_prioritize.prioritize(entry1, entry2)
+  end
+
+  local copilot_score = function(entry1, entry2)
+    -- require("copilot_cmp.comparators").score,
+    local copilot_comp_score = jaylib.loadpkg("copilot_cmp.comparators")
+    if copilot_comp_score == nil then
+      return cmp.config.compare.offset(entry1, entry2)
+    end
+    return copilot_comp_score.score(entry1, entry2)
+  end
+
   require("luasnip.loaders.from_vscode").lazy_load()
   require("plugins.tabnine").setup()
 
@@ -240,10 +266,13 @@ local function setup()
       comparators = {
         -- require("copilot_cmp.comparators").prioritize,
         -- require("copilot_cmp.comparators").score,
+        copilot_prioritize,
+        copilot_score,
         cmp.config.compare.offset,
         cmp.config.compare.exact,
         -- cmp.config.compare.scopes,
         cmp.config.compare.score,
+        under_comparator,
         cmp.config.compare.recently_used,
         cmp.config.compare.locality,
         -- cmp.config.compare.kind,

@@ -67,7 +67,7 @@ local packages = {
   { "hrsh7th/cmp-nvim-lua", requires = { "hrsh7th/nvim-cmp" } }, -- completion for neovim api - https://github.com/hrsh7th/cmp-nvim-lua
   { "lukas-reineke/cmp-under-comparator", requires = { "hrsh7th/nvim-cmp" } }, -- completion for neovim api - https://github.com/lukas-reineke/cmp-under-comparator
   { "tzachar/cmp-tabnine", requires = { "hrsh7th/nvim-cmp" }, run = "./install.sh" }, -- tabnine cmp integration - https://github.com/tzachar/cmp-tabnine
-  -- use { 'zbirenbaum/copilot-cmp', requires = { "hrsh7th/nvim-cmp" } } -- cmp integration for copilot.lua - https://github.com/zbirenbaum/copilot-cmp
+  { 'zbirenbaum/copilot-cmp', requires = { "hrsh7th/nvim-cmp", "zbirenbaum/copilot.lua" } }, -- cmp integration for copilot.lua - https://github.com/zbirenbaum/copilot-cmp
 
   -- snippet sources / plugins
   { "L3MON4D3/LuaSnip", run = "make install_jsregexp" }, -- used by cmp_luasnip - https://github.com/L3MON4D3/LuaSnip
@@ -84,7 +84,7 @@ local packages = {
   { "b0o/SchemaStore.nvim" }, -- lsp access to json schema catalog (SchemaStore, - https://github.com/b0o/SchemaStore.nvim
   { "lvimuser/lsp-inlayhints.nvim" }, -- wip/partial implementation of LSP inlay hints - https://github.com/lvimuser/lsp-inlayhints.nvim
   { "https://git.sr.ht/~whynothugo/lsp_lines.nvim" }, --  - https://git.sr.ht/~whynothugo/lsp_lines.nvim
-  -- use { 'zbirenbaum/copilot.lua' } -- lua implementation of github copilot integration - https://github.com/zbirenbaum/copilot.lua
+  { 'zbirenbaum/copilot.lua' }, -- lua implementation of github copilot integration - https://github.com/zbirenbaum/copilot.lua
 
   -- Language specific
   -- java

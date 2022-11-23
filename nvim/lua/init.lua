@@ -41,6 +41,7 @@ local setup = function()
   require("plugins.fidget").setup()
   require("plugins.session").setup()
   require("plugins.octo").setup()
+  require("plugins.copilot").setup()
   -- dap
 end
 
