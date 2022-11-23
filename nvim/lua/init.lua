@@ -36,6 +36,7 @@ local setup = function()
   require("plugins.indentline").setup()
   require("plugins.alpha").setup()
   require("plugins.symbols").setup()
+  require("plugins.colorizer").setup()
   -- dap
 end
 

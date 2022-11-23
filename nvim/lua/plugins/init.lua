@@ -46,6 +46,7 @@ local packages = {
   { "kevinhwang91/nvim-bqf", requires = { "nvim-treesitter/nvim-treesitter" } }, -- quickfix window replacement - https://github.com/kevinhwang91/nvim-bqf
   { "folke/which-key.nvim" }, -- search UI for looking up commands / keybinds - https://github.com/folke/which-key.nvim
   { 'simrat39/symbols-outline.nvim' }, -- symbol outline tree for lsp - https://github.com/simrat39/symbols-outline.nvim
+  { 'norcalli/nvim-colorizer.lua', }, -- preview colors in code -- https://github.com/norcalli/nvim-colorizer.lua
 
   -- utils
   { "monaqa/dial.nvim" }, -- inc/decriment util - https://github.com/monaqa/dial.nvim
