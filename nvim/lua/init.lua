@@ -37,6 +37,7 @@ local setup = function()
   require("plugins.alpha").setup()
   require("plugins.symbols").setup()
   require("plugins.colorizer").setup()
+  require("plugins.bqf").setup()
   -- dap
 end
 
