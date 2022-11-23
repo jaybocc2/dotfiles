@@ -66,15 +66,12 @@ local function setup()
     automatic_installation = true,
   })
 
-  local handlers = require("lsp.handlers")
+  local lsp = require("lsp")
 
   local neodev = jaylib.loadpkg("neodev")
   if neodev == nil then return end
   neodev.setup({
-    lspconfig = {
-      on_attach = handlers.on_attach,
-      capabilities = handlers.capabilities,
-    },
+    lspconfig = lsp.get_common_options(),
   })
 
   local lspconfig = jaylib.loadpkg("lspconfig")
@@ -83,12 +80,9 @@ local function setup()
   local opts = {}
 
   for _, server in pairs(lsp_servers) do
-    opts = {
-      on_attach = handlers.on_attach,
-      capabilities = handlers.capabilities,
-    }
+    opts = lsp.get_common_options()
 
-    server = vim.split(server, "@")[1]
+    --server = vim.split(server, "@", {})[1]
 
     if server == "jsonls" then
       local server_opts = require("lsp.settings.jsonls")

@@ -46,12 +46,14 @@ end
 function _M.common_on_attach(client, bufnr)
   add_buffer_options(bufnr)
   add_buffer_keybindings(bufnr)
+  local inlayhints = jaylib.loadpkg("lsp-inlayhints")
+  if inlayhints ~= nil then inlayhints.on_attach(client, bufnr) end
 end
 
 function _M.get_common_options()
   return {
     on_attach = _M.common_on_attach,
-    capabilities = _M.common_capabilities,
+    capabilities = _M.common_capabilities(),
   }
 end
 

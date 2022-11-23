@@ -1,14 +1,14 @@
-local M = {}
+local _M = {}
 
 local config = require("lsp.config")
 
 local cmp_nvim_lsp = jaylib.loadpkg("cmp_nvim_lsp")
 if cmp_nvim_lsp == nil then return end
 
-M.capabilities = cmp_nvim_lsp.default_capabilities()
-M.capabilities.textDocument.completion.completionItem.snippetSupport = true
+_M.capabilities = cmp_nvim_lsp.default_capabilities()
+_M.capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-M.setup = function()
+_M.setup = function()
   vim.diagnostic.config({
     virtual_text = config.diagnostics.virtual_text,
     signs = config.diagnostics.signs,
@@ -52,7 +52,8 @@ local function lsp_keymaps(bufnr)
   -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
 end
 
-M.on_attach = function(client, bufnr)
+_M.on_attach = function(client, bufnr)
+  vim.notify("handler on attach was called", "error")
   lsp_keymaps(bufnr)
   attach_navic(client, bufnr)
 
@@ -60,16 +61,16 @@ M.on_attach = function(client, bufnr)
     require("lsp-inlayhints").on_attach(client, bufnr)
   end
 
-  if client.name == "jdt.ls" then
-    vim.lsp.codelens.refresh()
-    if JAVA_DAP_ACTIVE then
-      require("jdtls").setup_dap({ hotcodereplace = "auto" })
-      require("jdtls.dap").setup_dap_main_class_configs()
-    end
-  end
+  -- if client.name == "jdt.ls" then
+  --   vim.lsp.codelens.refresh()
+  --   if JAVA_DAP_ACTIVE then
+  --     require("jdtls").setup_dap({ hotcodereplace = "auto" })
+  --     require("jdtls.dap").setup_dap_main_class_configs()
+  --   end
+  -- end
 end
 
-function M.enable_format_on_save()
+function _M.enable_format_on_save()
   vim.cmd([[
     augroup format_on_save
       autocmd! 
@@ -79,20 +80,20 @@ function M.enable_format_on_save()
   vim.notify("Enabled format on save")
 end
 
-function M.disable_format_on_save()
-  M.remove_augroup("format_on_save")
+function _M.disable_format_on_save()
+  _M.remove_augroup("format_on_save")
   vim.notify("Disabled format on save")
 end
 
-function M.toggle_format_on_save()
+function _M.toggle_format_on_save()
   if vim.fn.exists("#format_on_save#BufWritePre") == 0 then
-    M.enable_format_on_save()
+    _M.enable_format_on_save()
   else
-    M.disable_format_on_save()
+    _M.disable_format_on_save()
   end
 end
 
-function M.remove_augroup(name)
+function _M.remove_augroup(name)
   if vim.fn.exists("#" .. name) == 1 then
     vim.cmd("au! " .. name)
   end
@@ -100,4 +101,4 @@ end
 
 vim.cmd([[ command! LspToggleAutoFormat execute 'lua require('user.lsp.handlers').toggle_format_on_save()' ]])
 
-return M
+return _M
