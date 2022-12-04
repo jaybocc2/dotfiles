@@ -9,6 +9,8 @@ ARCH() {
     echo 'arm64'
   elif [[ "${arch}" == 'aarch64' ]]; then
     echo 'arm64'
+  elif [[ "${arch}" == 'armv7l' ]]; then
+    echo 'armv6'
   else
     echo 'unknown'
   fi

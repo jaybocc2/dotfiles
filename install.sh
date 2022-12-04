@@ -185,7 +185,6 @@ compile_neovim() {
   sudo apt-get install ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl doxygen git build-essential
   upstall_repo https://github.com/neovim/neovim.git neovim ${NEOVIM_VERSION}
   pushd neovim
-  git checkout ${NEOVIM_VERSION}
   make CMAKE_BUILD_TYPE=RelWithDebInfo
   sudo make install
 
@@ -210,7 +209,7 @@ install_deps() {
     brew install ${OSX_DEPS}
     brew upgrade ${OSX_DEPS}
   elif [[ "${OS}" == "linux" ]];then
-    if [[ "${ID}" == "debian" ]];then
+    if [ "${ID}" == "debian" -o "${ID}" == "raspbian" ];then
       sudo apt-get -t ${VERSION_CODENAME} install ${DEB_DEPS}
 
       if [ "$(nvim -v|head -n 1)" != "NVIM ${NEOVIM_VERSION}" ]; then
