@@ -210,7 +210,9 @@ install_deps() {
     brew upgrade ${OSX_DEPS}
   elif [[ "${OS}" == "linux" ]];then
     if [ "${ID}" == "debian" -o "${ID}" == "raspbian" ];then
-      sudo apt-get -t ${VERSION_CODENAME} install ${DEB_DEPS}
+      for PKG in ${DEB_DEPS};do
+        sudo apt-get -t ${VERSION_CODENAME} install ${PKG}
+      done
 
       if [ "$(nvim -v|head -n 1)" != "NVIM ${NEOVIM_VERSION}" ]; then
         compile_neovim
