@@ -1,7 +1,14 @@
-local function setup()
+local function disable_tabnine()
   -- can't use tabnine on rpi/rockpi as it is not supported https://github.com/codota/TabNine/issues/65
   local os = vim.loop.os_uname()
   if (os.machine == "aarch64" and os.sysname == "Linux") then
+    return true
+  end
+  return false
+end
+
+local function setup()
+  if disable_tabnine() then
     return
   end
 
@@ -24,4 +31,4 @@ local function setup()
   })
 end
 
-return { setup = setup }
+return { setup = setup, disable_tabnine = disable_tabnine }
