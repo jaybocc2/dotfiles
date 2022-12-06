@@ -27,6 +27,7 @@ local function init(packages)
       end,
       prompt_border = "rounded",
     },
+    -- log = { level = "debug" },
   })
   packer.startup(function(use)
     for i, pkg in ipairs(packages) do

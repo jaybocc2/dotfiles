@@ -1,4 +1,10 @@
 local function setup()
+  -- can't use tabnine on rpi/rockpi as it is not supported https://github.com/codota/TabNine/issues/65
+  local os = vim.loop.os_uname()
+  if (os.machine == "aarch64" and os.sysname == "Linux") then
+    return
+  end
+
   local package = jaylib.loadpkg("cmp_tabnine.config")
   if package == nil then
     return
