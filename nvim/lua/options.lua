@@ -31,7 +31,14 @@ local function setup()
   vim.opt.showmode = true -- set to false when / if use lualine
   vim.opt.mouse = "a"
 
-  if findcolor("NeoSolarized") then
+
+  local primary = "neogruvbox"
+  local bg = "dark"
+
+  if findcolor(primary) then
+    vim.cmd("colorscheme " .. primary)
+    vim.opt.background = bg
+  elseif findcolor("NeoSolarized") then
     vim.cmd("colorscheme NeoSolarized")
     vim.opt.background = "light"
   elseif findcolor("solarized") then

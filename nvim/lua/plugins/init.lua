@@ -57,6 +57,8 @@ local packages = {
 
   -- color schemes
   { "ishan9299/nvim-solarized-lua" }, -- lua configurable solarized color scheme - https://github.com/ishan9299/nvim-solarized-lua
+  { "almo7aya/neogruvbox.nvim" }, -- gruvbox for neovim - https://github.com/almo7aya/neogruvbox.nvim
+  { "folke/tokyonight.nvim" }, -- tokyonight for neovim - https://github.com/folke/tokyonight.nvim
 
   -- completion plugins
   { "hrsh7th/nvim-cmp" }, -- the core completion plugin - https://github.com/hrsh7th/nvim-cmp
