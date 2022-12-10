@@ -66,8 +66,11 @@ local function setup()
 
   local on_attach = function(client, bufnr)
     jdtls.setup.add_commands()
+    -- vim.lsp.codelens.refresh()
+    -- if JAVA_DAP_ACTIVE then
     --   jdtls.setup_dap({ hotcodereplace = "auto" })
     --   jdtls.dap.setup_dap_main_class_configs()
+    -- end
     common_opts.on_attach(client, bufnr)
   end
 

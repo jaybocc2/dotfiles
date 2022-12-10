@@ -32,7 +32,7 @@ local function setup()
   vim.opt.mouse = "a"
 
 
-  local primary = "neogruvbox"
+  local primary = "carbonfox"
   local bg = "dark"
 
   if findcolor(primary) then

@@ -46,10 +46,11 @@ end
 function _M.common_on_attach(client, bufnr)
   add_buffer_options(bufnr)
   add_buffer_keybindings(bufnr)
-  local inlayhints = jaylib.loadpkg("lsp-inlayhints")
-  if inlayhints ~= nil then
-    inlayhints.on_attach(client, bufnr)
-  end
+
+  -- local inlayhints = jaylib.loadpkg("lsp-inlayhints")
+  -- if inlayhints ~= nil then
+  --   inlayhints.on_attach(client, bufnr)
+  -- end
 end
 
 function _M.get_common_options()
@@ -91,17 +92,12 @@ function _M.setup()
     vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = sign.name })
   end
 
+  require("lsp.inlayhints").setup()
   require("lsp.signature").setup()
   require("lsp.handlers").setup()
   require("lsp.mason").setup()
   require("lsp.null-ls").setup()
-
-  local lsp_lines = jaylib.loadpkg("lsp_lines")
-  if lsp_lines == nil then
-    return
-  end
-  lsp_lines.setup()
-
+  require("lsp.lsp_lines").setup()
   -- autocmd format on save?
 end
 

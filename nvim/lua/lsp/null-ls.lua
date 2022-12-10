@@ -29,7 +29,7 @@ local function setup()
       formatting.shfmt,
       formatting.google_java_format,
       diagnostics.flake8,
-      diagnostics.shellcheck,
+      -- diagnostics.shellcheck,
     },
   })
 
