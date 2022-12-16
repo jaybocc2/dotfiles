@@ -33,6 +33,10 @@ local opts = {
             default = true,
           },
           {
+            name = "JavaSE-17",
+            path = "/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home",
+          },
+          {
             name = "JavaSE-19",
             path = "/Library/Java/JavaVirtualMachines/jdk-19.jdk/Contents/Home",
           },
