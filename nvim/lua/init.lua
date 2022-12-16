@@ -43,7 +43,7 @@ local setup = function()
 	require("plugins.octo").setup()
 	require("plugins.copilot").setup()
 	require("plugins.surround").setup()
-	-- dap
+  require("plugins.dapui").setup()
 end
 
 return { setup = setup }

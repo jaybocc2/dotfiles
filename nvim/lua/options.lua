@@ -32,7 +32,8 @@ local function setup()
   vim.opt.mouse = "a"
 
 
-  local primary = "carbonfox"
+  -- local primary = "carbonfox"
+  local primary = "melange"
   local bg = "dark"
 
   if findcolor(primary) then
