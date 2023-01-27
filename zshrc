@@ -4,6 +4,10 @@
 
 # reset to home for sourcing zshrc
 local old_cwd=$(pwd)
+if [ "${old_cwd}" = "/" ];then
+  old_cwd=${HOME}
+fi
+
 cd
 
 source ~/.zsh/colors.zsh

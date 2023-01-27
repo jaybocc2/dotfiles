@@ -1,3 +1,6 @@
-local jdtls_config = require("lsp.settings.jdtls").setup()
+local jdtls_enabled = require("lsp.settings.jdtls").enabled
 
-jaylib.loadpkg("jdtls").start_or_attach(jdtls_config)
+if jdtls_enabled then
+  local jdtls_config = require("lsp.settings.jdtls").setup()
+  jaylib.loadpkg("jdtls").start_or_attach(jdtls_config)
+end

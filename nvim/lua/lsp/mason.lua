@@ -1,8 +1,9 @@
 local icons = require("icons")
-
 -- install list for lsp for mason
 local lsp_servers = {
   "bashls", -- bash
+  "gradle_ls", -- gradle
+  "groovyls", -- groovy
   "jdtls", -- java
   "jsonls", -- json
   "marksman", -- markdown
@@ -14,6 +15,14 @@ local lsp_servers = {
   "tsserver", -- typescript server
   "yamlls", -- yaml
 }
+-- lsp servers that aren't supproted by mason_tool_installer or mason_install
+local final_lsp_servers = {
+  -- "java_language_server", -- java
+}
+
+for _, v in ipairs(lsp_servers) do
+  table.insert(final_lsp_servers, v)
+end
 
 local mason_server_mappings = jaylib.loadpkg("mason-lspconfig.mappings.server")
 if mason_server_mappings == nil then
@@ -26,6 +35,7 @@ end
 
 -- install list for non lsp binaries
 local auto_mason_install = {
+  "java-debug-adapter", -- java dap
   "marksman", -- markdown
   "misspell", -- english spelling
   "protolint", -- protobuff linter
@@ -89,7 +99,7 @@ local function setup()
 
   local opts = {}
 
-  for _, server in pairs(lsp_servers) do
+  for _, server in pairs(final_lsp_servers) do
     opts = lsp.get_common_options()
 
     --server = vim.split(server, "@", {})[1]
@@ -125,6 +135,17 @@ local function setup()
 
     if server == "pyright" then
       local server_opts = require("lsp.settings.pyright")
+      opts = vim.tbl_deep_extend("force", server_opts, opts)
+    end
+
+    -- if server == "groovyls" then
+    --   local server_opts = require("lsp.settings.groovyls")
+    --   opts = vim.tbl_deep_extend("force", server_opts, opts)
+    -- end
+
+    if server == "java_language_server" then
+      vim.notify("java server encountered!")
+      local server_opts = require("lsp.settings.java")
       opts = vim.tbl_deep_extend("force", server_opts, opts)
     end
 

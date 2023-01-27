@@ -36,7 +36,7 @@ local options = {
     timeout = 200,
   },
   view = {
-    width = 30,
+    width = 50,
     hide_root_folder = false,
     side = "left",
     mappings = {
@@ -87,7 +87,7 @@ local options = {
       },
     },
     highlight_git = true,
-    group_empty = false,
+    group_empty = true,
     root_folder_modifier = ":t",
   },
   filters = {

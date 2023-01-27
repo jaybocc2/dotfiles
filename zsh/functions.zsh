@@ -20,6 +20,8 @@ tmux_load_avg () {
 }
 
 nvimvenv () {
+  export JAVA_HOME=$(/usr/libexec/java_home -v 17)
+
   if [[ -e "${VIRTUAL_ENV}" && -f "${VIRTUAL_ENV}/bin/activate" ]]; then
     source "${VIRTUAL_ENV}/bin/activate"
     command nvim $@
@@ -27,4 +29,5 @@ nvimvenv () {
   else
     command nvim $@
   fi
+
 }

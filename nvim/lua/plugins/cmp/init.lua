@@ -59,11 +59,13 @@ local custom_sources = {
     entry_filter = function(entry, ctx)
       local kind = require("cmp.types.lsp").CompletionItemKind[entry:get_kind()]
       if kind == "Snippet" and ctx.prev_context.filetype == "java" then
-        return false
+        -- return false
+        return true
       end
 
       if kind == "Text" then
-        return false
+        -- return false
+        return true
       end
       return true
     end,
