@@ -27,7 +27,8 @@ local prompt_cwd() {
   local dir_limit="4"
   local truncation="⋯"
   local formatted_cwd=""
-  local tilde="" # \ueb06
+  # local tilde="" # \ueb06
+  local tilde="~"
   local _cwd="${PWD/#$HOME/$tilde}"
 
   # get first char

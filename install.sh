@@ -11,7 +11,7 @@ git rev-parse --abbrev-ref --symbolic-full-name '@{u}' || {
 
 DOT_FILES=$(git ls-tree '@{u}' | awk '{print $4}' | grep -Ev '(/|LICENSE|README|install.sh|shlibs|test.sh|.gitignore|.gitmodules|bashrc|^vim|vimrc|screenrc)')
 # OS=$(uname |tr '[:upper:]' '[:lower:]') # comes from utils.sh now
-DEB_DEPS="curl exuberant-ctags wget tmux zsh zsh-common vim git xclip zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
+DEB_DEPS="curl exuberant-ctags wget tmux zsh zsh-common vim git xclip zlib1g zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
 libncurses5-dev libssl-dev build-essential htop libffi-dev libffi7 xz-utils"
 # DEB_BACKPORTS_DEPS=""
 # DEB_BACKPORTS_REPO=""
@@ -209,9 +209,9 @@ install_deps() {
     brew install ${OSX_DEPS}
     brew upgrade ${OSX_DEPS}
   elif [[ "${OS}" == "linux" ]]; then
-    if [ "${ID}" == "debian" ] || [ "${ID}" == "raspbian" ]; then
+    if [ "${ID}" == "ubuntu" ] || [ "${ID}" == "debian" ] || [ "${ID}" == "raspbian" ]; then
       for PKG in ${DEB_DEPS}; do
-        sudo apt-get -t "${VERSION_CODENAME}" install "${PKG}"
+        sudo apt-get -t "${VERSION_CODENAME}" install "${PKG}" -f -y
       done
 
       if [ "$(nvim -v | head -n 1)" != "NVIM ${NEOVIM_VERSION}" ]; then
