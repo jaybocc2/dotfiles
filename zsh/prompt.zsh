@@ -69,7 +69,7 @@ local git_changes() {
 
   local behind_count=0
   local ahead_count=0
-  git rev-list --left-right --count @{upstream}...HEAD 2>/dev/null
+  git rev-list --left-right --count @{upstream}...HEAD &> /dev/null
   if [ $? -eq 0 ];then
     local behind_count=$(git rev-list --left-right --count @{upstream}...HEAD|awk '{print $1}')
     local ahead_count=$(git rev-list --left-right --count @{upstream}...HEAD|awk '{print $2}')
@@ -108,8 +108,8 @@ local git_changes() {
 }
 
 local prompt_git() {
-  git status &>/dev/null
-  test $? -ne 0 && echo "" && return 1;
+  git status &> /dev/null
+  test $? -ne 0 && return;
 
   local git_rev=$(git rev-parse --short HEAD 2>/dev/null)
   local git_branch=$(git branch --show-current)
