@@ -10,7 +10,7 @@ local lsp_servers = {
   "prosemd_lsp", -- markdown && nlprule processing
   "pyright", -- python
   "rust_analyzer", -- rust
-  "sumneko_lua", -- lua
+  "lua_ls", -- lua
   "terraformls", -- terraform
   "tsserver", -- typescript server
   "yamlls", -- yaml
@@ -114,18 +114,9 @@ local function setup()
       opts = vim.tbl_deep_extend("force", server_opts, opts)
     end
 
-    if server == "sumneko_lua" then
-      lspconfig.sumneko_lua.setup({
-        settings = {
-          Lua = {
-            completion = {
-              callSnippet = "Replace",
-            },
-          },
-        },
-      })
-
-      goto continue
+    if server == "lua_ls" then
+      local server_opts = require("lsp.settings.luals")
+      opts = vim.tbl_deep_extend("force", server_opts, opts)
     end
 
     if server == "tsserver" then
