@@ -163,6 +163,14 @@ local function setup()
     return copilot_comp_score.score(entry1, entry2)
   end
 
+  local tabnine_compare = function(entry1, entry2)
+    local cmp_tabnine = jaylib.loadpkg("cmp_tabnine")
+    if cmp_tabnine == nil then
+      return cmp.config.compare.offset(entry1, entry2)
+    end
+    return cmp_tabnine.compare(entry1, entry2)
+  end
+
   require("luasnip.loaders.from_vscode").lazy_load()
   require("plugins.tabnine").setup()
 
@@ -250,10 +258,10 @@ local function setup()
     },
     sources = {
       custom_sources.copilot,
+      { name = "cmp_tabnine" },
       custom_sources.nvim_lsp,
       { name = "path" },
       { name = "luasnip" },
-      { name = "cmp_tabnine" },
       { name = "nvim_lua" },
       { name = "buffer" },
       { name = "calc" },
@@ -266,10 +274,9 @@ local function setup()
     sorting = {
       priority_weight = 2,
       comparators = {
-        -- require("copilot_cmp.comparators").prioritize,
-        -- require("copilot_cmp.comparators").score,
         copilot_prioritize,
         copilot_score,
+        tabnine_compare,
         cmp.config.compare.offset,
         cmp.config.compare.exact,
         -- cmp.config.compare.scopes,
@@ -281,8 +288,6 @@ local function setup()
         cmp.config.compare.sort_text,
         cmp.config.compare.length,
         cmp.config.compare.order,
-        -- require("copilot_cmp.comparators").prioritize,
-        -- require("copilot_cmp.comparators").score,
       },
     },
     confirm_opts = {

@@ -28,6 +28,7 @@ local function setup()
       -- language = bool,
       -- lua = true,
     },
+    show_prediction_strength = true,
   })
 end
 
