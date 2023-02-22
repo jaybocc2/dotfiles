@@ -84,13 +84,14 @@ local packages = {
   { "neovim/nvim-lspconfig" }, -- collection of lsp configs - https://github.com/neovim/nvim-lspconfig
   { "williamboman/mason.nvim" }, -- LSP installer/manager - https://github.com/williamboman/mason.nvim
   { "williamboman/mason-lspconfig.nvim", requires = { "williamboman/mason.nvim", "neovim/nvim-lspconfig" } }, -- integrates nvim-lspconfig and mason - https://github.com/williamboman/mason-lspconfig.nvim
-  { "WhoIsSethDaniel/mason-tool-installer.nvim", requires = { "williamboman/mason.nvim" } }, -- auto installs and updates mason tools -- https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim
+  { "WhoIsSethDaniel/mason-tool-installer.nvim", requires = { "williamboman/mason.nvim" } }, -- auto installs and updates mason tools - https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim
+  { "smjonas/inc-rename.nvim" }, -- LSP based rename/refactoring tool - https://github.com/smjonas/inc-rename.nvim
   { "jose-elias-alvarez/null-ls.nvim", requires = { "nvim-lua/plenary.nvim" } }, -- non-lsp integration with neovim LSP client - https://github.com/jose-elias-alvarez/null-ls.nvim
   { "RRethy/vim-illuminate" }, -- lsp & tree based word highlighting - https://github.com/RRethy/vim-illuminate
   { "ray-x/lsp_signature.nvim" }, -- method/function signature hints while typing - https://github.com/ray-x/lsp_signature.nvim
   { "b0o/SchemaStore.nvim" }, -- lsp access to json schema catalog (SchemaStore, - https://github.com/b0o/SchemaStore.nvim
   { "lvimuser/lsp-inlayhints.nvim" }, -- wip/partial implementation of LSP inlay hints - https://github.com/lvimuser/lsp-inlayhints.nvim
-  { "https://git.sr.ht/~whynothugo/lsp_lines.nvim" }, --  - https://git.sr.ht/~whynothugo/lsp_lines.nvim
+  { "https://git.sr.ht/~whynothugo/lsp_lines.nvim" }, -- lsp hints/errors below - https://git.sr.ht/~whynothugo/lsp_lines.nvim
   { 'zbirenbaum/copilot.lua' }, -- lua implementation of github copilot integration - https://github.com/zbirenbaum/copilot.lua
 
   -- Language specific

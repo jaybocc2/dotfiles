@@ -44,6 +44,7 @@ local setup = function()
 	require("plugins.copilot").setup()
 	require("plugins.surround").setup()
   require("plugins.dapui").setup()
+  require("plugins.inc-rename").setup()
 end
 
 return { setup = setup }

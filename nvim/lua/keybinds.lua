@@ -10,6 +10,7 @@ local mappings = {
     -- leader key binds
     ["<LEADER>"] = {
       S = { "<cmd>SymbolsOutline<CR>", "toggle symbols outline" },
+      rn = { function() return ":IncRename " .. vim.fn.expand("<cword>") end, "LSP Rename/refactor word under cursor"}
     },
     b = {
       name = "Buffer",

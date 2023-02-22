@@ -10,7 +10,6 @@ git rev-parse --abbrev-ref --symbolic-full-name '@{u}' || {
 }
 
 DOT_FILES=$(git ls-tree '@{u}' | awk '{print $4}' | grep -Ev '(/|LICENSE|README|install.sh|shlibs|test.sh|.gitignore|.gitmodules|bashrc|^vim|vimrc|screenrc)')
-# OS=$(uname |tr '[:upper:]' '[:lower:]') # comes from utils.sh now
 DEB_DEPS="curl exuberant-ctags wget tmux zsh zsh-common vim git xclip zlib1g zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
 libncurses5-dev libssl-dev build-essential htop libffi-dev libffi7 xz-utils"
 # DEB_BACKPORTS_DEPS=""
@@ -25,24 +24,18 @@ NEOVIM_VERSION="v0.8.1"
 FLUTTER_VERSION=2.0.2
 FLUTTER_CHANNEL=stable
 GHCLI_VERSION=2.20.2
-NEOVIM_VERSION=v0.8.2
+NEOVIM_VERSION=v0.8.3
 NEOVIM_PYENV_PACKAGES="pip pynvim flake8 pylint"
 GLOBAL_PYENV_PACKAGES="pip"
-# CFLAGS='-O2' # what is this used for
 TFENV_VERSIONS="latest"
 
-source shlibs/lsp-deps.sh # install all LSP's
-source shlibs/fonts.sh    # install fonts
+source shlibs/lsp-deps.sh # source install methods for all LSP's
+source shlibs/fonts.sh    # source install fonts methods
 
 install_pyenv() {
   upstall_repo https://github.com/pyenv/pyenv.git ~/.pyenv master
   upstall_repo https://github.com/pyenv/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv master
 
-  # PYENV_ROOT="${HOME}/.pyenv"
-  # PATH=${PYENV_ROOT}/bin:${PATH}
-  # eval "$(pyenv init --path)"
-  # eval "$(pyenv init -)"
-  # eval "$(pyenv virtualenv-init -)"
   fixenv
 
   pyenv versions | grep ${PY3_VERSION} || pyenv install ${PY3_VERSION}
@@ -97,25 +90,24 @@ install_tfenv() {
   fixenv
 
   tfenv use latest
-  for v in $(echo ${TFENV_VERSIONS}); do
-    tfenv list | grep ${v} || tfenv install ${v}
+  for v in ${TFENV_VERSIONS}; do
+    tfenv list | grep "${v}" || tfenv install "${v}"
   done
 }
 
 install_golang() {
-  return # go setup seem a bit broken currently
   GOROOT="${HOME}/go"
 
-  if [ -d ${GOROOT} ]; then
+  if [ -d "${GOROOT}" ]; then
     if [ "$(${GOROOT}/bin/go version | cut -f3 -d' ')" != "go${GO_VERSION}" ]; then
-      rm -rf ${HOME}/go
+      rm -rf "${HOME}/go"
     else
       return
     fi
   fi
 
-  curl https://storage.googleapis.com/golang/go${GO_VERSION}.${OS}-$(ARCH).tar.gz |
-    tar -C ${HOME} -xz
+  curl "https://storage.googleapis.com/golang/go${GO_VERSION}.${OS}-$(ARCH).tar.gz" |
+    tar -C "${HOME}" -xz
 }
 
 install_rust() {
@@ -124,12 +116,11 @@ install_rust() {
 }
 
 install_flutter() {
-  return # disable flutter for now
   export FLUTTER_PATH=${HOME}/.flutter.d
 
-  if [ -d ${FLUTTER_PATH} ]; then
+  if [ -d "${FLUTTER_PATH}" ]; then
     flutter upgrade --verify-only
-    if [ $? -gt 0 ]; then
+    if ! flutter upgrade --verify-only; then
       flutter channel ${FLUTTER_CHANNEL}
       flutter upgrade
     else
@@ -137,14 +128,14 @@ install_flutter() {
     fi
   fi
 
-  if [ ${OS} == 'darwin' ]; then
+  if [ "${OS}" == 'darwin' ]; then
     FL_OS='macos'
   else
     FL_OS='linux'
   fi
 
   flutter_url="https://storage.googleapis.com/flutter_infra/releases/${FLUTTER_CHANNEL}/${FL_OS}/flutter_${FL_OS}_${FLUTTER_VERSION}-${FLUTTER_CHANNEL}.tar.xz"
-  curl ${flutter_url} | tar x -J -C ${HOME}
+  curl ${flutter_url} | tar x -J -C "${HOME}"
 }
 
 install_ghcli() {
@@ -154,22 +145,11 @@ install_ghcli() {
 
   mktmp
   curl -LO "https://github.com/cli/cli/releases/download/v${GHCLI_VERSION}/gh_${GHCLI_VERSION}_linux_$(ARCH).deb" || TRACE "ghcli deb download failed"
-  sudo dpkg -i gh_${GHCLI_VERSION}_linux_$(ARCH).deb || TRACE "ghcli deb install failed"
+  sudo dpkg -i "gh_${GHCLI_VERSION}_linux_$(ARCH).deb" || TRACE "ghcli deb install failed"
   rmtmp
 }
 
 install_fdfind() {
-  # if [[ "${OS}" == "darwin" ]]; then
-  #   brew install fd
-  #   return
-  # fi
-  # # install fdfind
-  # local version="v8.5.2"
-  # mktmp
-  # wget https://github.com/sharkdp/fd/releases/download/${version}/fd-${version}-arm-unknown-linux-musleabihf.tar.gz
-  # tar xvzf fd-v8.5.2-arm-unknown-linux-musleabihf.tar.gz
-  # mv fd-v8.5.2-arm-unknown-linux-musleabihf/fd ${HOME}/bin/
-  # rmtmp
   cargo install fd-find
 }
 
@@ -191,6 +171,24 @@ compile_neovim() {
   rmtmp
 }
 
+install_neovim() {
+  install_fdfind
+  install_ripgrep
+  install_lsp_binaries
+
+  if [[ "${OS}" == "darwin" ]]; then
+    if which nvim >/dev/null; then
+      brew upgrade neovim
+    else
+      brew install neovim
+    fi
+  else
+    if [ "$(nvim -v | head -n 1)" != "NVIM ${NEOVIM_VERSION}" ]; then
+      compile_neovim
+    fi
+  fi
+}
+
 install_deps() {
   echo ""
   echo "installing deps. . . ."
@@ -206,33 +204,26 @@ install_deps() {
     else
       brew update
     fi
-    brew install ${OSX_DEPS}
-    brew upgrade ${OSX_DEPS}
+    brew install "${OSX_DEPS}"
+    brew upgrade "${OSX_DEPS}"
   elif [[ "${OS}" == "linux" ]]; then
-    if [ "${ID}" == "ubuntu" ] || [ "${ID}" == "debian" ] || [ "${ID}" == "raspbian" ]; then
+    if [ "${ID}" == "ubuntu" ] || [ "${ID}" == "debian" ] || [ "${ID}" == "raspbian" ] || [ "${ID}" == "armbian" ]; then
       for PKG in ${DEB_DEPS}; do
         sudo apt-get -t "${VERSION_CODENAME}" install "${PKG}" -f -y
       done
-
-      if [ "$(nvim -v | head -n 1)" != "NVIM ${NEOVIM_VERSION}" ]; then
-        compile_neovim
-      fi
     fi
   fi
 
-  install_flutter
   install_ghcli
-  install_golang
+  install_rust
   install_nodenv
   install_pyenv
   install_rbenv
-  install_rust
   install_tfenv
+  # install_flutter # disable until i ever want to use flutter again
+  # install_golang # disable until i fix go installation - maybe consider goenv
 
-  install_fdfind
-  install_ripgrep
-
-  install_lsp_binaries
+  install_neovim
 }
 
 make_dirs() {
@@ -308,6 +299,13 @@ purge_dotfiles() {
   fi
 }
 
+purge_shada() {
+  # https://github.com/neovim/neovim/issues/6875
+  local shada_path=~/.local/state/nvim/shada
+  echo "purging ${shada_path} to fix shada errors"
+  rm -rf "${shada_path}"
+}
+
 #parameter handling here
 case "$1" in
 fast-install)
@@ -352,6 +350,9 @@ clean-config)
 config)
   # install configs
   install_configs
+  ;;
+purge-shada)
+  purge_shada
   ;;
 *)
   echo "Usage: $0 {install|fast-install|fast-clean-install|clean-install|config|fast-config|fast-clean-config|clean-config|purge|install-deps}"
