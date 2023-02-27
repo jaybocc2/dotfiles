@@ -52,6 +52,32 @@ function _M.loadpkg(pkg_name)
   return package
 end
 
+--- get os type
+---@return string the os type "osx|linux|other|unknown"
+function _M.get_os_type()
+  local homedir = os.getenv("HOME")
+  local user = os.getenv("USER")
+  local start_i = 0
+  local end_i = 0
+
+  if homedir == nil or user == nil then
+    return "unknown"
+  end
+
+  start_i, end_i = string.find(homedir, "/home/" .. user)
+
+  if start_i >= 0 and end_i > 0 then
+    return "linux"
+  else
+    start_i, end_i = string.find(homedir, "/Users/" .. user)
+    if start_i >= 0 and end_i > 0 then
+      return "osx"
+    else
+      return "other"
+    end
+  end
+end
+
 function _M.check_backspace()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil

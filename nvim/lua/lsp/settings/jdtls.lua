@@ -78,9 +78,18 @@ local opts = {
 }
 
 local function get_jdk_runtimes()
-  local runtimes = {}
   local dir_prefix = "/Library/Java/JavaVirtualMachines/"
   local dir_affix = "/Contents/Home"
+
+  local runtimes = {}
+
+  local os_name = jaylib.get_os_type()
+  if string.lower(os_name) == "osx" then
+    -- do nothing as vars are set correctly
+  elseif os_name == "linux" then
+    dir_prefix = "/usr/lib/jvm/"
+    dir_affix = ""
+  end
 
   if vim.fn.isdirectory(dir_prefix) <= 0 then
     dir_prefix = "/usr/lib/java/"
@@ -92,11 +101,20 @@ local function get_jdk_runtimes()
 
   for value, _ in vim.fs.dir(dir_prefix) do
     local version = value:match(".*-(%d+).")
+    if os_name == "linux" then
+      version = value:match("java-(%d+)-openjdk.-$")
+      if version == nil then
+        vim.notify("os is linux and jdk dir value is " .. value .. " and version was nil")
+        goto continue
+      end
+    end
+
     if version == "8" then
       version = "1.8"
     end
 
     runtimes[version] = dir_prefix .. value .. dir_affix
+    ::continue::
   end
 
   return runtimes
@@ -118,14 +136,18 @@ end
 local function build_cmd()
   local runtimes =  get_jdk_runtimes()
   if runtimes == nil then return {} end
-  -- local java = runtimes["17"] .. "/bin/java"
+
   local jdtls_path = vim.fn.stdpath("data") .. "/mason/packages/jdtls"
   local shared_config_path = ""
-  local os_name = os.execute("uname")
-  if string.lower(os_name) == "darwin" then
+
+  local os_name = jaylib.get_os_type()
+  if string.lower(os_name) == "osx" then
     shared_config_path = jdtls_path .. "/config_mac"
-  else
+  elseif os_name == "linux" then
     shared_config_path = jdtls_path .. "/config_linux"
+  else
+    shared_config_path = jdtls_path .. "/config_windows"
+    return {}
   end
 
   -- local project_name = vim.fn.fnamemodify(root_dir, ":p:h:t")

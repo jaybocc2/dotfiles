@@ -88,6 +88,12 @@ local function contains(t, value)
   return false
 end
 
+local function has_words_before()
+  if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_text(0, line-1, 0, line-1, col, {})[1]:match("^%s*$") == nil
+end
+
 local function format(entry, vim_item)
   local max_width = 0 -- lvim.builtin.cmp.formatting.max_width
   if max_width ~= 0 and #vim_item.abbr > max_width then
@@ -149,6 +155,7 @@ local function setup()
         -- require("copilot_cmp.comparators").prioritize,
     local copilot_comp_prioritize = jaylib.loadpkg("copilot_cmp.comparators")
     if copilot_comp_prioritize == nil then
+      vim.notify("copilot_comp_prioritize is nil")
       return cmp.config.compare.offset(entry1, entry2)
     end
     return copilot_comp_prioritize.prioritize(entry1, entry2)
@@ -158,6 +165,7 @@ local function setup()
     -- require("copilot_cmp.comparators").score,
     local copilot_comp_score = jaylib.loadpkg("copilot_cmp.comparators")
     if copilot_comp_score == nil then
+      vim.notify("copilot_comp_score is nil")
       return cmp.config.compare.offset(entry1, entry2)
     end
     return copilot_comp_score.score(entry1, entry2)
@@ -227,8 +235,13 @@ local function setup()
       ["<CR>"] = cmp.mapping.confirm({ select = false }),
       ["<Right>"] = cmp.mapping.confirm({ select = true }),
       ["<Tab>"] = cmp.mapping(function(fallback)
-        if cmp.visible() then
-          cmp.select_next_item()
+        if cmp.visible() and has_words_before() then
+          local entry = cmp.get_selected_entry()
+          if not entry then
+            cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+          else
+            cmp.confirm()
+          end
         elseif luasnip.jumpable(1) then
           luasnip.jump(1)
         elseif luasnip.expand_or_jumpable() then
@@ -257,7 +270,8 @@ local function setup()
       format = format,
     },
     sources = {
-      custom_sources.copilot,
+      -- custom_sources.copilot,
+      { name = "copilot" },
       { name = "cmp_tabnine" },
       custom_sources.nvim_lsp,
       { name = "path" },
