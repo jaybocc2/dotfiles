@@ -189,6 +189,12 @@ install_neovim() {
   fi
 }
 
+install_zsh() {
+  # install oh-my-zsh
+  export KEEP_ZSHRC="yes"
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+}
+
 install_deps() {
   echo ""
   echo "installing deps. . . ."
@@ -214,6 +220,7 @@ install_deps() {
     fi
   fi
 
+  install_zsh
   install_ghcli
   install_rust
   install_nodenv
