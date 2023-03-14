@@ -1,12 +1,2 @@
 new -d -s sideprojects
-neww -d -n dev -t :1 
-splitw -h -p 50 -t :1 
-neww -d -n dev -t :2 
-splitw -h -p 50 -t :2 
-neww -d -n dev -t :3 
-splitw -h -p 50 -t :3 
-neww -d -n dev -t :4 
-splitw -h -p 50 -t :4 
-neww -d -n dev -t :5 
-splitw -h -p 50 -t :5 
 selectw -t 1

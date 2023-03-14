@@ -1,153 +1,126 @@
 #!/bin/bash
 # install for jaybocc2@'s dotfiles
-source utils.sh
-if [[ -f /etc/os-release ]];then source /etc/os-release; fi
-DOT_FILES=$(git ls-tree @{u}|awk '{print $4}' |egrep -v '(/|LICENSE|README|install.sh)')
-# OS=$(uname |tr '[:upper:]' '[:lower:]') # comes from utils.sh now
-DEB_DEPS="curl exuberant-ctags wget tmux zsh zsh-common vim git xclip zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
+source shlibs/os.sh      # OS && ARCH
+source shlibs/logging.sh # ERROR
+source shlibs/common.sh  # mktmp and rmtmp
+
+git rev-parse --abbrev-ref --symbolic-full-name '@{u}' || {
+  echo "Missing upstream branch -- config install will fail"
+  exit 1
+}
+
+DOT_FILES=$(git ls-tree '@{u}' | awk '{print $4}' | grep -Ev '(/|LICENSE|README|install.sh|shlibs|test.sh|.gitignore|.gitmodules|bashrc|^vim|vimrc|screenrc)')
+DEB_DEPS="curl exuberant-ctags wget tmux zsh zsh-common vim git xclip zlib1g zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
 libncurses5-dev libssl-dev build-essential htop libffi-dev libffi7 xz-utils"
-DEB_BACKPORTS_DEPS=""
-DEB_BACKPORTS_REPO=""
-DEB_TESTING_DEPS=""
-OSX_DEPS="ctags wget neovim tmux zsh vim git hub gh readline xz htop"
+# DEB_BACKPORTS_DEPS=""
+# DEB_BACKPORTS_REPO=""
+# DEB_TESTING_DEPS=""
+OSX_DEPS="ctags wget tmux zsh vim git gh readline xz htop"
 GO_VERSION=1.18.4
-# ARCH=amd64 # comes from utils.sh now
-PY3_VERSION=3.10.0
-NODE_VERSION=16.14.0
-NEOVIM_VERSION="v0.7.0"
+PY3_VERSION=3.11.0
+RUBY_VERSION=3.1.2   # update in nvim/lua/options.lua
+NODE_VERSION=18.12.1 # update in nvim/lua/options.lua
+NEOVIM_VERSION="v0.8.1"
 FLUTTER_VERSION=2.0.2
 FLUTTER_CHANNEL=stable
-GHCLI_VERSION=2.17.0
+GHCLI_VERSION=2.20.2
+NEOVIM_VERSION=v0.8.3
 NEOVIM_PYENV_PACKAGES="pip pynvim flake8 pylint"
 GLOBAL_PYENV_PACKAGES="pip"
-CFLAGS='-O2'
 TFENV_VERSIONS="latest"
-source lsps.sh
 
-# backup dotfiles
-backup_dotfiles() {
-  echo ""
-  echo "backing up existing dotfiles. . . ."
-
-  bdir=$(date +%Y-%m-%d_%H:%M)
-  mkdir -p ~/dotfiles-backup/${bdir}/
-
-  for file in $(echo ${DOT_FILES});do
-    if [[ -e ~/.${file} ]]; then
-      mv ~/.${file} ~/dotfiles-backup/${bdir}/.${file}
-    fi
-  done
-}
-
-install_fonts() {
-  pushd /tmp
-  fontdir=~/.fonts
-  if [[ ${OS} == "darwin" ]];then
-    fontdir=~/Library/Fonts
-  fi
-  mkdir -p ${fontdir}
-  wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Hasklig.zip
-  unzip -o /tmp/Hasklig.zip -d ${fontdir}
-  popd
-}
-
-upstall_repo() {
-  test -d $2 && {
-    echo "Updating ${2} . . ."
-    pushd $2
-    git checkout master
-    git pull --ff-only
-    popd
-  } || {
-    echo "Installing $1 to $2 . . ."
-    git clone $1 $2
-  }
-}
+source shlibs/lsp-deps.sh # source install methods for all LSP's
+source shlibs/fonts.sh    # source install fonts methods
 
 install_pyenv() {
-  upstall_repo https://github.com/pyenv/pyenv.git ~/.pyenv
-  upstall_repo https://github.com/pyenv/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv
+  upstall_repo https://github.com/pyenv/pyenv.git ~/.pyenv master
+  upstall_repo https://github.com/pyenv/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv master
 
-  PYENV_ROOT="${HOME}/.pyenv"
-  PATH=${PYENV_ROOT}/bin:${PATH}
-  eval "$(pyenv init --path)"
-  eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
+  fixenv
 
-  pyenv versions |grep ${PY3_VERSION} || pyenv install ${PY3_VERSION}
-  pyenv versions |grep ${PY2_VERSION} || pyenv install ${PY2_VERSION}
-  pyenv versions |grep 3global || pyenv virtualenv ${PY3_VERSION} 3global
-  pyenv global 3global
-  pyenv versions |grep neovim3 || pyenv virtualenv ${PY3_VERSION} neovim3
+  pyenv versions | grep ${PY3_VERSION} || pyenv install ${PY3_VERSION}
+  pyenv versions | grep ${PY3_VERSION}/envs/3global || pyenv virtualenv-delete -f 3global
+  pyenv versions | grep 3global || pyenv virtualenv ${PY3_VERSION} 3global
+  pyenv global 3global # set 3global to global python version
+  pyenv versions | grep ${PY3_VERSION}/envs/neovim || pyenv virtualenv-delete -f neovim
+  pyenv versions | grep neovim || pyenv virtualenv ${PY3_VERSION} neovim
 
-  for package in $(echo $GLOBAL_PYENV_PACKAGES);do
+  for package in ${GLOBAL_PYENV_PACKAGES}; do
     export PYENV_VERSION='3global'
-    pyenv exec pip list |grep ${package} || pyenv exec pip install ${package}
-    pyenv exec pip list --outdated |grep ${package} && pyenv exec pip install ${package} -U
+    pyenv exec pip list | grep "${package}" || pyenv exec pip install "${package}"
+    pyenv exec pip list --outdated | grep "${package}" && pyenv exec pip install "${package}" -U
   done
 
-  for package in $(echo $NEOVIM_PYENV_PACKAGES);do
-    export PYENV_VERSION='neovim3'
-    pyenv exec pip list |grep ${package} || pyenv exec pip install ${package}
-    pyenv exec pip list --outdated |grep ${package} && pyenv exec pip install ${package} -U
+  for package in ${NEOVIM_PYENV_PACKAGES}; do
+    export PYENV_VERSION='neovim'
+    pyenv exec pip list | grep "${package}" || pyenv exec pip install "${package}"
+    pyenv exec pip list --outdated | grep "${package}" && pyenv exec pip install "${package}" -U
   done
 
   unset PYENV_VERSION
-
 }
 
 install_rbenv() {
-  upstall_repo https://github.com/rbenv/rbenv.git ~/.rbenv
-  upstall_repo https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+  upstall_repo https://github.com/rbenv/rbenv.git ~/.rbenv master
+  upstall_repo https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build master
+
+  fixenv
+
+  rbenv versions | grep ${RUBY_VERSION} || rbenv install ${RUBY_VERSION}
+  rbenv global ${RUBY_VERSION}
+  gem install neovim
 }
 
 install_nodenv() {
-  upstall_repo https://github.com/nodenv/nodenv.git ~/.nodenv
-  upstall_repo https://github.com/nodenv/node-build.git ~/.nodenv/plugins/node-build
-  upstall_repo https://github.com/nodenv/node-build-update-defs.git ~/.nodenv/plugins/node-build-update-defs
+  upstall_repo https://github.com/nodenv/nodenv.git ~/.nodenv master
+  upstall_repo https://github.com/nodenv/node-build.git ~/.nodenv/plugins/node-build master
+  upstall_repo https://github.com/nodenv/node-build-update-defs.git ~/.nodenv/plugins/node-build-update-defs master
 
-  NODENV_ROOT="${HOME}/.nodenv"
-  PATH="${NODENV_ROOT}/bin:${PATH}"
-  eval "$(nodenv init -)"
+  fixenv
 
-  nodenv versions |grep ${NODE_VERSION} || nodenv install ${NODE_VERSION}
+  nodenv versions | grep ${NODE_VERSION} || nodenv install ${NODE_VERSION}
   nodenv global ${NODE_VERSION}
-  npm install -g tern
+  npm install -g neovim
+  # npm install -g tern # not sure what this is for
 }
 
 install_tfenv() {
-  upstall_repo https://github.com/tfutils/tfenv.git ~/.tfenv
+  upstall_repo https://github.com/tfutils/tfenv.git ~/.tfenv master
 
-  TFENV_ROOT="${HOME}/.tfenv"
-  PATH="${TFENV_ROOT}/bin:${PATH}"
+  fixenv
 
   tfenv use latest
-  for v in $(echo ${TFENV_VERSIONS});do
-    tfenv list |grep ${v} || tfenv install ${v}
+  for v in ${TFENV_VERSIONS}; do
+    tfenv list | grep "${v}" || tfenv install "${v}"
   done
 }
 
 install_golang() {
-  GOROOT="${home}/go"
+  GOROOT="${HOME}/go"
 
-  if [ -d ${GOROOT} ]; then
-    if [ "$(${GOROOT}/bin/go version |cut -f3 -d' ')" != "go${GO_VERSION}" ]; then
-      rm -rf ${HOME}/go
+  if [ -d "${GOROOT}" ]; then
+    if [ "$(${GOROOT}/bin/go version | cut -f3 -d' ')" != "go${GO_VERSION}" ]; then
+      rm -rf "${HOME}/go"
     else
       return
     fi
   fi
 
-  curl https://storage.googleapis.com/golang/go${GO_VERSION}.${OS}-$(ARCH).tar.gz \
-    | tar -C ${HOME} -xz
+  curl "https://storage.googleapis.com/golang/go${GO_VERSION}.${OS}-$(ARCH).tar.gz" |
+    tar -C "${HOME}" -xz
+}
+
+install_rust() {
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --profile default -y
+  fixenv
 }
 
 install_flutter() {
   export FLUTTER_PATH=${HOME}/.flutter.d
 
-  if [ -d ${FLUTTER_PATH} ]; then
+  if [ -d "${FLUTTER_PATH}" ]; then
     flutter upgrade --verify-only
-    if [ $? -gt 0 ]; then
+    if ! flutter upgrade --verify-only; then
       flutter channel ${FLUTTER_CHANNEL}
       flutter upgrade
     else
@@ -155,14 +128,14 @@ install_flutter() {
     fi
   fi
 
-  if [ ${OS} == 'darwin' ]; then
+  if [ "${OS}" == 'darwin' ]; then
     FL_OS='macos'
   else
     FL_OS='linux'
   fi
 
   flutter_url="https://storage.googleapis.com/flutter_infra/releases/${FLUTTER_CHANNEL}/${FL_OS}/flutter_${FL_OS}_${FLUTTER_VERSION}-${FLUTTER_CHANNEL}.tar.xz"
-  curl ${flutter_url} |tar x -J -C ${HOME}
+  curl ${flutter_url} | tar x -J -C "${HOME}"
 }
 
 install_ghcli() {
@@ -170,269 +143,226 @@ install_ghcli() {
     return
   fi
 
-  pushd /tmp
-  curl -LO "https://github.com/cli/cli/releases/download/v${GHCLI_VERSION}/gh_${GHCLI_VERSION}_linux_$(ARCH).deb"
-  sudo dpkg -i gh_${GHCLI_VERSION}_linux_$(ARCH).deb
-  rm -rf gh_${GHCLI_VERSION}_linux_$(ARCH).deb
-  popd
+  mktmp
+  curl -LO "https://github.com/cli/cli/releases/download/v${GHCLI_VERSION}/gh_${GHCLI_VERSION}_linux_$(ARCH).deb" || TRACE "ghcli deb download failed"
+  sudo dpkg -i "gh_${GHCLI_VERSION}_linux_$(ARCH).deb" || TRACE "ghcli deb install failed"
+  rmtmp
+}
+
+install_fdfind() {
+  cargo install fd-find
+}
+
+install_ripgrep() {
+  cargo install ripgrep
+}
+
+compile_neovim() {
+  mktmp
+
+  # install nvim build deps
+  sudo apt-get install ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl doxygen git build-essential
+  upstall_repo https://github.com/neovim/neovim.git neovim ${NEOVIM_VERSION}
+  pushd neovim || TRACE "failed to pushd neovim"
+  make CMAKE_BUILD_TYPE=RelWithDebInfo
+  sudo make install
+
+  popd || TRACE "failed to popd"
+  rmtmp
+}
+
+install_neovim() {
+  install_fdfind
+  install_ripgrep
+  install_lsp_binaries
+
+  if [[ "${OS}" == "darwin" ]]; then
+    if which nvim >/dev/null; then
+      brew upgrade neovim
+    else
+      brew install neovim
+    fi
+  else
+    if [ "$(nvim -v | head -n 1)" != "NVIM ${NEOVIM_VERSION}" ]; then
+      compile_neovim
+    fi
+  fi
+}
+
+install_zsh() {
+  # install oh-my-zsh
+  export KEEP_ZSHRC="yes"
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 }
 
 install_deps() {
   echo ""
   echo "installing deps. . . ."
 
-  if [[ "${OS}" == "darwin" ]];then
+  if [[ "${OS}" == "darwin" ]]; then
     xcode-select --install
     # sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /
-    which brew
-    if [ "$?" -gt 0 ]; then
+    # which brew
+    # if [ "$?" -gt 0 ]; then
+    if ! which brew; then
       /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
       eval "$(/opt/homebrew/bin/brew shellenv)"
     else
       brew update
     fi
-    brew install ${OSX_DEPS}
-    brew upgrade ${OSX_DEPS}
-  elif [[ "${OS}" == "linux" ]];then
-    source /etc/*-release
-    if [[ "${ID}" == "debian" ]];then
-      sudo apt-get -t ${VERSION_CODENAME} install ${DEB_DEPS}
-
-      if [ "$(nvim -v|head -n 1)" != "NVIM v0.8.0" ]; then
-        compile_neovim
-      fi
-      # sudo apt-get -t ${VERSION_CODENAME}-backports install ${DEB_BACKPORTS_DEPS}
-      # sudo apt-get -t testing install ${DEB_TESTING_DEPS}
-      # pushd /tmp
-      # curl -LO "https://github.com/neovim/neovim/releases/download/${NEOVIM_VERSION}/nvim-linux64.deb"
-      # sudo dpkg -i nvim-linux64.deb
-
+    brew install "${OSX_DEPS}"
+    brew upgrade "${OSX_DEPS}"
+  elif [[ "${OS}" == "linux" ]]; then
+    if [ "${ID}" == "ubuntu" ] || [ "${ID}" == "debian" ] || [ "${ID}" == "raspbian" ] || [ "${ID}" == "armbian" ]; then
+      for PKG in ${DEB_DEPS}; do
+        sudo apt-get -t "${VERSION_CODENAME}" install "${PKG}" -f -y
+      done
     fi
   fi
 
+  install_zsh
   install_ghcli
-  install_golang
+  install_rust
+  install_nodenv
   install_pyenv
   install_rbenv
-  install_nodenv
   install_tfenv
-  install_flutter
-}
+  # install_flutter # disable until i ever want to use flutter again
+  # install_golang # disable until i fix go installation - maybe consider goenv
 
-compile_neovim() {
-  pushd /tmp
-  # install fdfind
-  wget https://github.com/sharkdp/fd/releases/download/v8.5.2/fd-v8.5.2-arm-unknown-linux-musleabihf.tar.gz
-  tar xvzf fd-v8.5.2-arm-unknown-linux-musleabihf.tar.gz
-  mv fd-v8.5.2-arm-unknown-linux-musleabihf/fd ${HOME}/bin/
-  rm -rf fd-v8.5.2*
-
-  # install ripgrep
-  sudo apt-get -t testing install ripgrep # install ripgrep v13.0.0-4 from testing
-
-  # install nvim build deps
-  sudo apt-get install ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl doxygen git build-essential
-  git clone https://github.com/neovim/neovim.git
-  pushd neovim
-  git checkout release-0.8
-  make CMAKE_BUILD_TYPE=RelWithDebInfo
-  sudo make install
-
-  popd;popd
+  install_neovim
 }
 
 make_dirs() {
   echo ""
   echo "creating directories. . . ."
 
-  for dir in {.ssh/keys,.tmux,.zsh,.vim/autoload,.local/share/nvim,.config,bin}; do
-    echo creating directory ~/${dir}
-    mkdir -p ~/${dir}
+  for dir in {.ssh/keys,.config}; do
+    echo creating directory "${HOME}/${dir}"
+    mkdir -p "${HOME}/${dir}"
   done
 
   chmod 700 ~/.ssh
 }
 
 install_configs() {
-  echo ""
-  echo "installing configurations. . . ."
-
-  for file in $(echo ${DOT_FILES});do
-    if [[ -f ${file} ]];then
-      cp ${file} ~/.${file}
-    elif [[ -d ${file} ]];then
-      prefix='.'
-      if [[ ${file} = "bin" ]];then
-        prefix=''
-      fi
-      if [[ ! -d ~/${prefix}${file} ]];then
-        mkdir -p ~/${prefix}${file}
-      fi
-      for sub_file in $(ls -1 ${file});do
-        cp -r ${file}/${sub_file} ~/${prefix}${file}/${sub_file}
-      done
-    fi
-  done
-
-  ln -s ~/.nvim ~/.config/nvim
-  # ln -s ~/.vimrc ~/.config/nvim/init.vim
-  # ln -s ~/.vim ~/.local/share/nvim/site
-  # ln -s ~/.vim/coc-settings.json ~/.config/nvim/coc-settings.json
-}
-
-setup_env() {
-  export PYENV_ROOT="${HOME}/.pyenv"
-  export PATH=${PYENV_ROOT}/bin:${PATH}
-  eval "$(pyenv init -)"
-
-  export NODENV_ROOT="${HOME}/.nodenv"
-  export PATH=${NODENV_ROOT}/bin:${PATH}
-  eval "$(nodenv init -)"
-
-  export GOROOT=${HOME}/go
-  export GOPATH=${HOME}/go-workspace
-  mkdir -p ${GOPATH}
-  export PATH=${PATH}:${GOPATH}/bin:${GOROOT}/bin
-}
-
-install_nvim() {
-  setup_env
-  # PYENV_VERSION=neovim3 nvim --headless -u NONE -c 'lua require("packages").bootstrap()'
-  echo ""
-}
-
-install_vim_plugins() {
-  echo ""
-  echo "installing vim plugins. . . ."
-
-  curl -fLo ~/.vim/autoload/plug.vim \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-
-  PYENV_ROOT="${HOME}/.pyenv"
-  PATH=${PYENV_ROOT}/bin:${PATH}
-  eval "$(pyenv init -)"
-
-  NODENV_ROOT="${HOME}/.nodenv"
-  PATH=${NODENV_ROOT}/bin:${PATH}
-  eval "$(nodenv init -)"
-
-  export GOROOT=${HOME}/go
-  export GOPATH=${HOME}/go-workspace
-  mkdir -p ${GOPATH}
-  export PATH=${PATH}:${GOPATH}/bin:${GOROOT}/bin
-  
-  nvim \
-    +PlugInstall \
-    +qall
-  nvim \
-    +PlugUpgrade \
-    +qall
-  nvim \
-    +PlugUpdate \
-    +qall
-  nvim \
-    +GoInstallBinaries \
-    +qall
-  nvim \
-    +GoUpdateBinaries \
-    +qall
-  nvim \
-    +'CocInstall -sync coc-flutter' \
-    +qall
-  nvim \
-    +'CocInstall -sync coc-pyright coc-snippets coc-go coc-git coc-lua' \
-    +qall
-}
-
-install() {
-  # echo "  ++  NOTICE  ++"
-  # echo "Please install ctags, and go.  Also be sure to run :GoInstallBinaries in vim on first run, or some functionality will be missing."
-  # echo "Press [Enter] to continue..."
-  # read
-
-  if [[ "X${FAST}" != "Xfast" ]]; then
-    # install_dependencies
-    install_deps
-
-    install_fonts
-
-    # install_lsps
-  fi
-
-  # backup existing dotfiles
-  backup_dotfiles
-
   # remove conflicting dotfiles
-  purge_all
+  purge_dotfiles
 
   # make directories
   make_dirs
 
-  # install configs
-  install_configs
+  echo ""
+  echo "installing configurations. . . ."
 
-  # install vim plugins
-  # install_vim_plugins
-  
-  # install nvim
-  install_nvim
+  for file in ${DOT_FILES}; do
+    if [ -f "${file}" ]; then
+      echo "linking ~/.${file}"
+      ln -s "$(pwd)/${file}" "${HOME}/.${file}"
+    elif [ -d "${file}" ]; then
+      prefix='.'
+      if [[ "${file}" = "bin" ]]; then
+        prefix=''
+      fi
+      if [ ! -d "${HOME}/${prefix}${file}" ]; then
+        echo "linking directory ~/${prefix}${file}"
+        ln -s "$(pwd)/${file}" "${HOME}/${prefix}${file}"
+        if [ "${file}" == "nvim" ]; then
+          echo "linking directory ${HOME}/.config/${prefix}${file}"
+          ln -s "$(pwd)/${file}" "${HOME}/.config/nvim"
+        fi
+      fi
+    fi
+  done
 }
 
-purge_all() {
+install() {
+  install_deps
+
+  install_fonts
+
+  install_configs
+}
+
+purge_dotfiles() {
   echo "  ++  NOTICE  ++"
-  echo "This will potentially remove all dotfiles checked into this repository from your home dir."
+  echo "This will remove all matching dotfiles checked into this repository from your home dir."
   if [[ "X${FAST}" != "Xfast" ]]; then
     echo "Press [Enter] to continue..."
     read
   fi
 
-  echo -e "\nremoving dotfiles"
-  for file in $(echo ${DOT_FILES});do
-    if [[ -e ~/.${file} ]] || [[ -h ~/.${file} ]]; then
-      rm -rf ~/.${file}
+  echo -e "\nlooking for  $(echo "${DOT_FILES}" | wc -w) dotfiles to uninstall ..."
+  for file in ${DOT_FILES}; do
+    rmlink "${HOME}/.${file}"
+    if [ "${file}" == "nvim" ]; then
+      rmlink ~/.config/nvim
     fi
   done
 
   if [[ "X${CLEAN}" == "Xclean" ]]; then
     echo -e "\ncleaning nvim"
     rm -rf ~/.local/share/nvim/site
-    rm -rf ~/.config/nvim
   fi
+}
+
+purge_shada() {
+  # https://github.com/neovim/neovim/issues/6875
+  local shada_path=~/.local/state/nvim/shada
+  echo "purging ${shada_path} to fix shada errors"
+  rm -rf "${shada_path}"
 }
 
 #parameter handling here
 case "$1" in
-  fast)
-    export FAST=${FAST:="fast"}
-    install
-    ;;
-  fastclean)
-    export CLEAN=${CLEAN:="clean"}
-    export FAST=${FAST:="fast"}
-    install
-    ;;
-  install)
-    export CLEAN=${CLEAN:="clean"}
-    install
-    ;;
-  plugins)
-    install_vim_plugins
-    ;;
-  purge)
-    ;;
-  install_deps)
-    install_deps
-    install_fonts
-    # install_lsps
-    ;;
-  config)
-    install_configs
-    ;;
-  nvim)
-    install_nvim
-    ;;
-  *)
-    echo "Usage: $0 {install|purge}"
-    exit 1
-    ;;
+fast-install)
+  export FAST=${FAST:="fast"}
+  install
+  ;;
+fast-clean-install)
+  export CLEAN=${CLEAN:="clean"}
+  export FAST=${FAST:="fast"}
+  install
+  ;;
+clean-install)
+  export CLEAN=${CLEAN:="clean"}
+  install
+  ;;
+install)
+  install
+  ;;
+purge)
+  purge_dotfiles
+  ;;
+install-deps)
+  install_deps
+  install_fonts
+  ;;
+fast-config)
+  export FAST=${FAST:="fast"}
+  # install configs
+  install_configs
+  ;;
+fast-clean-config)
+  export CLEAN=${CLEAN:="clean"}
+  export FAST=${FAST:="fast"}
+  # install configs
+  install_configs
+  ;;
+clean-config)
+  export CLEAN=${CLEAN:="clean"}
+  # install configs
+  install_configs
+  ;;
+config)
+  # install configs
+  install_configs
+  ;;
+purge-shada)
+  purge_shada
+  ;;
+*)
+  echo "Usage: $0 {install|fast-install|fast-clean-install|clean-install|config|fast-config|fast-clean-config|clean-config|purge|install-deps}"
+  exit 1
+  ;;
 esac

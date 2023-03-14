@@ -1,41 +1,119 @@
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
+
+# Path to your oh-my-zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
+
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+# ZSH_THEME="robbyrussell"
+ZSH_THEME=ys
+
+# Set list of themes to pick from when loading at random
+# Setting this variable when ZSH_THEME=random will cause zsh to load
+# a theme from this variable instead of looking in $ZSH/themes/
+# If set to an empty array, this variable will have no effect.
+# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+
+# Uncomment the following line to use case-sensitive completion.
+# CASE_SENSITIVE="true"
+
+# Uncomment the following line to use hyphen-insensitive completion.
+# Case-sensitive completion must be off. _ and - will be interchangeable.
+# HYPHEN_INSENSITIVE="true"
+
+# Uncomment one of the following lines to change the auto-update behavior
+# zstyle ':omz:update' mode disabled  # disable automatic updates
+# zstyle ':omz:update' mode auto      # update automatically without asking
+# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
+
+# Uncomment the following line to change how often to auto-update (in days).
+# zstyle ':omz:update' frequency 13
+
+# Uncomment the following line if pasting URLs and other text is messed up.
+# DISABLE_MAGIC_FUNCTIONS="true"
+
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
+
+# Uncomment the following line to disable auto-setting terminal title.
+# DISABLE_AUTO_TITLE="true"
+
+# Uncomment the following line to enable command auto-correction.
+ENABLE_CORRECTION="true"
+
+# Uncomment the following line to display red dots whilst waiting for completion.
+# You can also set it to another string to have that shown instead of the default red dots.
+# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
+# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
+# COMPLETION_WAITING_DOTS="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# You can set one of the optional three formats:
+# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# or set a custom format using the strftime function format specifications,
+# see 'man strftime' for details.
+# HIST_STAMPS="mm/dd/yyyy"
+
+# Would you like to use another custom folder than $ZSH/custom?
+ZSH_CUSTOM=${HOME}/.zsh
+
+# Which plugins would you like to load?
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(
+  git
+  vi-mode
+)
+
+source $ZSH/oh-my-zsh.sh
+
+# User configuration
+
+# export MANPATH="/usr/local/man:$MANPATH"
+
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
+
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
+
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+
+
 # -----------------------------------------------
 # Set up the Environment
 # -----------------------------------------------
-source ~/.zsh/env.zsh
-source ~/.zsh/colors.zsh
-source ~/.zsh/functions.zsh
-
 
 EDITOR="nvim"
 PAGER=less
 RSYNC_RSH=/usr/bin/ssh
 FIGNORE='.o:.out:~'
 DISPLAY=:0.0
-
-
-ARDUINO_DIR=/usr/share/arduino
-ARDMK_DIR=/usr/local
-AVR_TOOLS_DIR=/usr
-
-
-# colored filename/directory completion
-# Attribute codes:
-# 00 none 01 bold 04 underscore 05 blink 07 reverse 08 concealed
-# Text color codes:
-# 30 black 31 red 32 green 33 yellow 34 blue 35 magenta 36 cyan 37 white
-# Background color codes:
-# 40 black 41 red 42 green 43 yellow 44 blue 45 magenta 46 cyan 47 white
-LS_COLORS='no=0:fi=0:di=1;34:ln=1;36:pi=40;33:so=1;35:do=1;35:bd=40;33;1:cd=40;33;1:or=40;31;1:ex=1;32:*.tar=1;31:*.tgz=1;31:*.arj=1;31:*.taz=1;31:*.lzh=1;31:*.zip=1;31:*.rar=1;31:*.z=1;31:*.Z=1;31:*.gz=1;31:*.bz2=1;31:*.tbz2=1;31:*.deb=1;31:*.pdf=1;31:*.jpg=1;35:*.jpeg=1;35:*.gif=1;35:*.bmp=1;35:*.pbm=1;35:*.pgm=1;35:*.ppm=1;35:*.pnm=1;35:*.tga=1;35:*.xbm=1;35:*.xpm=1;35:*.tif=1;35:*.tiff=1;35:*.png=1;35:*.mpg=1;35:*.mpeg=1;35:*.mov=1;35:*.avi=1;35:*.wmv=1;35:*.ogg=1;35:*.mp3=1;35:*.mpc=1;35:*.wav=1;35:*.au=1;35:*.swp=1;30:*.pl=36:*.c=36:*.cc=36:*.h=36:*.core=1;33;41:*.gpg=1;33:'
-
-ZLS_COLORS="$LS_COLORS" COLORTERM=truecolor
-case $TERM in
-  iterm            |\
-  linux-truecolor  |\
-  screen-truecolor |\
-  tmux-truecolor   |\
-  xterm-truecolor  )    export COLORTERM=truecolor ;;
-  vte*)
-esac
 
 # history saves 50,000 in it if we want to open it
 # only the last 1000 are part of backward searching
@@ -57,150 +135,11 @@ autoload -U zcalc
 
 export TERM EDITOR PAGER RSYNC_RSH CVSROOT FIGNORE DISPLAY NNTPSERVER COLORTERM PATH HISTFILE HISTSIZE SAVEHIST
 
-# -----------------------------------------------
-# Prompt Setup
-# -----------------------------------------------
-setopt promptsubst
-autoload -U promptinit && promptinit
-
-# source airline style zsh prompt
-source ~/.zsh/prompt.zsh
-
-autoload -U zrecompile
-
-# case-insensitive tab completion for filenames (useful on Mac OS X)
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
-
-zstyle ':completion:*' verbose yes
-zstyle ':completion:*:descriptions' format '-- %B%d%b --'
-zstyle ':completion:*:messages' format '%d'
-zstyle ':completion:*:warnings' format 'No matches for: %d'
-zstyle ':completion:*' group-name ''
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
-
-# -----------------------------------------------
-# Setup
-# -----------------------------------------------
-setopt \
-    no_beep \
-    correct \
-    auto_list \
-    complete_in_word \
-    auto_pushd \
-    pushd_ignoredups \
-    complete_aliases \
-    extended_glob \
-    zle
-
-# -----------------------------------------------
-# Keybindings
-# -----------------------------------------------
-[[ -n "${key[Delete]}" ]] && bindkey "${key[Delete]}" delete-char
-
-bindkey "\e[1~" beginning-of-line
-bindkey "\e[4~" end-of-line
-bindkey "\e[5~" beginning-of-history
-bindkey "\e[6~" end-of-history
-bindkey "\e[3~" delete-char
-bindkey "\e[2~" quoted-insert
-bindkey "\e[5C" forward-word
-bindkey "\eOc" emacs-forward-word
-bindkey "\e[5D" backward-word
-bindkey "\eOd" emacs-backward-word
-bindkey "\ee[C" forward-word
-bindkey "\ee[D" backward-word
-bindkey "^H" backward-delete-word
-# for rxvt
-bindkey "\e[8~" end-of-line
-bindkey "\e[7~" beginning-of-line
-# for non RH/Debian xterm, can't hurt for RH/DEbian xterm
-bindkey "\eOH" beginning-of-line
-bindkey "\eOF" end-of-line
-# for freebsd console
-bindkey "\e[H" beginning-of-line
-bindkey "\e[F" end-of-line
-# completion in the middle of a line
-bindkey '^i' expand-or-complete-prefix
-bindkey '^R' history-incremental-search-backward
-# complete on a space character
-bindkey ' ' magic-space
-
-# allow editing of the text on the current command line with v (cmd mode)
-autoload -U edit-command-line
-zle -N edit-command-line
-bindkey -M vicmd v edit-command-line
-
-# map jj as the esc key for vim mode
-bindkey "jj" vi-cmd-mode
-
-# auto pushd setopt autocd autopushd pushdignoredups
-bindkey -v
-
-# -----------------------------------------------
-# SSH AGENT SETUP
-# -----------------------------------------------
-HOSTNAME=$(hostname -s)
-SSHAGENT=/usr/bin/ssh-agent
-SSHAGENTARGS=""
-
-SSHEC=$(ps ax|grep -c "[s]sh-agent")
-
-if [ ${SSHEC} -eq 0 ]; then
-  eval $(${SSHAGENT} ${SSHAGENTARGS} > ~/.ssh/agent.${HOSTNAME}.${USER})
-  source ~/.ssh/agent.${HOSTNAME}.${USER}
-  for i in $(ls ~/.ssh/keys/ |grep -v '.pub'); do
-    ssh-add ~/.ssh/keys/${i}
-  done
-  # ssh-add -s libeToken.so.8 -t 28800
-else
-  source ~/.ssh/agent.${HOSTNAME}.${USER}
-fi
-
-# -----------------------------------------------
-# Shell Aliases
-# -----------------------------------------------
-
-## Command Aliases
-alias x=exit
-alias c=clear
-alias b=byobu
-alias s=screen
-alias r='screen -R'
-alias ls='ls --color=auto -F'
-alias ll='ls -lAFh --color=auto'
-alias ld='ls -ltr --color=auto'
-alias sls='screen -ls'
-alias zrc='vim ~/.zshrc'
-alias dv='dirs -v'
-alias hist='history -rd'
-alias zc='zcalc'
-alias grep='grep --color'
-# alias bjs='ssh-add -s libeToken.so.8 -t 28800'
-alias ka='pkill ssh-agent'
-alias fa='source ~/.zshrc'
-alias fnv="nvimvenv --headless -u NONE -c 'lua require(\"bootstrap\").bootstrap_paq()'"
-alias tmuxmain='tmux -2 attach -t main'
-alias tmuxside='tmux -2 attach -t sideprojects'
-alias gows="cd ${GOPATH}/src/github.com/jaybocc2"
-alias vim="nvimvenv"
-alias nvim="nvimvenv"
-alias vi='vim'
-# eval "$(hub alias -s)"
-
-## Pipe Aliases (Global)
-#alias -g L='|less'
-#alias -g G='|grep'
-#alias -g T='|tail'
-#alias -g H='|head'
-#alias -g W='|wc -l'
-#alias -g S='|sort'
-
-# directory aliases
-# use like: ls ~src OR ~src OR du -h ~src
-# src=~/src
 
 if [ -e ~/.localized.zsh ]; then
   source ~/.localized.zsh
 fi
 
-cd
+if [ "$(pwd)X" = "/X" ]; then
+  cd "${HOME}"
+fi
