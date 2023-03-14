@@ -1,5 +1,5 @@
 check_in_path() {
-  test "$(echo ${PATH} |grep -o $1)" != $1 
+  test "$(echo ${PATH} |grep -o $1)" = $1 
 }
 
 check_if_dir_exists() {
@@ -68,9 +68,13 @@ if check_if_dir_exists ${PYENV_ROOT}; then
   fi
 
   if ! check_in_path "${PYENV_ROOT}/shims"; then
-    eval "$(pyenv init --path)"
-    eval "$(pyenv init -)"
-    eval "$(pyenv virtualenv-init -)"
+    # eval "$(pyenv init --path)"
+    # eval "$(pyenv init -)"
+    export PYENV_SHELL=zsh
+    source '/Users/jay/.pyenv/libexec/../completions/pyenv.zsh'
+    # eval "$(pyenv virtualenv-init -)"
+    export PYENV_VIRTUALENV_INIT=1;
+
   fi
 fi
 

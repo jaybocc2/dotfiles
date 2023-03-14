@@ -139,3 +139,7 @@ export TERM EDITOR PAGER RSYNC_RSH CVSROOT FIGNORE DISPLAY NNTPSERVER COLORTERM 
 if [ -e ~/.localized.zsh ]; then
   source ~/.localized.zsh
 fi
+
+if [ "$(pwd)X" = "/X" ]; then
+  cd "${HOME}"
+fi

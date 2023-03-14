@@ -3,6 +3,7 @@ local opts = {
     schemaStore = {
       enable = true,
     },
+    keyOrdering = false,
   },
 }
 

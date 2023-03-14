@@ -66,11 +66,11 @@ function _M.get_os_type()
 
   start_i, end_i = string.find(homedir, "/home/" .. user)
 
-  if start_i >= 0 and end_i > 0 then
+  if start_i ~= nil and end_i ~= nil then
     return "linux"
   else
     start_i, end_i = string.find(homedir, "/Users/" .. user)
-    if start_i >= 0 and end_i > 0 then
+    if start_i ~= nil and end_i ~= nil then
       return "osx"
     else
       return "other"

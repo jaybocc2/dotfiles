@@ -10,5 +10,5 @@ tmux_setup () {
 
 if [ "${TMUX}" != "X" ]; then
   tmux_setup main ~/.tmux/$(uname).init
-  tmux_setup sideprojects ~/.tmux/$(uname).init
+  tmux_setup sideprojects ~/.tmux/sideprojects.init
 fi
