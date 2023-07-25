@@ -32,6 +32,12 @@ TFENV_VERSIONS="latest"
 source shlibs/lsp-deps.sh # source install methods for all LSP's
 source shlibs/fonts.sh    # source install fonts methods
 
+install_goenv() {
+  upstall_repo https://github.com/syndbg/goenv ~/.goenv master
+
+  fixenv
+}
+
 install_pyenv() {
   upstall_repo https://github.com/pyenv/pyenv.git ~/.pyenv master
   upstall_repo https://github.com/pyenv/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv master
@@ -93,21 +99,6 @@ install_tfenv() {
   for v in ${TFENV_VERSIONS}; do
     tfenv list | grep "${v}" || tfenv install "${v}"
   done
-}
-
-install_golang() {
-  GOROOT="${HOME}/go"
-
-  if [ -d "${GOROOT}" ]; then
-    if [ "$(${GOROOT}/bin/go version | cut -f3 -d' ')" != "go${GO_VERSION}" ]; then
-      rm -rf "${HOME}/go"
-    else
-      return
-    fi
-  fi
-
-  curl "https://storage.googleapis.com/golang/go${GO_VERSION}.${OS}-$(ARCH).tar.gz" |
-    tar -C "${HOME}" -xz
 }
 
 install_rust() {
@@ -227,8 +218,8 @@ install_deps() {
   install_pyenv
   install_rbenv
   install_tfenv
+  install_goenv
   # install_flutter # disable until i ever want to use flutter again
-  # install_golang # disable until i fix go installation - maybe consider goenv
 
   install_neovim
 }
@@ -277,11 +268,11 @@ install_configs() {
 }
 
 install() {
-  install_deps
+  install_configs
 
   install_fonts
 
-  install_configs
+  install_deps
 }
 
 purge_dotfiles() {

@@ -1,9 +1,29 @@
+#!/bin/zsh
+
 check_in_path() {
   test "$(echo ${PATH} |grep -o $1)" = $1 
 }
 
 check_if_dir_exists() {
   test -d $1
+}
+
+check_add_langenv() {
+  local envbin=${HOME}/.$1/bin
+  if [ ! -e ${envbin} ];then
+    return false
+  fi
+
+  if ! command -v $1 >/dev/null; then
+    export PATH="${envbin}:${PATH}"
+  fi
+
+  return true
+}
+
+check_shims() {
+  local shimroot=${HOME}/.$1
+  check_in_path "${shimroot}/shims"
 }
 
 # -----------------------------------------------
@@ -17,12 +37,13 @@ export ANDROID_HOME="${HOME}/Android"
 export ANDROID_PATH="${HOME}/android-studio"
 export ANDROID_SDK_ROOT="${ANDROID_HOME}/Sdk"
 export FLUTTER_PATH="${HOME}/flutter"
-export GOPATH=${HOME}/go-workspace
-export GOROOT=${HOME}/go
-export NODENV_ROOT="${HOME}/.nodenv"
-export PYENV_ROOT="${HOME}/.pyenv"
-export RBENV_ROOT="${HOME}/.rbenv"
-export TFENV_ROOT="${HOME}/.tfenv"
+# export GOPATH=${HOME}/go-workspace
+# export GOROOT=${HOME}/go
+# export GOENV_ROOT="${HOME}/.goenv"
+# export NODENV_ROOT="${HOME}/.nodenv"
+# export PYENV_ROOT="${HOME}/.pyenv"
+# export RBENV_ROOT="${HOME}/.rbenv"
+# export TFENV_ROOT="${HOME}/.tfenv"
 export HOME_BIN="${HOME}/bin"
 export HOMEBREW_BIN="/opt/homebrew/bin"
 
@@ -44,56 +65,29 @@ if check_if_dir_exists ${HOMEBREW_BIN}; then
 fi
 
 # golang
-if [ -e ${GOROOT}/bin -a -e ${GOPATH}/bin ];then
-  if ! check_in_path "${GOPATH}/bin:${GOROOT}/bin"; then
-    export PATH=${GOPATH}/bin:${GOROOT}/bin:${PATH}
-  fi
+if check_add_langenv goenv; then
+  check_shims goenv || eval "$(goenv init -)"
 fi
 
 # ruby / rbenv
-if check_if_dir_exists ${RBENV_ROOT}; then
-  if ! check_in_path "${RBENV_ROOT}/bin";then
-    export PATH=${RBENV_ROOT}/bin:${PATH}
-  fi
-
-  if ! check_in_path "${RBENV_ROOT}/shims";then
-    eval "$(rbenv init -)"
-  fi
+if check_add_langenv rbenv; then
+  check_shims rbenv || eval "$(rbenv init -)"
 fi
 
 # python / pyenv / pyenv-virtualenv
-if check_if_dir_exists ${PYENV_ROOT}; then
-  if ! check_in_path "${PYENV_ROOT}/bin"; then
-    export PATH=${PYENV_ROOT}/bin:${PATH}
-  fi
-
-  if ! check_in_path "${PYENV_ROOT}/shims"; then
-    # eval "$(pyenv init --path)"
-    # eval "$(pyenv init -)"
-    export PYENV_SHELL=zsh
-    source '/Users/jay/.pyenv/libexec/../completions/pyenv.zsh'
-    # eval "$(pyenv virtualenv-init -)"
-    export PYENV_VIRTUALENV_INIT=1;
-
-  fi
+if check_add_langenv pyenv; then
+  check_shims pyenv || eval "$(pyenv init -)"
+  check_shims "pyenv/plugins/pyenv-virtualenv" || eval "$(pyenv virtualenv-init -)"
 fi
 
 # node / nodenv
-if check_if_dir_exists ${NODENV_ROOT}; then
-  if ! check_in_path "${NODENV_ROOT}/bin"; then
-    export PATH=${NODENV_ROOT}/bin:${PATH}
-  fi
-
-  if ! check_in_path "${NODENV_ROOT}/shims"; then
-    eval "$(nodenv init -)"
-  fi
+if check_add_langenv nodenv; then
+  check_shims nodenv || eval "$(nodenv init -)"
 fi
 
 # terraform / tfenv
-if check_if_dir_exists ${TFENV_ROOT}; then
-  if ! check_in_path "${TFENV_ROOT}/bin"; then
-    export PATH=${TFENV_ROOT}/bin:${PATH}
-  fi
+if check_add_langenv tfenv; then
+  check_shims tfenv || eval "$(tfenv init -)"
 fi
 
 # okta aws cli wrapper

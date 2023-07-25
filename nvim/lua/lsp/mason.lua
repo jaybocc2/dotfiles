@@ -2,6 +2,7 @@ local icons = require("icons")
 -- install list for lsp for mason
 local lsp_servers = {
   "bashls", -- bash
+  "gopls", -- golang
   "gradle_ls", -- gradle
   "groovyls", -- groovy
   "jdtls", -- java
@@ -126,6 +127,11 @@ local function setup()
 
     if server == "pyright" then
       local server_opts = require("lsp.settings.pyright")
+      opts = vim.tbl_deep_extend("force", server_opts, opts)
+    end
+
+    if server == "gopls" then
+      local server_opts = require("lsp.settings.gopls")
       opts = vim.tbl_deep_extend("force", server_opts, opts)
     end
 
