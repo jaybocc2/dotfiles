@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+
 tmux_setup () {
   if ! tmux has -t $1; then
     echo "Initializing $1 session with $2"
