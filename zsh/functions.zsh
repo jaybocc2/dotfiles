@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 tmux_load_avg () {
   cat /proc/loadavg || uptime |awk '{print $10, $11, $12}'

@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 # install for jaybocc2@'s dotfiles
 source shlibs/os.sh      # OS && ARCH
 source shlibs/logging.sh # ERROR
@@ -10,7 +11,7 @@ git rev-parse --abbrev-ref --symbolic-full-name '@{u}' || {
 }
 
 DOT_FILES=$(git ls-tree '@{u}' | awk '{print $4}' | grep -Ev '(/|LICENSE|README|install.sh|shlibs|test.sh|.gitignore|.gitmodules|bashrc|^vim|vimrc|screenrc)')
-DEB_DEPS="curl exuberant-ctags wget tmux zsh zsh-common vim git xclip zlib1g zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
+DEB_DEPS="zip unzip curl exuberant-ctags wget tmux zsh zsh-common vim git xclip zlib1g zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
 libncurses5-dev libssl-dev build-essential htop libffi-dev libffi7 xz-utils"
 # DEB_BACKPORTS_DEPS=""
 # DEB_BACKPORTS_REPO=""
@@ -24,7 +25,7 @@ NEOVIM_VERSION="v0.8.1"
 FLUTTER_VERSION=2.0.2
 FLUTTER_CHANNEL=stable
 GHCLI_VERSION=2.20.2
-NEOVIM_VERSION=v0.8.3
+NEOVIM_VERSION=v0.9.4
 NEOVIM_PYENV_PACKAGES="pip pynvim flake8 pylint"
 GLOBAL_PYENV_PACKAGES="pip"
 TFENV_VERSIONS="latest"
@@ -306,54 +307,54 @@ purge_shada() {
 
 #parameter handling here
 case "$1" in
-fast-install)
-  export FAST=${FAST:="fast"}
-  install
-  ;;
-fast-clean-install)
-  export CLEAN=${CLEAN:="clean"}
-  export FAST=${FAST:="fast"}
-  install
-  ;;
-clean-install)
-  export CLEAN=${CLEAN:="clean"}
-  install
-  ;;
-install)
-  install
-  ;;
-purge)
-  purge_dotfiles
-  ;;
-install-deps)
-  install_deps
-  install_fonts
-  ;;
-fast-config)
-  export FAST=${FAST:="fast"}
-  # install configs
-  install_configs
-  ;;
-fast-clean-config)
-  export CLEAN=${CLEAN:="clean"}
-  export FAST=${FAST:="fast"}
-  # install configs
-  install_configs
-  ;;
-clean-config)
-  export CLEAN=${CLEAN:="clean"}
-  # install configs
-  install_configs
-  ;;
-config)
-  # install configs
-  install_configs
-  ;;
-purge-shada)
-  purge_shada
-  ;;
-*)
-  echo "Usage: $0 {install|fast-install|fast-clean-install|clean-install|config|fast-config|fast-clean-config|clean-config|purge|install-deps}"
-  exit 1
-  ;;
+  fast-install)
+    export FAST=${FAST:="fast"}
+    install
+    ;;
+  fast-clean-install)
+    export CLEAN=${CLEAN:="clean"}
+    export FAST=${FAST:="fast"}
+    install
+    ;;
+  clean-install)
+    export CLEAN=${CLEAN:="clean"}
+    install
+    ;;
+  install)
+    install
+    ;;
+  purge)
+    purge_dotfiles
+    ;;
+  install-deps)
+    install_deps
+    install_fonts
+    ;;
+  fast-config)
+    export FAST=${FAST:="fast"}
+    # install configs
+    install_configs
+    ;;
+  fast-clean-config)
+    export CLEAN=${CLEAN:="clean"}
+    export FAST=${FAST:="fast"}
+    # install configs
+    install_configs
+    ;;
+  clean-config)
+    export CLEAN=${CLEAN:="clean"}
+    # install configs
+    install_configs
+    ;;
+  config)
+    # install configs
+    install_configs
+    ;;
+  purge-shada)
+    purge_shada
+    ;;
+  *)
+    echo "Usage: $0 {install|fast-install|fast-clean-install|clean-install|config|fast-config|fast-clean-config|clean-config|purge|install-deps}"
+    exit 1
+    ;;
 esac
