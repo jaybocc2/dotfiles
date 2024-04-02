@@ -11,6 +11,7 @@ return {
         -- "groovyls",
         -- "jsonls",
         -- "lua_ls",
+        "markdownlint",
         "marksman",
         "misspell",
         -- "prosemd_lsp",
