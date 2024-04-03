@@ -18,14 +18,14 @@ libncurses5-dev libssl-dev build-essential htop libffi-dev libffi7 xz-utils"
 # DEB_TESTING_DEPS=""
 OSX_DEPS="ctags wget tmux zsh vim git gh readline xz htop"
 GO_VERSION=1.18.4
-PY3_VERSION=3.11.0
+PY3_VERSION=3.12.0
 RUBY_VERSION=3.1.2   # update in nvim/lua/options.lua
 NODE_VERSION=18.12.1 # update in nvim/lua/options.lua
 NEOVIM_VERSION="v0.8.1"
 FLUTTER_VERSION=2.0.2
 FLUTTER_CHANNEL=stable
 GHCLI_VERSION=2.20.2
-NEOVIM_VERSION=v0.9.4
+NEOVIM_VERSION=v0.9.5
 NEOVIM_PYENV_PACKAGES="pip pynvim flake8 pylint"
 GLOBAL_PYENV_PACKAGES="pip"
 TFENV_VERSIONS="latest"
