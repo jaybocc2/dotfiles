@@ -1,3 +1,0 @@
-new -d -s main
-neww -d -n htop -t :10 "htop"
-selectw -t 1

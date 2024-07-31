@@ -17,3 +17,20 @@ nvimvenv () {
     command nvim $@
   fi
 }
+
+tmuxsession () {
+  name='main'
+  if [ -n "${1}" ]; then
+    name=${1}
+  fi
+
+  if tmux list-sessions -F '#S' -f "#{m:${name},#S}" 2>1| grep -q "${name}"; then
+    echo "trying to attach to ${name}..."
+    tmux attach -t ${name}
+  else
+    echo "trying to create session ${name}..."
+    tmux new-session -d -n "htop" -s "${name}" htop
+    echo "trying to attach to ${name}..."
+    tmux attach -t ${name}
+  fi
+}

@@ -183,6 +183,11 @@ install_neovim() {
 
 install_zsh() {
   # install oh-my-zsh
+  if ! grep -q /opt/homebrew/bin/zsh /etc/shells; then
+    echo "/opt/homebrew/bin/zsh" >>/etc/shells
+  fi
+  chsh -s /opt/homebrew/bin/zsh $USER
+
   export KEEP_ZSHRC="yes"
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 }
