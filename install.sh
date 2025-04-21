@@ -24,8 +24,8 @@ NODE_VERSION=18.12.1 # update in nvim/lua/options.lua
 NEOVIM_VERSION="v0.8.1"
 FLUTTER_VERSION=2.0.2
 FLUTTER_CHANNEL=stable
-GHCLI_VERSION=2.20.2
-NEOVIM_VERSION=v0.9.5
+GHCLI_VERSION=2.65.0
+NEOVIM_VERSION=v0.10.1
 NEOVIM_PYENV_PACKAGES="pip pynvim flake8 pylint"
 GLOBAL_PYENV_PACKAGES="pip"
 TFENV_VERSIONS="latest"
@@ -334,6 +334,11 @@ case "$1" in
   install-deps)
     install_deps
     install_fonts
+    ;;
+  installx)
+    if echo "${2}" | grep -q -E '(ghcli)'; then
+      eval "install_${2}"
+    fi
     ;;
   fast-config)
     export FAST=${FAST:="fast"}
