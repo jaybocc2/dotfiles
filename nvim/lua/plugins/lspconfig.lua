@@ -17,12 +17,12 @@ return {
         -- "prosemd_lsp",
         "protolint",
         -- "pylint8",
-        -- "pyright",
+        "pyright",
         -- "rust_analyzer",
         "shellcheck",
         "shfmt",
         "stylua",
-        -- "terraformls",
+        -- "terraform-ls", -- disabled as it currently appears to crash my macbook
         -- "tsserver",
         -- "yamlls",
       },
@@ -30,27 +30,27 @@ return {
   },
 
   -- extend treesitter config
-  {
-    "nvim-treesitter/nvim-treesitter",
-    opts = function(_, opts)
-      -- add terraform to treesitter
-      vim.list_extend(opts.ensure_installed, {
-        "terraform",
-      })
-    end,
-  },
+  -- {
+  --   "nvim-treesitter/nvim-treesitter",
+  --   opts = function(_, opts)
+  --     -- add terraform to treesitter
+  --     vim.list_extend(opts.ensure_installed, {
+  --       "terraform",
+  --     })
+  --   end,
+  -- },
 
   -- add pyright to lspconfig
-  {
-    "neovim/nvim-lspconfig",
-    ---@class PluginLspOpts
-    opts = {
-      ---@type lspconfig.options
-      servers = {
-        -- gopls = {},
-        pyright = {},
-        terraformls = {},
-      },
-    },
-  },
+  -- {
+  --   "neovim/nvim-lspconfig",
+  --   ---@class PluginLspOpts
+  --   opts = {
+  --     ---@type lspconfig.options
+  --     servers = {
+  --       -- gopls = {},
+  --       pyright = {},
+  --       terraformls = {},
+  --     },
+  --   },
+  -- },
 }
