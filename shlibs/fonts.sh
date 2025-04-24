@@ -5,7 +5,7 @@ source shlibs/logging.sh # ERROR
 source shlibs/common.sh  # mktmp and rmtmp
 
 install_fonts() {
-  local version="v2.2.2"
+  local version="v3.3.0"
   mktmp
 
   local fontdir=~/.fonts

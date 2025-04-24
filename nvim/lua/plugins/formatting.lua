@@ -4,15 +4,22 @@ return {
     dependencies = { "mason.nvim" },
     lazy = true,
     opts = function()
-      ---@class ConformOpts
       local opts = {
-        -- The filetypes that will be formatted.
-        ---@type table<string, conform.FormatterUnit[]>
+        default_format_opts = {
+          timeout_ms = 3000,
+          async = false, -- not recommended to change
+          quiet = false, -- not recommended to change
+          lsp_format = "fallback", -- not recommended to change
+        },
         formatters_by_ft = {
           lua = { "stylua" },
           sh = { "shfmt" },
+          -- terraform
+          hcl = { "packer_fmt" },
+          terraform = { "terraform_fmt" },
+          tf = { "terraform_fmt" },
+          ["terraform-vars"] = { "terraform_fmt" },
         },
-
         -- The options you set here will be merged with the builtin formatters.
         -- You can also define any custom formatters here.
         ---@type table<string, conform.FormatterConfigOverride|fun(bufnr: integer): nil|conform.FormatterConfigOverride>
