@@ -24,7 +24,7 @@ tmuxsession () {
     name=${1}
   fi
 
-  if tmux list-sessions -F '#S' -f "#{m:${name},#S}" 2>1| grep -q "${name}"; then
+  if tmux list-sessions -F '#S' -f "#{m:${name},#S}" 2>&1| grep -q "${name}"; then
     echo "trying to attach to ${name}..."
     tmux attach -t ${name}
   else
