@@ -1,0 +1,21 @@
+{
+  "selectedAuthType": "oauth-personal",
+  "preferredEditor": "neovim",
+  "checkpointing": {
+    "enabled": true
+  },
+  "mcpServers": {
+    "astgrep": {
+      "command": "/Users/jaybendon/.pyenv/versions/3global/bin/python3",
+      "args": [
+        "/Users/jaybendon/.pyenv/versions/3global/lib/python3.13/site-packages/main.py"
+      ]
+    },
+    "shopify-mcp": {
+      "command": "pnpx",
+      "args": [
+        "@shopify/dev-mcp@latest"
+      ]
+    }
+  }
+}
