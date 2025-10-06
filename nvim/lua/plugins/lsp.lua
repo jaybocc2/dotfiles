@@ -15,4 +15,11 @@ return {
       },
     },
   },
+  {
+    "stevearc/aerial.nvim",
+    ---@class PluginLspOpts
+    opts = {
+      disable_max_lines = 25000,
+    },
+  },
 }
