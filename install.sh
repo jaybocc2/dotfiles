@@ -149,6 +149,14 @@ install_ripgrep() {
   cargo install ripgrep
 }
 
+install_ast_grep() {
+  cargo install ast-grep
+}
+
+iinstall_uv() {
+  cargo install --git https://github.com/astral-sh/uv uv
+}
+
 compile_neovim() {
   mktmp
 
@@ -167,6 +175,8 @@ install_neovim() {
   install_fdfind
   install_ripgrep
   install_lsp_binaries
+  install_ast_grep
+  install_uv
 
   if [[ "${OS}" == "darwin" ]]; then
     if which nvim >/dev/null; then
