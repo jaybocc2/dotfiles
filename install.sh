@@ -345,6 +345,9 @@ case "$1" in
     install_deps
     install_fonts
     ;;
+  install-neovim)
+    install_neovim
+    ;;
   installx)
     if echo "${2}" | grep -q -E '(ghcli)'; then
       eval "install_${2}"
