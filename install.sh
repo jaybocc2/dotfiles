@@ -16,7 +16,7 @@ libncurses5-dev libssl-dev build-essential htop libffi-dev libffi7 xz-utils"
 # DEB_BACKPORTS_DEPS=""
 # DEB_BACKPORTS_REPO=""
 # DEB_TESTING_DEPS=""
-OSX_DEPS="ctags wget tmux zsh vim git gh readline xz htop"
+OSX_DEPS="ctags wget tmux zsh vim git gh readline xz htop grep"
 GO_VERSION=1.18.4
 PY3_VERSION=3.13.7
 RUBY_VERSION=3.1.2   # update in nvim/lua/options.lua
@@ -153,7 +153,7 @@ install_ast_grep() {
   cargo install ast-grep
 }
 
-iinstall_uv() {
+install_uv() {
   cargo install --git https://github.com/astral-sh/uv uv
 }
 
@@ -194,7 +194,7 @@ install_neovim() {
 install_zsh() {
   # install oh-my-zsh
   if ! grep -q /opt/homebrew/bin/zsh /etc/shells; then
-    echo "/opt/homebrew/bin/zsh" >>/etc/shells
+    echo "/opt/homebrew/bin/zsh" | sudo tee -a /etc/shells > /dev/null
   fi
   chsh -s /opt/homebrew/bin/zsh $USER
 
@@ -217,8 +217,8 @@ install_deps() {
     else
       brew update
     fi
-    brew install "${OSX_DEPS}"
-    brew upgrade "${OSX_DEPS}"
+    brew install ${OSX_DEPS}
+    brew upgrade ${OSX_DEPS}
   elif [[ "${OS}" == "linux" ]]; then
     if [ "${ID}" == "ubuntu" ] || [ "${ID}" == "debian" ] || [ "${ID}" == "raspbian" ] || [ "${ID}" == "armbian" ]; then
       for PKG in ${DEB_DEPS}; do
@@ -284,11 +284,9 @@ install_configs() {
 }
 
 install() {
-  install_configs
-
-  install_fonts
-
   install_deps
+  install_configs
+  install_fonts
 }
 
 purge_dotfiles() {

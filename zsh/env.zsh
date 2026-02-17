@@ -11,14 +11,14 @@ check_if_dir_exists() {
 check_add_langenv() {
   local envbin=${HOME}/.$1/bin
   if [ ! -e ${envbin} ];then
-    return false
+    return 1
   fi
 
   if ! command -v $1 >/dev/null; then
     export PATH="${envbin}:${PATH}"
   fi
 
-  return true
+  return 0
 }
 
 check_shims() {
