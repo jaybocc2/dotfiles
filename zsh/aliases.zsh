@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 # -----------------------------------------------
 # Shell Aliases
@@ -14,12 +14,17 @@ alias dv='dirs -v'
 alias hist='history -rd'
 alias zc='zcalc'
 alias grep='grep --color'
-alias tmuxmain='tmux -2 attach -t main'
-alias tmuxside='tmux -2 attach -t sideprojects'
+
+# tmux
+alias tmuxmain='tmuxsession'
+alias tmuxside='tmuxsession side'
+
+# editor
 alias vim="nvimvenv"
 alias nvim="nvimvenv"
 alias vi='vim'
 
+# configs
 alias editzshrc='vim ~/.zshrc'
 alias editlocalizedzsh='vim ~/.localized.zsh'
 alias reloadzshrc="source ${HOME}/.zshrc"

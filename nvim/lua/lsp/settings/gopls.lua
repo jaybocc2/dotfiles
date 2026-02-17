@@ -1,4 +1,0 @@
-local opts = {
-}
-
-return opts

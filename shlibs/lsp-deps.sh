@@ -1,7 +1,8 @@
-#!/bin/bash
-source shlibs/os.sh # OS && ARCH
+#!/usr/bin/env bash
+
+source shlibs/os.sh      # OS && ARCH
 source shlibs/logging.sh # ERROR
-source shlibs/common.sh # mktmp and rmtmp
+source shlibs/common.sh  # mktmp and rmtmp
 
 USER_BIN_DIR=${USER_BIN_DIR:="${HOME}/bin"}
 USER_LIBS_DIR=${USER_LIBS_DIR:="${HOME}/.local/libs"}
@@ -45,7 +46,7 @@ java_lsp() {
     brew install protobuf
   fi
 
- # shellcheck disable=SC2155 
+  # shellcheck disable=SC2155
   export JAVA_HOME=$(/usr/libexec/java_home -v 17)
 
   mktmp

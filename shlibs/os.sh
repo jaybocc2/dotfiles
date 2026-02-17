@@ -1,5 +1,6 @@
-#!/bin/bash
-OS=$(uname |tr '[:upper:]' '[:lower:]')
+#!/usr/bin/env bash
+
+OS=$(uname | tr '[:upper:]' '[:lower:]')
 
 ARCH() {
   local arch=$(uname -m)
@@ -16,4 +17,4 @@ ARCH() {
   fi
 }
 
-if [[ -f /etc/os-release ]];then source /etc/os-release; fi
+if [[ -f /etc/os-release ]]; then source /etc/os-release; fi

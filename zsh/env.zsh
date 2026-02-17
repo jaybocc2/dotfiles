@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 check_in_path() {
   test "$(echo ${PATH} |grep -o $1)" = $1 

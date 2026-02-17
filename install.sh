@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 # install for jaybocc2@'s dotfiles
 source shlibs/os.sh      # OS && ARCH
 source shlibs/logging.sh # ERROR
@@ -9,22 +10,22 @@ git rev-parse --abbrev-ref --symbolic-full-name '@{u}' || {
   exit 1
 }
 
-DOT_FILES=$(git ls-tree '@{u}' | awk '{print $4}' | grep -Ev '(/|LICENSE|README|install.sh|shlibs|test.sh|.gitignore|.gitmodules|bashrc|^vim|vimrc|screenrc)')
-DEB_DEPS="curl exuberant-ctags wget tmux zsh zsh-common vim git xclip zlib1g zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
+DOT_FILES=$(git ls-tree '@{u}' | awk '{print $4}' | grep -Ev '(/|LICENSE|README|install.sh|shlibs|test.sh|.gitignore|.gitmodules|bashrc|^vim|vimrc|screenrc|gemini)')
+DEB_DEPS="zip unzip curl exuberant-ctags wget tmux zsh zsh-common vim git xclip zlib1g zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
 libncurses5-dev libssl-dev build-essential htop libffi-dev libffi7 xz-utils"
 # DEB_BACKPORTS_DEPS=""
 # DEB_BACKPORTS_REPO=""
 # DEB_TESTING_DEPS=""
 OSX_DEPS="ctags wget tmux zsh vim git gh readline xz htop"
 GO_VERSION=1.18.4
-PY3_VERSION=3.11.0
+PY3_VERSION=3.13.7
 RUBY_VERSION=3.1.2   # update in nvim/lua/options.lua
-NODE_VERSION=18.12.1 # update in nvim/lua/options.lua
+NODE_VERSION=22.17.1 # update in nvim/lua/options.lua
 NEOVIM_VERSION="v0.8.1"
 FLUTTER_VERSION=2.0.2
 FLUTTER_CHANNEL=stable
-GHCLI_VERSION=2.20.2
-NEOVIM_VERSION=v0.8.3
+GHCLI_VERSION=2.65.0
+NEOVIM_VERSION=v0.11.4
 NEOVIM_PYENV_PACKAGES="pip pynvim flake8 pylint"
 GLOBAL_PYENV_PACKAGES="pip"
 TFENV_VERSIONS="latest"
@@ -148,6 +149,14 @@ install_ripgrep() {
   cargo install ripgrep
 }
 
+install_ast_grep() {
+  cargo install ast-grep
+}
+
+iinstall_uv() {
+  cargo install --git https://github.com/astral-sh/uv uv
+}
+
 compile_neovim() {
   mktmp
 
@@ -166,6 +175,8 @@ install_neovim() {
   install_fdfind
   install_ripgrep
   install_lsp_binaries
+  install_ast_grep
+  install_uv
 
   if [[ "${OS}" == "darwin" ]]; then
     if which nvim >/dev/null; then
@@ -182,6 +193,11 @@ install_neovim() {
 
 install_zsh() {
   # install oh-my-zsh
+  if ! grep -q /opt/homebrew/bin/zsh /etc/shells; then
+    echo "/opt/homebrew/bin/zsh" >>/etc/shells
+  fi
+  chsh -s /opt/homebrew/bin/zsh $USER
+
   export KEEP_ZSHRC="yes"
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 }
@@ -306,54 +322,62 @@ purge_shada() {
 
 #parameter handling here
 case "$1" in
-fast-install)
-  export FAST=${FAST:="fast"}
-  install
-  ;;
-fast-clean-install)
-  export CLEAN=${CLEAN:="clean"}
-  export FAST=${FAST:="fast"}
-  install
-  ;;
-clean-install)
-  export CLEAN=${CLEAN:="clean"}
-  install
-  ;;
-install)
-  install
-  ;;
-purge)
-  purge_dotfiles
-  ;;
-install-deps)
-  install_deps
-  install_fonts
-  ;;
-fast-config)
-  export FAST=${FAST:="fast"}
-  # install configs
-  install_configs
-  ;;
-fast-clean-config)
-  export CLEAN=${CLEAN:="clean"}
-  export FAST=${FAST:="fast"}
-  # install configs
-  install_configs
-  ;;
-clean-config)
-  export CLEAN=${CLEAN:="clean"}
-  # install configs
-  install_configs
-  ;;
-config)
-  # install configs
-  install_configs
-  ;;
-purge-shada)
-  purge_shada
-  ;;
-*)
-  echo "Usage: $0 {install|fast-install|fast-clean-install|clean-install|config|fast-config|fast-clean-config|clean-config|purge|install-deps}"
-  exit 1
-  ;;
+  fast-install)
+    export FAST=${FAST:="fast"}
+    install
+    ;;
+  fast-clean-install)
+    export CLEAN=${CLEAN:="clean"}
+    export FAST=${FAST:="fast"}
+    install
+    ;;
+  clean-install)
+    export CLEAN=${CLEAN:="clean"}
+    install
+    ;;
+  install)
+    install
+    ;;
+  purge)
+    purge_dotfiles
+    ;;
+  install-deps)
+    install_deps
+    install_fonts
+    ;;
+  install-neovim)
+    install_neovim
+    ;;
+  installx)
+    if echo "${2}" | grep -q -E '(ghcli)'; then
+      eval "install_${2}"
+    fi
+    ;;
+  fast-config)
+    export FAST=${FAST:="fast"}
+    # install configs
+    install_configs
+    ;;
+  fast-clean-config)
+    export CLEAN=${CLEAN:="clean"}
+    export FAST=${FAST:="fast"}
+    # install configs
+    install_configs
+    ;;
+  clean-config)
+    export CLEAN=${CLEAN:="clean"}
+    # install configs
+    install_configs
+    ;;
+  config)
+    # install configs
+    install_configs
+    ;;
+  purge-shada)
+    purge_shada
+    ;;
+  *)
+    echo "Usage: $0 {install|fast-install|fast-clean-install|clean-install|config|fast-config|fast-clean-config|clean-config|purge|install-deps}"
+    exit 1
+    ;;
 esac
