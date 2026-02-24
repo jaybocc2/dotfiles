@@ -66,23 +66,23 @@ fi
 
 # golang
 if check_add_langenv goenv; then
-  check_shims goenv || eval "$(goenv init -)"
+  (( $+functions[goenv] )) || eval "$(goenv init -)"
 fi
 
 # ruby / rbenv
 if check_add_langenv rbenv; then
-  check_shims rbenv || eval "$(rbenv init -)"
+  (( $+functions[rbenv] )) || eval "$(rbenv init -)"
 fi
 
 # python / pyenv / pyenv-virtualenv
 if check_add_langenv pyenv; then
-  check_shims pyenv || eval "$(pyenv init -)"
-  check_shims "pyenv/plugins/pyenv-virtualenv" || eval "$(pyenv virtualenv-init -)"
+  (( $+functions[pyenv] )) || eval "$(pyenv init -)"
+  (( $+functions[_pyenv_virtualenv_hook] )) || eval "$(pyenv virtualenv-init -)"
 fi
 
 # node / nodenv
 if check_add_langenv nodenv; then
-  check_shims nodenv || eval "$(nodenv init -)"
+  (( $+functions[nodenv] )) || eval "$(nodenv init -)"
 fi
 
 # terraform / tfenv

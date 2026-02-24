@@ -34,3 +34,23 @@ tmuxsession () {
     tmux attach -t ${name}
   fi
 }
+
+tokb() {
+  jq -n "$1 / 1024"
+}
+
+tomb() {
+  jq -n "$(tokb $1) / 1024"
+}
+
+togb() {
+  jq -n "$(tomb $1) / 1024"
+}
+
+totb() {
+  jq -n "$(togb $1) / 1024"
+}
+
+rmkhkey() {
+  sed -i '' "${1}d" ~/.ssh/known_hosts
+}
