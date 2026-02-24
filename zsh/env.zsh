@@ -66,23 +66,23 @@ fi
 
 # golang
 if check_add_langenv goenv; then
-  (( $+functions[goenv] )) || eval "$(goenv init -)"
+  typeset -f goenv >/dev/null || eval "$(goenv init -)"
 fi
 
 # ruby / rbenv
 if check_add_langenv rbenv; then
-  (( $+functions[rbenv] )) || eval "$(rbenv init -)"
+  typeset -f rbenv >/dev/null || eval "$(rbenv init -)"
 fi
 
 # python / pyenv / pyenv-virtualenv
 if check_add_langenv pyenv; then
-  (( $+functions[pyenv] )) || eval "$(pyenv init -)"
-  (( $+functions[_pyenv_virtualenv_hook] )) || eval "$(pyenv virtualenv-init -)"
+  typeset -f pyenv >/dev/null || eval "$(pyenv init -)"
+  typeset -f _pyenv_virtualenv_hook >/dev/null || eval "$(pyenv virtualenv-init -)"
 fi
 
 # node / nodenv
 if check_add_langenv nodenv; then
-  (( $+functions[nodenv] )) || eval "$(nodenv init -)"
+  typeset -f nodenv >/dev/null || eval "$(nodenv init -)"
 fi
 
 # terraform / tfenv
