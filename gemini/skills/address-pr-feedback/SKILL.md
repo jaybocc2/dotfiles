@@ -44,9 +44,12 @@ Good reply patterns:
 - For declined suggestions: "I kept the existing approach because <reason>."
 
 ### Step 5 — Resolve each thread
-Resolve every thread if satisfactory
-use git mcp
+Resolve every thread/comment if satisfactory
+use git mcp / gh cli and GraphQL id field:
 
+```
+gh api graphql -f query='mutation { resolveReviewThread(input: {threadId: "<thread_id>"}) { thread { id isResolved } } }'
+```
 ## Notes
 
 - Work through all unresolved threads before committing — batch the code changes into one commit
