@@ -34,6 +34,12 @@ priority = 100
 
 [[rule]]
 toolName = "run_shell_command"
+commandPrefix = "git remote -v"
+decision = "allow"
+priority = 100
+
+[[rule]]
+toolName = "run_shell_command"
 commandPrefix = "gh pr status"
 decision = "allow"
 priority = 100
@@ -126,6 +132,26 @@ priority = 100
 toolName = "read_file"
 decision = "allow"
 priority = 100
+
+# Explicitly allowed git commands for specific repositories
+# Uses argsPattern to match both the command and the dir_path (keys are sorted alphabetically)
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = '"command":"git add.*"dir_path":"/Users/jaybendon/repos/jaybocc2/.*"'
+decision = "allow"
+priority = 120
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = '"command":"git commit.*"dir_path":"/Users/jaybendon/repos/jaybocc2/.*"'
+decision = "allow"
+priority = 120
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = '"command":"git push.*"dir_path":"/Users/jaybendon/repos/jaybocc2/.*"'
+decision = "ask_user"
+priority = 120
 
 # Explicitly denied shell commands
 [[rule]]
