@@ -1,4 +1,7 @@
 {
+  "policyPaths": [
+    "./gemini/policies"
+  ],
   "security": {
     "auth": {
       "selectedType": "oauth-personal"
@@ -46,25 +49,6 @@
     ]
   },
   "tools": {
-    "allowed": [
-      "run_shell_command(git status)",
-      "run_shell_command(git diff)",
-      "run_shell_command(git log)",
-      "run_shell_command(diff)",
-      "run_shell_command(find)",
-      "run_shell_command(pwd)",
-      "run_shell_command(grep)",
-      "run_shell_command(cat)",
-      "run_shell_command(poetry run flake8)",
-      "run_shell_command(poetry run pyright)",
-      "run_shell_command(cd)",
-      "list_directory",
-      "read_file"
-    ],
-    "exclude": [
-      "run_shell_command(git commit)",
-      "run_shell_command(git push)"
-    ],
     "core": [
       "list_directory",
       "read_file",
@@ -83,7 +67,12 @@
     ]
   },
   "general": {
-    "preferredEditor": "neovim"
+    "preferredEditor": "neovim",
+    "sessionRetention": {
+      "enabled": true,
+      "maxAge": "30d",
+      "warningAcknowledged": true
+    }
   },
   "experimental": {
     "plan": true

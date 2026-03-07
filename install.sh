@@ -16,7 +16,7 @@ libncurses5-dev libssl-dev build-essential htop libffi-dev libffi7 xz-utils"
 # DEB_BACKPORTS_DEPS=""
 # DEB_BACKPORTS_REPO=""
 # DEB_TESTING_DEPS=""
-OSX_DEPS="ctags wget tmux zsh vim git gh readline xz htop grep"
+OSX_DEPS="ctags wget tmux zsh vim git gh readline xz htop grep fzf colima docker yq jq libpq pre-commit direnv"
 GO_VERSION=1.18.4
 PY3_VERSION=3.13.7
 RUBY_VERSION=3.1.2   # update in nvim/lua/options.lua
@@ -179,10 +179,10 @@ install_neovim() {
   install_uv
 
   if [[ "${OS}" == "darwin" ]]; then
-    if which nvim >/dev/null; then
+    if which -a nvim | grep -v aliased >/dev/null; then
       brew upgrade neovim
     else
-      brew install neovim
+      brew install neovim --HEAD
     fi
   else
     if [ "$(nvim -v | head -n 1)" != "NVIM ${NEOVIM_VERSION}" ]; then
@@ -194,7 +194,7 @@ install_neovim() {
 install_zsh() {
   # install oh-my-zsh
   if ! grep -q /opt/homebrew/bin/zsh /etc/shells; then
-    echo "/opt/homebrew/bin/zsh" | sudo tee -a /etc/shells > /dev/null
+    echo "/opt/homebrew/bin/zsh" | sudo tee -a /etc/shells >/dev/null
   fi
   chsh -s /opt/homebrew/bin/zsh $USER
 
