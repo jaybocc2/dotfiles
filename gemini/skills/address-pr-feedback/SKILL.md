@@ -33,7 +33,7 @@ If no change is needed (e.g. the reviewer asked a question, or you disagree), pr
 After addressing a comment that requires code changes, create a single follow-up commit. Write a short message that summarizes what was changed (e.g. `"fix: use const for immutable bindings per review"`) rather than a generic message:
 
 Skip this step if no code changes were made.
-Provide a commit message and wait until prompted to continue if not allowed to commit.
+Provide a commit message and wait until prompted to continue if not allowed by policy to commit.
 
 ### Step 4 — Reply to each comment
 use github mcp
@@ -42,6 +42,7 @@ Good reply patterns:
 - For changes made: "Done — <brief description of what changed>."
 - For questions answered: "< direct answer to question >."
 - For declined suggestions: "I kept the existing approach because <reason>."
+- For issues already resolved in code: "I fixed this in <commit>"
 
 ### Step 5 — Resolve each thread
 Resolve every thread/comment if satisfactory
@@ -52,7 +53,9 @@ gh api graphql -f query='mutation { resolveReviewThread(input: {threadId: "<thre
 ```
 ## Notes
 
-- Work through all unresolved threads before committing — batch the code changes into one commit
+- break down commits by units of work
+- commits should be broken down into logical parts
+- do not group unrelated changes into a single commit
 - If the PR has no open review threads, report that there is nothing to address
 - Always reply before resolving so the reviewer sees the response
 - Keep replies concise and direct

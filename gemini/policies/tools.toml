@@ -124,6 +124,11 @@ priority = 100
 
 # Other allowed tools
 [[rule]]
+toolName = "find_code"
+decision = "allow"
+priority = 100
+
+[[rule]]
 toolName = "list_directory"
 decision = "allow"
 priority = 100

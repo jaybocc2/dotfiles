@@ -26,13 +26,15 @@
       ]
     },
     "github": {
+      "description": "Connect AI assistants to GitHub - manage repos, issues, PRs, and workflows through natural language.",
       "httpUrl": "https://api.githubcopilot.com/mcp/",
       "headers": {
-        "Authorization": "${GITHUB_PAT}"
+        "Authorization": "Bearer ${GITHUB_PAT}"
       },
       "timeout": 5000
     },
     "context7": {
+      "description": "Up-to-date code docs for any prompt",
       "httpUrl": "https://mcp.context7.com/mcp",
       "headers": {
         "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}"
@@ -76,5 +78,12 @@
   },
   "experimental": {
     "plan": true
+  },
+  "vimMode": true,
+  "fileFiltering": {
+    "respectGitIgnore": true
+  },
+  "model": {
+    "name": "auto-gemini-3"
   }
 }
