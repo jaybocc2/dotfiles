@@ -68,7 +68,11 @@ jdtls_bazel() {
   curl -L -o "$(pwd)/${fname}.zip" "${url}" || TRACE "failed to download jdtls bazel plugins"
   unzip ${fname}.zip
   mkdir -p "${install_dir}"
-  cp "$(pwd)/plugins/*.jar" "${install_dir}/"
+  if [ -d "plugins" ]; then
+    cp plugins/*.jar "${install_dir}/"
+  else
+    cp "${fname}/plugins/*.jar" "${install_dir}/"
+  fi
   rmtmp
 }
 
