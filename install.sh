@@ -182,6 +182,7 @@ install_neovim() {
     if which -a nvim | grep -v aliased >/dev/null; then
       brew upgrade neovim
     else
+      # install development version to support plugins
       brew install neovim --HEAD
     fi
   else
