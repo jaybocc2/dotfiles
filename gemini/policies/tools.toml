@@ -142,7 +142,7 @@ priority = 100
 # Uses argsPattern to match both the command and the dir_path (keys are sorted alphabetically)
 [[rule]]
 toolName = "run_shell_command"
-argsPattern = '"command":"git (add|commit|push|pull|fetch|rebase|reset|stash|status|diff|log|grep).*""dir_path":"/.*/repos/jaybocc2/.*"'
+argsPattern = '"command":"git (add|commit|push|pull|fetch|rebase|reset|stash|status|diff|log|grep).*","dir_path":"/.*/repos/jaybocc2/.*"'
 decision = "allow"
 priority = 120
 
