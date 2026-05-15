@@ -74,16 +74,20 @@
       "enabled": true,
       "maxAge": "30d",
       "warningAcknowledged": true
+    },
+    "plan": {
+      "enabled": false
     }
   },
-  "experimental": {
-    "plan": true
-  },
+  "experimental": {},
   "vimMode": true,
   "fileFiltering": {
     "respectGitIgnore": true
   },
   "model": {
     "name": "auto-gemini-3"
+  },
+  "agents": {
+    "overrides": {}
   }
 }
