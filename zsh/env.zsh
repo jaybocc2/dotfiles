@@ -45,12 +45,10 @@ export FLUTTER_PATH="${HOME}/flutter"
 # export RBENV_ROOT="${HOME}/.rbenv"
 # export TFENV_ROOT="${HOME}/.tfenv"
 export HOME_BIN="${HOME}/bin"
-export HOMEBREW_BIN="/opt/homebrew/bin"
 
 # -----------------------------------------------
 # Set up the various dev tools && shims
 # -----------------------------------------------
-export PATH=${PATH}
 if check_if_dir_exists ${HOME_BIN}; then
   if ! check_in_path ${HOME_BIN}; then
     export PATH=${HOME_BIN}:${PATH}
@@ -58,10 +56,10 @@ if check_if_dir_exists ${HOME_BIN}; then
 fi
 
 # homebrew
-if check_if_dir_exists ${HOMEBREW_BIN}; then
-  if ! check_in_path ${HOMEBREW_BIN}; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-  fi
+if [[ -x "/opt/homebrew/bin/brew" ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [[ -x "/usr/local/bin/brew" ]]; then
+  eval "$(/usr/local/bin/brew shellenv)"
 fi
 
 # golang

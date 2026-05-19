@@ -197,11 +197,28 @@ install_neovim() {
 
 install_zsh() {
   # install oh-my-zsh
-  ZSH_PATH=$(which zsh)
+  if [[ "${OS}" == "darwin" ]]; then
+    # prefer homebrew zsh
+    if [[ -x "/opt/homebrew/bin/zsh" ]]; then
+      ZSH_PATH="/opt/homebrew/bin/zsh"
+    elif [[ -x "/usr/local/bin/zsh" ]]; then
+      ZSH_PATH="/usr/local/bin/zsh"
+    else
+      ZSH_PATH=$(which zsh)
+    fi
+  else
+    ZSH_PATH=$(which zsh)
+  fi
+
   if ! grep -q "$ZSH_PATH" /etc/shells; then
+    echo "Adding $ZSH_PATH to /etc/shells"
     echo "$ZSH_PATH" | sudo tee -a /etc/shells >/dev/null
   fi
-  chsh -s "$ZSH_PATH" $USER
+
+  if [[ "$SHELL" != "$ZSH_PATH" ]]; then
+    echo "Changing shell to $ZSH_PATH"
+    chsh -s "$ZSH_PATH" "$USER"
+  fi
 
   export KEEP_ZSHRC="yes"
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -218,10 +235,16 @@ install_deps() {
     # if [ "$?" -gt 0 ]; then
     if ! which brew; then
       /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-      eval "$(/opt/homebrew/bin/brew shellenv)"
     else
       brew update
     fi
+
+    if [[ -x "/opt/homebrew/bin/brew" ]]; then
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [[ -x "/usr/local/bin/brew" ]]; then
+      eval "$(/usr/local/bin/brew shellenv)"
+    fi
+
     brew install ${OSX_DEPS}
     brew upgrade ${OSX_DEPS}
   elif [[ "${OS}" == "linux" ]]; then
