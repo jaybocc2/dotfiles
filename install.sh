@@ -25,7 +25,7 @@ RUBY_VERSION=3.1.2   # update in nvim/lua/options.lua
 NODE_VERSION=22.17.1 # update in nvim/lua/options.lua
 FLUTTER_VERSION=2.0.2
 FLUTTER_CHANNEL=stable
-GHCLI_VERSION=2.65.0
+GHCLI_VERSION=2.92.0
 NEOVIM_VERSION=v0.11.4
 NEOVIM_PYENV_PACKAGES="pip pynvim flake8 pylint"
 GLOBAL_PYENV_PACKAGES="pip"
@@ -399,10 +399,10 @@ install_configs() {
       if [[ "${file}" == "bin" ]]; then
         prefix=''
       fi
-      
+
       local dst="${HOME}/${prefix}${file}"
       safe_link "${src}" "${dst}"
-      
+
       if [ "${file}" == "nvim" ]; then
         safe_link "${src}" "${HOME}/.config/nvim"
       fi
