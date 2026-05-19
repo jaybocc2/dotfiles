@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
 
 check_in_path() {
-  test "$(echo ${PATH} |grep -o $1)" = $1 
+  [[ ":$PATH:" == *":$1:"* ]]
 }
 
 check_if_dir_exists() {
-  test -d $1
+  test -d "$1"
 }
 
 check_add_langenv() {
@@ -138,6 +138,6 @@ fi
 # Added by Antigravity CLI installer
 if [ -d "${HOME}/.local/bin" ]; then
   if ! check_in_path "${HOME}/.local/bin"; then
-    export PATH="${HOME}/.local/bin:$PATH"
+    export PATH="${HOME}/.local/bin:${PATH}"
   fi
 fi

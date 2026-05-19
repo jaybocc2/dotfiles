@@ -210,12 +210,24 @@ install_zsh() {
     ZSH_PATH=$(which zsh)
   fi
 
+  if [[ -z "$ZSH_PATH" ]]; then
+    ERROR "zsh not found"
+    return 1
+  fi
+
   if ! grep -q "$ZSH_PATH" /etc/shells; then
     echo "Adding $ZSH_PATH to /etc/shells"
     echo "$ZSH_PATH" | sudo tee -a /etc/shells >/dev/null
   fi
 
-  if [[ "$SHELL" != "$ZSH_PATH" ]]; then
+  CURRENT_SHELL=""
+  if [[ "${OS}" == "darwin" ]]; then
+    CURRENT_SHELL=$(dscl . -read "/Users/$USER" UserShell | awk '{print $2}')
+  else
+    CURRENT_SHELL=$(getent passwd "$USER" | cut -d: -f7)
+  fi
+
+  if [[ "$CURRENT_SHELL" != "$ZSH_PATH" ]]; then
     echo "Changing shell to $ZSH_PATH"
     chsh -s "$ZSH_PATH" "$USER"
   fi
