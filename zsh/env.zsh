@@ -133,3 +133,11 @@ if ! check_in_path "${HOME}/.cargo/bin";then
   # this does the same thing as above
   # source ${HOME}/.cargo/env
 fi
+
+
+# Added by Antigravity CLI installer
+if [ -d "${HOME}/.local/bin" ]; then
+  if ! check_in_path "${HOME}/.local/bin"; then
+    export PATH="${HOME}/.local/bin:$PATH"
+  fi
+fi
