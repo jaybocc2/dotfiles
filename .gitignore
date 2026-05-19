@@ -1,3 +1,13 @@
 nvim/snapshot
 nvim/plugin
 nvim/nvim
+nvim/lazy-lock.json
+
+gemini/history
+gemini/tmp
+gemini/google_accounts.json
+gemini/installation_id
+gemini/oauth_creds.json
+gemini/projects.json
+gemini/state.json
+gemini/trustedFolders.json

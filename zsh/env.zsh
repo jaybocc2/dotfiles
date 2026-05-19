@@ -11,14 +11,14 @@ check_if_dir_exists() {
 check_add_langenv() {
   local envbin=${HOME}/.$1/bin
   if [ ! -e ${envbin} ];then
-    return false
+    return 1
   fi
 
   if ! command -v $1 >/dev/null; then
     export PATH="${envbin}:${PATH}"
   fi
 
-  return true
+  return 0
 }
 
 check_shims() {
@@ -66,23 +66,23 @@ fi
 
 # golang
 if check_add_langenv goenv; then
-  check_shims goenv || eval "$(goenv init -)"
+  typeset -f goenv >/dev/null || eval "$(goenv init -)"
 fi
 
 # ruby / rbenv
 if check_add_langenv rbenv; then
-  check_shims rbenv || eval "$(rbenv init -)"
+  typeset -f rbenv >/dev/null || eval "$(rbenv init -)"
 fi
 
 # python / pyenv / pyenv-virtualenv
 if check_add_langenv pyenv; then
-  check_shims pyenv || eval "$(pyenv init -)"
-  check_shims "pyenv/plugins/pyenv-virtualenv" || eval "$(pyenv virtualenv-init -)"
+  typeset -f pyenv >/dev/null || eval "$(pyenv init -)"
+  typeset -f _pyenv_virtualenv_hook >/dev/null || eval "$(pyenv virtualenv-init -)"
 fi
 
 # node / nodenv
 if check_add_langenv nodenv; then
-  check_shims nodenv || eval "$(nodenv init -)"
+  typeset -f nodenv >/dev/null || eval "$(nodenv init -)"
 fi
 
 # terraform / tfenv

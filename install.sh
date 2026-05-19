@@ -10,18 +10,17 @@ git rev-parse --abbrev-ref --symbolic-full-name '@{u}' || {
   exit 1
 }
 
-DOT_FILES=$(git ls-tree '@{u}' | awk '{print $4}' | grep -Ev '(/|LICENSE|README|install.sh|shlibs|test.sh|.gitignore|.gitmodules|bashrc|^vim|vimrc|screenrc|gemini)')
+DOT_FILES=$(git ls-tree '@{u}' | awk '{print $4}' | grep -Ev '(/|LICENSE|README|install.sh|shlibs|test.sh|.gitignore|.gitmodules|bashrc|^vim|vimrc|screenrc)')
 DEB_DEPS="zip unzip curl exuberant-ctags wget tmux zsh zsh-common vim git xclip zlib1g zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
 libncurses5-dev libssl-dev build-essential htop libffi-dev libffi7 xz-utils"
 # DEB_BACKPORTS_DEPS=""
 # DEB_BACKPORTS_REPO=""
 # DEB_TESTING_DEPS=""
-OSX_DEPS="ctags wget tmux zsh vim git gh readline xz htop"
+OSX_DEPS="ctags wget tmux zsh vim git gh readline xz htop grep fzf colima docker yq jq libpq pre-commit direnv"
 GO_VERSION=1.18.4
 PY3_VERSION=3.13.7
 RUBY_VERSION=3.1.2   # update in nvim/lua/options.lua
 NODE_VERSION=22.17.1 # update in nvim/lua/options.lua
-NEOVIM_VERSION="v0.8.1"
 FLUTTER_VERSION=2.0.2
 FLUTTER_CHANNEL=stable
 GHCLI_VERSION=2.65.0
@@ -153,7 +152,7 @@ install_ast_grep() {
   cargo install ast-grep
 }
 
-iinstall_uv() {
+install_uv() {
   cargo install --git https://github.com/astral-sh/uv uv
 }
 
@@ -179,10 +178,11 @@ install_neovim() {
   install_uv
 
   if [[ "${OS}" == "darwin" ]]; then
-    if which nvim >/dev/null; then
+    if which -a nvim | grep -v aliased >/dev/null; then
       brew upgrade neovim
     else
-      brew install neovim
+      # install development version to support plugins
+      brew install neovim --HEAD
     fi
   else
     if [ "$(nvim -v | head -n 1)" != "NVIM ${NEOVIM_VERSION}" ]; then
@@ -193,10 +193,11 @@ install_neovim() {
 
 install_zsh() {
   # install oh-my-zsh
-  if ! grep -q /opt/homebrew/bin/zsh /etc/shells; then
-    echo "/opt/homebrew/bin/zsh" >>/etc/shells
+  ZSH_PATH=$(which zsh)
+  if ! grep -q "$ZSH_PATH" /etc/shells; then
+    echo "$ZSH_PATH" | sudo tee -a /etc/shells >/dev/null
   fi
-  chsh -s /opt/homebrew/bin/zsh $USER
+  chsh -s "$ZSH_PATH" $USER
 
   export KEEP_ZSHRC="yes"
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -217,8 +218,8 @@ install_deps() {
     else
       brew update
     fi
-    brew install "${OSX_DEPS}"
-    brew upgrade "${OSX_DEPS}"
+    brew install ${OSX_DEPS}
+    brew upgrade ${OSX_DEPS}
   elif [[ "${OS}" == "linux" ]]; then
     if [ "${ID}" == "ubuntu" ] || [ "${ID}" == "debian" ] || [ "${ID}" == "raspbian" ] || [ "${ID}" == "armbian" ]; then
       for PKG in ${DEB_DEPS}; do
@@ -284,11 +285,9 @@ install_configs() {
 }
 
 install() {
-  install_configs
-
-  install_fonts
-
   install_deps
+  install_configs
+  install_fonts
 }
 
 purge_dotfiles() {

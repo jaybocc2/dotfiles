@@ -34,3 +34,27 @@ tmuxsession () {
     tmux attach -t ${name}
   fi
 }
+
+tokb() {
+  echo $(( ${1:-0}.0 / 1024 ))
+}
+
+tomb() {
+  echo $(( ${1:-0}.0 / (1024 * 1024) ))
+}
+
+togb() {
+  echo $(( ${1:-0}.0 / (1024 * 1024 * 1024) ))
+}
+
+totb() {
+  echo $(( ${1:-0}.0 / (1024 * 1024 * 1024 * 1024) ))
+}
+
+rmkhkey() {
+  if [[ "$(uname)" == "Darwin" ]]; then
+    sed -i '' "${1}d" ~/.ssh/known_hosts
+  else
+    sed -i "${1}d" ~/.ssh/known_hosts
+  fi
+}

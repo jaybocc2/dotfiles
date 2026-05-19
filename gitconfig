@@ -19,3 +19,8 @@
 [credential "https://gist.github.com"]
 	helper = 
 	helper = !/opt/homebrew/bin/gh auth git-credential
+
+[includeIf "gitdir:~/repos/work/"]
+    path = ~/.gitconfig-work
+[alias]
+	syncmain = "!f() { CURRENT_BRANCH=$(git symbolic-ref --short HEAD); if [ \"$CURRENT_BRANCH\" = main ]; then echo 'Error: cannot run syncmain on main branch.' >&2; exit 1; fi; git checkout main && git pull origin main && git checkout \"$CURRENT_BRANCH\" && git rebase origin/main && git push origin \"$CURRENT_BRANCH\" --force-with-lease; }; f"
