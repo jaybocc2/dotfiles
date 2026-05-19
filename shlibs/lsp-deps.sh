@@ -71,7 +71,7 @@ jdtls_bazel() {
   if [ -d "plugins" ]; then
     cp plugins/*.jar "${install_dir}/"
   else
-    cp "${fname}/plugins/*.jar" "${install_dir}/"
+    cp "${fname}/plugins/"*.jar "${install_dir}/"
   fi
   rmtmp
 }
