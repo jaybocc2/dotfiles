@@ -102,8 +102,22 @@ install_tfenv() {
 }
 
 install_rust() {
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --profile default -y
+  if command -v rustup >/dev/null; then
+    echo "Updating Rust..."
+    rustup update
+  else
+    echo "Installing Rust..."
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --profile default -y
+  fi
   fixenv
+}
+
+install_antigravity() {
+  if command -v agy >/dev/null; then
+    echo "antigravity-cli already installed, skipping..."
+    return
+  fi
+  curl -fsSL https://antigravity.google/cli/install.sh | bash
 }
 
 install_flutter() {
@@ -140,24 +154,35 @@ install_ghcli() {
   rmtmp
 }
 
+install_cargo_bin() {
+  local bin="$1"
+  local crate="${2:-$1}"
+  if command -v "${bin}" >/dev/null; then
+    echo "${bin} already installed, skipping..."
+  else
+    echo "Installing ${crate} via cargo..."
+    cargo install "${crate}"
+  fi
+}
+
 install_fdfind() {
-  cargo install fd-find
+  install_cargo_bin fd fd-find
 }
 
 install_ripgrep() {
-  cargo install ripgrep
+  install_cargo_bin rg ripgrep
 }
 
 install_ast_grep() {
-  cargo install ast-grep
+  install_cargo_bin sg ast-grep
 }
 
 install_uv() {
-  cargo install --git https://github.com/astral-sh/uv uv
-}
-
-install_antigravity() {
-  curl -fsSL https://antigravity.google/cli/install.sh | bash
+  if command -v uv >/dev/null; then
+    echo "uv already installed, skipping..."
+  else
+    cargo install --git https://github.com/astral-sh/uv uv
+  fi
 }
 
 compile_neovim() {
@@ -245,13 +270,19 @@ install_deps() {
   echo "installing deps. . . ."
 
   if [[ "${OS}" == "darwin" ]]; then
-    xcode-select --install
-    # sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /
-    # which brew
-    # if [ "$?" -gt 0 ]; then
-    if ! which brew; then
+    # Check if Xcode Command Line Tools are installed
+    if ! xcode-select -p >/dev/null 2>&1; then
+      echo "Installing Xcode Command Line Tools..."
+      xcode-select --install
+      echo "Please complete the installation and run this script again."
+      exit 0
+    fi
+
+    if ! which brew >/dev/null; then
+      echo "Installing Homebrew..."
       /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
     else
+      echo "Updating Homebrew..."
       brew update
     fi
 
@@ -261,8 +292,13 @@ install_deps() {
       eval "$(/usr/local/bin/brew shellenv)"
     fi
 
+    echo "Installing Homebrew dependencies..."
     brew install ${OSX_DEPS}
-    brew upgrade ${OSX_DEPS}
+
+    if [[ "X${UPGRADE}" == "Xupgrade" ]]; then
+      echo "Upgrading Homebrew dependencies..."
+      brew upgrade ${OSX_DEPS}
+    fi
   elif [[ "${OS}" == "linux" ]]; then
     if [ "${ID}" == "ubuntu" ] || [ "${ID}" == "debian" ] || [ "${ID}" == "raspbian" ] || [ "${ID}" == "armbian" ]; then
       for PKG in ${DEB_DEPS}; do
@@ -297,10 +333,49 @@ make_dirs() {
   chmod 700 ~/.ssh
 }
 
-install_configs() {
-  # remove conflicting dotfiles
-  purge_dotfiles
+safe_link() {
+  local src="$1"
+  local dst="$2"
 
+  if [[ -L "${dst}" ]]; then
+    local current_src
+    current_src=$(readlink "${dst}")
+    if [[ "${current_src}" == "${src}" ]]; then
+      return
+    fi
+    echo "Updating link: ${dst} -> ${src} (was ${current_src})"
+    rm "${dst}"
+  elif [[ -e "${dst}" ]]; then
+    if [[ "X${FAST}" == "Xfast" ]]; then
+      echo "Warning: ${dst} exists and is not a symlink. Skipping in fast mode."
+      return
+    fi
+
+    echo -n "File ${dst} already exists and is not a symlink. [B]ackup, [O]verwrite, [S]kip? (B/o/s) "
+    read -n 1 -r
+    echo
+    case "${REPLY}" in
+      [Bb]* | "")
+        local bak="${dst}.bak.$(date +%Y%m%d%H%M%S)"
+        echo "Backing up ${dst} to ${bak}"
+        mv "${dst}" "${bak}"
+        ;;
+      [Oo]*)
+        echo "Overwriting ${dst}"
+        rm -rf "${dst}"
+        ;;
+      *)
+        echo "Skipping ${dst}"
+        return
+        ;;
+    esac
+  fi
+
+  echo "Linking ${dst} -> ${src}"
+  ln -s "${src}" "${dst}"
+}
+
+install_configs() {
   # make directories
   make_dirs
 
@@ -308,21 +383,20 @@ install_configs() {
   echo "installing configurations. . . ."
 
   for file in ${DOT_FILES}; do
+    local src="$(pwd)/${file}"
     if [ -f "${file}" ]; then
-      echo "linking ~/.${file}"
-      ln -s "$(pwd)/${file}" "${HOME}/.${file}"
+      safe_link "${src}" "${HOME}/.${file}"
     elif [ -d "${file}" ]; then
-      prefix='.'
-      if [[ "${file}" = "bin" ]]; then
+      local prefix='.'
+      if [[ "${file}" == "bin" ]]; then
         prefix=''
       fi
-      if [ ! -d "${HOME}/${prefix}${file}" ]; then
-        echo "linking directory ~/${prefix}${file}"
-        ln -s "$(pwd)/${file}" "${HOME}/${prefix}${file}"
-        if [ "${file}" == "nvim" ]; then
-          echo "linking directory ${HOME}/.config/${prefix}${file}"
-          ln -s "$(pwd)/${file}" "${HOME}/.config/nvim"
-        fi
+      
+      local dst="${HOME}/${prefix}${file}"
+      safe_link "${src}" "${dst}"
+      
+      if [ "${file}" == "nvim" ]; then
+        safe_link "${src}" "${HOME}/.config/nvim"
       fi
     fi
   done
@@ -381,10 +455,19 @@ case "$1" in
   install)
     install
     ;;
+  upgrade-install)
+    export UPGRADE="upgrade"
+    install
+    ;;
   purge)
     purge_dotfiles
     ;;
   install-deps)
+    install_deps
+    install_fonts
+    ;;
+  upgrade-deps)
+    export UPGRADE="upgrade"
     install_deps
     install_fonts
     ;;
@@ -420,7 +503,7 @@ case "$1" in
     purge_shada
     ;;
   *)
-    echo "Usage: $0 {install|fast-install|fast-clean-install|clean-install|config|fast-config|fast-clean-config|clean-config|purge|install-deps}"
+    echo "Usage: $0 {install|upgrade-install|fast-install|fast-clean-install|clean-install|config|fast-config|fast-clean-config|clean-config|purge|install-deps|upgrade-deps}"
     exit 1
     ;;
 esac
