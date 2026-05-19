@@ -5,12 +5,14 @@ source shlibs/os.sh      # OS && ARCH
 source shlibs/logging.sh # ERROR
 source shlibs/common.sh  # mktmp and rmtmp
 
-git rev-parse --abbrev-ref --symbolic-full-name '@{u}' || {
-  echo "Missing upstream branch -- config install will fail"
-  exit 1
-}
+# Check for upstream branch, but don't exit if it fails (first install might not have it)
+UPSTREAM=$(git rev-parse --abbrev-ref --symbolic-full-name '@{u}' 2>/dev/null || echo "master")
 
-DOT_FILES=$(git ls-tree '@{u}' | awk '{print $4}' | grep -Ev '(/|LICENSE|README|install.sh|shlibs|test.sh|.gitignore|.gitmodules|bashrc|^vim|vimrc|screenrc)')
+DOT_FILES=$(git ls-tree "${UPSTREAM}" 2>/dev/null | awk '{print $4}' | grep -Ev '(/|LICENSE|README|install.sh|shlibs|test.sh|.gitignore|.gitmodules|bashrc|^vim|vimrc|screenrc)')
+if [[ -z "${DOT_FILES}" ]]; then
+  # Fallback if git is missing or upstream fails
+  DOT_FILES="gitconfig gitignore_global tmux.conf zlogin zshrc"
+fi
 DEB_DEPS="zip unzip curl exuberant-ctags wget tmux zsh zsh-common vim git xclip zlib1g zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
 libncurses5-dev libssl-dev build-essential htop libffi-dev libffi7 xz-utils"
 # DEB_BACKPORTS_DEPS=""
@@ -148,6 +150,11 @@ install_ghcli() {
     return
   fi
 
+  if ! command -v dpkg >/dev/null; then
+    echo "Skipping gh cli install: dpkg not found (only Debian/Ubuntu supported for now)"
+    return
+  fi
+
   mktmp
   curl -LO "https://github.com/cli/cli/releases/download/v${GHCLI_VERSION}/gh_${GHCLI_VERSION}_linux_$(ARCH).deb" || TRACE "ghcli deb download failed"
   sudo dpkg -i "gh_${GHCLI_VERSION}_linux_$(ARCH).deb" || TRACE "ghcli deb install failed"
@@ -247,9 +254,9 @@ install_zsh() {
 
   CURRENT_SHELL=""
   if [[ "${OS}" == "darwin" ]]; then
-    CURRENT_SHELL=$(dscl . -read "/Users/$USER" UserShell | awk '{print $2}')
+    CURRENT_SHELL=$(dscl . -read "/Users/$USER" UserShell 2>/dev/null | awk '{print $2}')
   else
-    CURRENT_SHELL=$(getent passwd "$USER" | cut -d: -f7)
+    CURRENT_SHELL=$(getent passwd "$USER" | cut -d: -f7 2>/dev/null || grep "^$USER:" /etc/passwd | cut -d: -f7)
   fi
 
   if [[ "$CURRENT_SHELL" != "$ZSH_PATH" ]]; then
