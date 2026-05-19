@@ -156,6 +156,10 @@ install_uv() {
   cargo install --git https://github.com/astral-sh/uv uv
 }
 
+install_antigravity() {
+  curl -fsSL https://antigravity.google/cli/install.sh | bash
+}
+
 compile_neovim() {
   mktmp
 
@@ -236,6 +240,7 @@ install_deps() {
   install_rbenv
   install_tfenv
   install_goenv
+  install_antigravity
   # install_flutter # disable until i ever want to use flutter again
 
   install_neovim
