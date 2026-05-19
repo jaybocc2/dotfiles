@@ -21,7 +21,6 @@ GO_VERSION=1.18.4
 PY3_VERSION=3.13.7
 RUBY_VERSION=3.1.2   # update in nvim/lua/options.lua
 NODE_VERSION=22.17.1 # update in nvim/lua/options.lua
-NEOVIM_VERSION="v0.8.1"
 FLUTTER_VERSION=2.0.2
 FLUTTER_CHANNEL=stable
 GHCLI_VERSION=2.65.0
@@ -194,10 +193,11 @@ install_neovim() {
 
 install_zsh() {
   # install oh-my-zsh
-  if ! grep -q /opt/homebrew/bin/zsh /etc/shells; then
-    echo "/opt/homebrew/bin/zsh" | sudo tee -a /etc/shells >/dev/null
+  ZSH_PATH=$(which zsh)
+  if ! grep -q "$ZSH_PATH" /etc/shells; then
+    echo "$ZSH_PATH" | sudo tee -a /etc/shells >/dev/null
   fi
-  chsh -s /opt/homebrew/bin/zsh $USER
+  chsh -s "$ZSH_PATH" $USER
 
   export KEEP_ZSHRC="yes"
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"

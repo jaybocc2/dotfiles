@@ -75,8 +75,6 @@ plugins=(
   gh
   git
   vi-mode
-  pyenv
-  nodenv
   asdf
   poetry
 )

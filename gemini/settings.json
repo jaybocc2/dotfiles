@@ -1,6 +1,6 @@
 {
   "policyPaths": [
-    "./gemini/policies"
+    "./policies"
   ],
   "security": {
     "auth": {
