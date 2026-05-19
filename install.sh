@@ -232,8 +232,12 @@ install_zsh() {
     chsh -s "$ZSH_PATH" "$USER"
   fi
 
-  export KEEP_ZSHRC="yes"
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  if [ -d "$HOME/.oh-my-zsh" ]; then
+    echo "oh-my-zsh already installed, skipping..."
+  else
+    export KEEP_ZSHRC="yes"
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+  fi
 }
 
 install_deps() {
@@ -362,16 +366,16 @@ purge_shada() {
 #parameter handling here
 case "$1" in
   fast-install)
-    export FAST=${FAST:="fast"}
+    export FAST="fast"
     install
     ;;
   fast-clean-install)
-    export CLEAN=${CLEAN:="clean"}
-    export FAST=${FAST:="fast"}
+    export CLEAN="clean"
+    export FAST="fast"
     install
     ;;
   clean-install)
-    export CLEAN=${CLEAN:="clean"}
+    export CLEAN="clean"
     install
     ;;
   install)
@@ -393,18 +397,18 @@ case "$1" in
     fi
     ;;
   fast-config)
-    export FAST=${FAST:="fast"}
+    export FAST="fast"
     # install configs
     install_configs
     ;;
   fast-clean-config)
-    export CLEAN=${CLEAN:="clean"}
-    export FAST=${FAST:="fast"}
+    export CLEAN="clean"
+    export FAST="fast"
     # install configs
     install_configs
     ;;
   clean-config)
-    export CLEAN=${CLEAN:="clean"}
+    export CLEAN="clean"
     # install configs
     install_configs
     ;;
