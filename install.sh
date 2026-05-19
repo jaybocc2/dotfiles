@@ -155,8 +155,8 @@ install_ghcli() {
 }
 
 install_cargo_bin() {
-  local bin="$1"
-  local crate="${2:-$1}"
+  local bin="${1}"
+  local crate="${2:-${1}}"
   if command -v "${bin}" >/dev/null; then
     echo "${bin} already installed, skipping..."
   else
@@ -352,9 +352,10 @@ safe_link() {
     fi
 
     echo -n "File ${dst} already exists and is not a symlink. [B]ackup, [O]verwrite, [S]kip? (B/o/s) "
-    read -n 1 -r
+    local action
+    read -n 1 -r action
     echo
-    case "${REPLY}" in
+    case "${action}" in
       [Bb]* | "")
         local bak="${dst}.bak.$(date +%Y%m%d%H%M%S)"
         echo "Backing up ${dst} to ${bak}"
