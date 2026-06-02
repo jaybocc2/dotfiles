@@ -1,0 +1,28 @@
+{
+  "allowNonWorkspaceAccess": true,
+  "colorScheme": "solarized dark",
+  "model": "Gemini 3.5 Flash (Medium)",
+  "permissions": {
+    "allow": [
+      "command(ls)",
+      "command(tail)",
+      "command(find)",
+      "command(git log)",
+      "command(gh)",
+      "command(grep)",
+      "command(head)",
+      "command(git branch)",
+      "command(git status)",
+      "command(git diff)",
+      "command(git checkout)",
+      "command(git show)"
+    ]
+  },
+  "trustedWorkspaces": [
+    "/Users/jaybendon/repos/work/*",
+    "/Users/jaybendon/repos/monacoinc/*",
+    "/Users/jaybendon",
+    "/Users/jaybendon/repos/monacoinc/monaco.bare/jay/irw-6723",
+    "/Users/jaybendon/repos/jaybocc2/dotfiles"
+  ]
+}

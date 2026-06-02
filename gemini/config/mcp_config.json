@@ -1,0 +1,28 @@
+{
+  "mcpServers": {
+    "astgrep": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/ast-grep/ast-grep-mcp",
+        "ast-grep-server"
+      ]
+    },
+    "shopify-mcp": {
+      "command": "pnpx",
+      "args": [
+        "@shopify/dev-mcp@latest"
+      ]
+    },
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ]
+    },
+    "datadog": {
+      "command": "mcp-datadog"
+    }
+  }
+}
