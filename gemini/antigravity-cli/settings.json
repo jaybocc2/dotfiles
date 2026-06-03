@@ -15,7 +15,15 @@
       "command(git status)",
       "command(git diff)",
       "command(git checkout)",
-      "command(git show)"
+      "command(git show)",
+      "mcp(datadog/list_datadog_skills)",
+      "mcp(datadog/load_datadog_skill)",
+      "mcp(datadog/search_datadog_logs)",
+      "mcp(datadog/search_datadog_events)",
+      "mcp(datadog/search_datadog_monitors)",
+      "mcp(datadog/get_datadog_metric)",
+      "mcp(datadog/search_datadog_metrics)",
+      "mcp(datadog/analyze_datadog_logs)"
     ]
   },
   "trustedWorkspaces": [
