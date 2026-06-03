@@ -23,7 +23,8 @@
       "mcp(datadog/search_datadog_monitors)",
       "mcp(datadog/get_datadog_metric)",
       "mcp(datadog/search_datadog_metrics)",
-      "mcp(datadog/analyze_datadog_logs)"
+      "mcp(datadog/analyze_datadog_logs)",
+      "mcp(datadog/search_datadog_services)"
     ]
   },
   "trustedWorkspaces": [
