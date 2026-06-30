@@ -58,3 +58,27 @@ rmkhkey() {
     sed -i "${1}d" ~/.ssh/known_hosts
   fi
 }
+
+gowt() {
+  local branch="${1}"
+  if [[ -z "${branch}" ]]; then
+    echo "Usage: gowt <branch-name>" >&2
+    return 1
+  fi
+
+  local worktree_path
+  worktree_path=$(git worktree list | awk -v br="[${branch}]" 'index($0, br) {print $1}')
+
+  if [[ -n "${worktree_path}" ]]; then
+    cd "${worktree_path}"
+  else
+    git worktree add -B "${branch}" "${branch}"
+    cd "${branch}"
+    git fetch origin
+    local remote_head
+    remote_head=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null)
+    local default_branch=${remote_head#refs/remotes/origin/}
+    default_branch=${default_branch:-main}
+    git reset --hard "origin/${default_branch}"
+  fi
+}
