@@ -42,8 +42,5 @@
       "mcp(linear/list_issues)"
     ]
   },
-  "trustedWorkspaces": [
-    "/Users/jaybendon",
-    "/Users/jaybendon/repos/jaybocc2/dotfiles"
-  ]
+  "trustedWorkspaces": []
 }
