@@ -24,3 +24,9 @@
     path = ~/.gitconfig-work
 [alias]
 	syncmain = "!f() { CURRENT_BRANCH=$(git symbolic-ref --short HEAD); if [ \"$CURRENT_BRANCH\" = main ]; then echo 'Error: cannot run syncmain on main branch.' >&2; exit 1; fi; git checkout main && git pull origin main && git checkout \"$CURRENT_BRANCH\" && git rebase origin/main && git push origin \"$CURRENT_BRANCH\" --force-with-lease; }; f"
+
+[filter "clean-trusted-workspaces"]
+	clean = "if command -v jq >/dev/null 2>&1; then jq --arg home \"$HOME\" '.trustedWorkspaces = [.trustedWorkspaces[] | select(. == ($home + \"/repos/jaybocc2/dotfiles\") or . == $home or (startswith($home + \"/repos/\") | not))]'; else cat; fi"
+	smudge = "cat"
+
+

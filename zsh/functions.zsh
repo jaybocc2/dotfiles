@@ -82,3 +82,27 @@ gowt() {
     git reset --hard "origin/${default_branch}"
   fi
 }
+
+agy () {
+  local target_dir
+  target_dir=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+  target_dir=$(realpath "${target_dir}" 2>/dev/null || readlink -f "${target_dir}" 2>/dev/null || echo "${target_dir}")
+
+  if [[ "${target_dir}" == "${HOME}/repos/"* ]]; then
+    local settings_file="${HOME}/.gemini/antigravity-cli/settings.json"
+    if [[ -f "${settings_file}" ]]; then
+      if ! grep -q "\"${target_dir}\"" "${settings_file}" 2>/dev/null; then
+        local tmp_file
+        tmp_file=$(mktemp)
+        if jq --arg dir "${target_dir}" 'if .trustedWorkspaces then .trustedWorkspaces = (.trustedWorkspaces + [$dir] | unique) else . + {trustedWorkspaces: [$dir]} end' "${settings_file}" > "${tmp_file}" 2>/dev/null; then
+          cat "${tmp_file}" > "${settings_file}"
+          rm -f "${tmp_file}"
+        else
+          rm -f "${tmp_file}"
+        fi
+      fi
+    fi
+  fi
+  command agy "$@"
+}
+
