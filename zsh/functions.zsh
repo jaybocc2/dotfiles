@@ -84,23 +84,27 @@ gowt() {
 }
 
 agy () {
-  local target_dir
+  local target_dir resolved_dir
   target_dir=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
-  target_dir=$(realpath "${target_dir}" 2>/dev/null || readlink -f "${target_dir}" 2>/dev/null || echo "${target_dir}")
+  resolved_dir=$(realpath "${target_dir}" 2>/dev/null || readlink -f "${target_dir}" 2>/dev/null || echo "${target_dir}")
 
+  local paths_to_trust=()
   if [[ "${target_dir}" == "${HOME}/repos/"* ]]; then
+    paths_to_trust+=("${target_dir}")
+  fi
+  if [[ "${resolved_dir}" == "${HOME}/repos/"* ]]; then
+    paths_to_trust+=("${resolved_dir}")
+  fi
+
+  if (( ${#paths_to_trust[@]} > 0 )); then
     local settings_file="${HOME}/.gemini/antigravity-cli/settings.json"
     if [[ -f "${settings_file}" ]]; then
-      if ! grep -q "\"${target_dir}\"" "${settings_file}" 2>/dev/null; then
-        local tmp_file
-        tmp_file=$(mktemp)
-        if jq --arg dir "${target_dir}" 'if .trustedWorkspaces then .trustedWorkspaces = (.trustedWorkspaces + [$dir] | unique) else . + {trustedWorkspaces: [$dir]} end' "${settings_file}" > "${tmp_file}" 2>/dev/null; then
-          cat "${tmp_file}" > "${settings_file}"
-          rm -f "${tmp_file}"
-        else
-          rm -f "${tmp_file}"
-        fi
+      local tmp_file
+      tmp_file=$(mktemp)
+      if jq 'if .trustedWorkspaces then .trustedWorkspaces = (.trustedWorkspaces + $ARGS.positional | unique) else . + {trustedWorkspaces: $ARGS.positional} end' "${settings_file}" --args "${paths_to_trust[@]}" > "${tmp_file}" 2>/dev/null; then
+        cat "${tmp_file}" > "${settings_file}"
       fi
+      rm -f "${tmp_file}"
     fi
   fi
   command agy "$@"
