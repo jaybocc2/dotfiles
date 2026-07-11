@@ -408,6 +408,8 @@ install_configs() {
       fi
     fi
   done
+
+  git update-index --skip-worktree gemini/antigravity-cli/settings.json 2>/dev/null || true
 }
 
 install() {
