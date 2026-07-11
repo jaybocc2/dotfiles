@@ -84,8 +84,18 @@ gowt() {
 }
 
 agy () {
-  local target_dir resolved_dir
-  target_dir=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+  local dir="$PWD"
+  local unresolved_git_root=""
+  while [[ "$dir" != "/" ]]; do
+    if [[ -e "$dir/.git" ]]; then
+      unresolved_git_root="$dir"
+      break
+    fi
+    dir=$(dirname "$dir")
+  done
+
+  local target_dir="${unresolved_git_root:-$PWD}"
+  local resolved_dir
   resolved_dir=$(realpath "${target_dir}" 2>/dev/null || readlink -f "${target_dir}" 2>/dev/null || echo "${target_dir}")
 
   local paths_to_trust=()
