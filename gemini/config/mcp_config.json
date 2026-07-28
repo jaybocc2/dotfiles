@@ -8,12 +8,6 @@
         "ast-grep-server"
       ]
     },
-    "shopify-mcp": {
-      "command": "pnpx",
-      "args": [
-        "@shopify/dev-mcp@latest"
-      ]
-    },
     "context7": {
       "command": "npx",
       "args": [
@@ -21,11 +15,18 @@
         "@upstash/context7-mcp"
       ]
     },
+    "datadog": {
+      "command": "mcp-datadog",
+      "disabled": true
+    },
     "linear": {
       "serverUrl": "https://mcp.linear.app/mcp"
     },
-    "datadog": {
-      "command": "mcp-datadog"
+    "shopify-mcp": {
+      "command": "pnpx",
+      "args": [
+        "@shopify/dev-mcp@latest"
+      ]
     }
   }
 }
