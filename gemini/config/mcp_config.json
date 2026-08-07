@@ -6,7 +6,8 @@
         "--from",
         "git+https://github.com/ast-grep/ast-grep-mcp",
         "ast-grep-server"
-      ]
+      ],
+      "disabled": true
     },
     "context7": {
       "command": "npx",
@@ -16,8 +17,7 @@
       ]
     },
     "datadog": {
-      "command": "mcp-datadog",
-      "disabled": true
+      "command": "mcp-datadog"
     },
     "linear": {
       "serverUrl": "https://mcp.linear.app/mcp"
