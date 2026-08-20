@@ -1,20 +1,20 @@
 {
   "mcpServers": {
     "astgrep": {
-      "command": "uvx",
       "args": [
         "--from",
         "git+https://github.com/ast-grep/ast-grep-mcp",
         "ast-grep-server"
       ],
+      "command": "uvx",
       "disabled": true
     },
     "context7": {
-      "command": "npx",
       "args": [
         "-y",
         "@upstash/context7-mcp"
-      ]
+      ],
+      "command": "npx"
     },
     "datadog": {
       "command": "mcp-datadog"
@@ -26,10 +26,10 @@
       "serverUrl": "https://retool.corp.monaco.com/mcp"
     },
     "shopify-mcp": {
-      "command": "pnpx",
       "args": [
         "@shopify/dev-mcp@latest"
-      ]
+      ],
+      "command": "pnpx"
     }
   }
 }
