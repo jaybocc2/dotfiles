@@ -22,6 +22,9 @@
     "linear": {
       "serverUrl": "https://mcp.linear.app/mcp"
     },
+    "retool": {
+      "serverUrl": "https://retool.corp.monaco.com/mcp"
+    },
     "shopify-mcp": {
       "command": "pnpx",
       "args": [
