@@ -58,3 +58,65 @@ rmkhkey() {
     sed -i "${1}d" ~/.ssh/known_hosts
   fi
 }
+
+gowt() {
+  local branch="${1}"
+  if [[ -z "${branch}" ]]; then
+    echo "Usage: gowt <branch-name>" >&2
+    return 1
+  fi
+
+  local worktree_path
+  worktree_path=$(git worktree list | awk -v br="[${branch}]" 'index($0, br) {print $1}')
+
+  if [[ -n "${worktree_path}" ]]; then
+    cd "${worktree_path}"
+  else
+    git worktree add -B "${branch}" "${branch}"
+    cd "${branch}"
+    git fetch origin
+    local remote_head
+    remote_head=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null)
+    local default_branch=${remote_head#refs/remotes/origin/}
+    default_branch=${default_branch:-main}
+    git reset --hard "origin/${default_branch}"
+  fi
+}
+
+agy () {
+  local dir="$PWD"
+  local unresolved_git_root=""
+  while [[ "$dir" != "/" ]]; do
+    if [[ -e "$dir/.git" ]]; then
+      unresolved_git_root="$dir"
+      break
+    fi
+    dir=$(dirname "$dir")
+  done
+
+  local target_dir="${unresolved_git_root:-$PWD}"
+  local resolved_dir
+  resolved_dir=$(realpath "${target_dir}" 2>/dev/null || readlink -f "${target_dir}" 2>/dev/null || echo "${target_dir}")
+
+  local paths_to_trust=()
+  if [[ "${target_dir}" == "${HOME}/repos/"* ]]; then
+    paths_to_trust+=("${target_dir}")
+  fi
+  if [[ "${resolved_dir}" == "${HOME}/repos/"* ]]; then
+    paths_to_trust+=("${resolved_dir}")
+  fi
+
+  if (( ${#paths_to_trust[@]} > 0 )); then
+    local settings_file="${HOME}/.gemini/antigravity-cli/settings.json"
+    if [[ -f "${settings_file}" ]]; then
+      local tmp_file
+      tmp_file=$(mktemp)
+      if jq 'if .trustedWorkspaces then .trustedWorkspaces = (.trustedWorkspaces + $ARGS.positional | unique) else . + {trustedWorkspaces: $ARGS.positional} end' "${settings_file}" --args "${paths_to_trust[@]}" > "${tmp_file}" 2>/dev/null; then
+        cat "${tmp_file}" > "${settings_file}"
+      fi
+      rm -f "${tmp_file}"
+    fi
+  fi
+  command agy "$@"
+}
+

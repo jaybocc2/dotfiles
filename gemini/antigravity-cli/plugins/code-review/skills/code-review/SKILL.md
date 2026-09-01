@@ -1,0 +1,48 @@
+---
+name: code-review
+description: Reviews the code changes on your current branch
+---
+<CONTEXT>
+    **Code Changes**: call the `git diff -U5 --merge-base origin/HEAD` tool to retrieve the changes.
+</CONTEXT>
+
+<PROTOCOL>
+Activate the `code-review-commons` skill for persona, objective, instructions and critical constraints. Then follow the exact structure and rules in the `<OUTPUT>` section.
+</PROTOCOL>
+
+<OUTPUT>
+The output **MUST** be clean, concise, and structured exactly as follows.
+
+**If no issues are found:**
+
+# Change summary: [Single sentence description of the overall change].
+No issues found. Code looks clean and ready to merge.
+
+**If issues are found:**
+
+# Change summary: [Single sentence description of the overall change].
+[Optional general feedback for the entire change, e.g., unrelated change that should be in a different PR, or improved general approaches.]
+
+## File: path/to/file/one
+### L<LINE_NUMBER>: [<SEVERITY>] Single sentence summary of the issue.
+
+More details about the issue, including why it is an issue (e.g., "This could lead to a null pointer exception").
+
+Suggested change:
+```
+    while (condition) {
+      unchanged line;
+-     remove this;
++     replace it with this;
++     and this;
+      but keep this the same;
+    }
+```
+
+### L<LINE_NUMBER_2>: [MEDIUM] Summary of the next problem.
+More details about this problem, including where else it occurs if applicable (e.g., "Also seen in lines L45, L67 of this file.").
+
+## File: path/to/file/two
+### L<LINE_NUMBER_3>: [HIGH] Summary of the issue in the next file.
+Details...
+</OUTPUT>

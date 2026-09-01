@@ -1,0 +1,178 @@
+#!/usr/bin/env node
+
+const https = require('https');
+const fs = require('fs');
+const path = require('path');
+const readline = require('readline');
+
+const envPath = path.join(process.env.HOME, '.env');
+try {
+  if (fs.existsSync(envPath)) {
+    const envConfig = fs.readFileSync(envPath, 'utf-8');
+    envConfig.split('\n').forEach(line => {
+      const match = line.match(/^([^=#]+)=(.*)$/);
+      if (match) {
+        const key = match[1].trim();
+        const value = match[2].trim().replace(/^['"]|['"]$/g, '');
+        process.env[key] = value;
+      }
+    });
+  }
+} catch (err) {
+  console.error(err.message);
+  process.exit(1);
+}
+
+const apiKey = process.env.DD_API_KEY;
+const appKey = process.env.DD_APP_KEY;
+const site = process.env.DD_SITE;
+
+if (!apiKey || !appKey || !site) {
+  process.exit(1);
+}
+
+const ddSite = site.trim().toLowerCase();
+let mcpHostname = 'mcp.datadoghq.com';
+
+if (ddSite === 'eu' || ddSite === 'eu1' || ddSite === 'datadoghq.eu') {
+  mcpHostname = 'mcp.datadoghq.eu';
+} else if (ddSite === 'us1-fed' || ddSite === 'ddog-gov.com') {
+  mcpHostname = 'mcp.ddog-gov.com';
+} else if (ddSite === 'us1' || ddSite === 'datadoghq.com') {
+  mcpHostname = 'mcp.datadoghq.com';
+} else {
+  const shortNames = ['us3', 'us5', 'ap1', 'ap2'];
+  if (shortNames.includes(ddSite)) {
+    mcpHostname = `mcp.${ddSite}.datadoghq.com`;
+  } else if (ddSite.endsWith('.datadoghq.com')) {
+    const prefix = ddSite.split('.')[0];
+    mcpHostname = `mcp.${prefix}.datadoghq.com`;
+  }
+}
+
+console.error(`mcp-datadog: Hostname=${mcpHostname} Site=${ddSite} APIKeyLen=${apiKey.length} AppKeyLen=${appKey.length}`);
+
+let mcpSessionId = null;
+let isInitializing = false;
+const pendingQueue = [];
+
+function sendRequest(line) {
+  const headers = {
+    'Content-Type': 'application/json',
+    'DD-API-KEY': apiKey,
+    'DD-APPLICATION-KEY': appKey,
+    'DD-SITE': ddSite,
+  };
+
+  if (mcpSessionId) {
+    headers['Mcp-Session-Id'] = mcpSessionId;
+  }
+
+  const postOptions = {
+    hostname: mcpHostname,
+    port: 443,
+    path: '/api/unstable/mcp-server/mcp',
+    method: 'POST',
+    headers: headers
+  };
+
+  const req = https.request(postOptions, (res) => {
+    if (res.headers['mcp-session-id']) {
+      mcpSessionId = res.headers['mcp-session-id'];
+    }
+
+    let body = '';
+    res.on('data', (chunk) => {
+      body += chunk;
+    });
+
+    res.on('end', () => {
+      if (res.statusCode >= 200 && res.statusCode < 300) {
+        if (body.trim()) {
+          process.stdout.write(body.trim() + '\n');
+        }
+        if (isInitializing) {
+          isInitializing = false;
+          while (pendingQueue.length > 0) {
+            sendRequest(pendingQueue.shift());
+          }
+        }
+      } else {
+        console.error(body);
+        try {
+          const parsed = JSON.parse(line);
+          if (parsed.id !== undefined) {
+            const errorResponse = {
+              jsonrpc: '2.0',
+              id: parsed.id,
+              error: {
+                code: -32603,
+                message: `Datadog MCP HTTP error ${res.statusCode}: ${body.trim()}`
+              }
+            };
+            process.stdout.write(JSON.stringify(errorResponse) + '\n');
+          }
+        } catch (e) {}
+        if (isInitializing) {
+          isInitializing = false;
+          while (pendingQueue.length > 0) {
+            sendRequest(pendingQueue.shift());
+          }
+        }
+      }
+    });
+  });
+
+  req.on('error', (e) => {
+    console.error(e.message);
+    try {
+      const parsed = JSON.parse(line);
+      if (parsed.id !== undefined) {
+        const errorResponse = {
+          jsonrpc: '2.0',
+          id: parsed.id,
+          error: {
+            code: -32603,
+            message: `Datadog MCP network error: ${e.message}`
+          }
+        };
+        process.stdout.write(JSON.stringify(errorResponse) + '\n');
+      }
+    } catch (err) {}
+    if (isInitializing) {
+      isInitializing = false;
+      while (pendingQueue.length > 0) {
+        sendRequest(pendingQueue.shift());
+      }
+    }
+  });
+
+  req.write(line);
+  req.end();
+}
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+  terminal: false
+});
+
+rl.on('line', (line) => {
+  if (!line.trim()) {
+    return;
+  }
+
+  try {
+    const parsed = JSON.parse(line);
+    if (parsed.method === 'initialize') {
+      isInitializing = true;
+      sendRequest(line);
+    } else if (mcpSessionId || !isInitializing) {
+      sendRequest(line);
+    } else {
+      pendingQueue.push(line);
+    }
+  } catch (e) {
+    sendRequest(line);
+  }
+});

@@ -1,7 +1,6 @@
 
 # Use Tools available
 use mcp_context7_query-docs to query for api documentation
-use mcp_github for relevant github tasks
 use mcp_astgrep for abstract syntax tree dumps and efficient structured code search
 
 # Making changes

@@ -44,6 +44,7 @@ upstall_repo() {
 }
 
 fixenv() {
-  # source "${HOME}/.zsh/env.zsh"
-  source ~/.zsh/env.zsh
+  if [[ -f "${HOME}/.zsh/env.zsh" ]]; then
+    source "${HOME}/.zsh/env.zsh"
+  fi
 }

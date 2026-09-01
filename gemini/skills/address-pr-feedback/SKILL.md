@@ -9,7 +9,7 @@ disable-model-invocation: true
 ## Context
 
 - Current branch: !`git branch --show-current`
-- get pull request review with git mcp: `pull_request_read`
+- get pull request review with gh cli
 
 ## Your task
 
@@ -36,7 +36,7 @@ Skip this step if no code changes were made.
 Provide a commit message and wait until prompted to continue if not allowed by policy to commit.
 
 ### Step 4 — Reply to each comment
-use github mcp
+use gh cli
 
 Good reply patterns:
 - For changes made: "Done — <brief description of what changed>."
@@ -46,7 +46,7 @@ Good reply patterns:
 
 ### Step 5 — Resolve each thread
 Resolve every thread/comment if satisfactory
-use git mcp / gh cli and GraphQL id field:
+use gh cli and GraphQL id field:
 
 ```
 gh api graphql -f query='mutation { resolveReviewThread(input: {threadId: "<thread_id>"}) { thread { id isResolved } } }'
