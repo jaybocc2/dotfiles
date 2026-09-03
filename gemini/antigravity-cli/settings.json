@@ -1,7 +1,7 @@
 {
   "allowNonWorkspaceAccess": true,
   "colorScheme": "solarized dark",
-  "model": "Gemini 3.5 Flash (High)",
+  "model": "Gemini 3.7 Flash (High)",
   "permissions": {
     "allow": [
       "command(find)",
