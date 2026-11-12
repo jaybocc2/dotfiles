@@ -17,19 +17,52 @@
       "command": "npx"
     },
     "datadog": {
-      "command": "mcp-datadog"
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.us5.datadoghq.com/v1/mcp"
+      ],
+      "command": "npx"
     },
     "linear": {
       "serverUrl": "https://mcp.linear.app/mcp"
     },
+    "notion": {
+      "disabled": false,
+      "serverUrl": "https://mcp.notion.com/mcp"
+    },
     "retool": {
-      "serverUrl": "https://retool.corp.monaco.com/mcp"
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://retool.corp.monaco.com/mcp"
+      ],
+      "command": "npx",
+      "disabled": false
     },
     "shopify-mcp": {
       "args": [
         "@shopify/dev-mcp@latest"
       ],
       "command": "pnpx"
+    },
+    "vanta": {
+      "args": [
+        "-y",
+        "@vantasdk/vanta-mcp-server"
+      ],
+      "command": "npx",
+      "env": {
+        "VANTA_ENV_FILE": "/Users/jaybendon/vanta-credentials.env",
+        "VANTA_MCP_URL": "https://mcp.vanta.com/mcp"
+      }
+    },
+    "vantaoauth": {
+      "disabled": true,
+      "oauth": {
+        "clientId": "vci_e089c9a4cf49916ee62889db8d154b18d07f93b78677a3f6"
+      },
+      "serverUrl": "https://mcp.vanta.com/mcp"
     }
   }
 }
