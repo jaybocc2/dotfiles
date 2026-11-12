@@ -15,6 +15,7 @@ never rebase or ammend commits. only merge origin/main and make new commits in m
 - use clear naming, descriptive variables.
 - code should prioritize readability
 - code should be concise, but not obfuscated.
+- single PR's should strive to be around 400 lines added maximum.  Any more than that is cognitively unreviewable.
 
 # code-review
 - if a review is requested to be posted to github it will strictly adhere to the inline review structure with explicit line anchors, severity tags, and concrete suggestion blocks. It will not summarize the PR it self as the author does not need a summary of their own PR
